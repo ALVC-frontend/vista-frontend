@@ -8,7 +8,7 @@ const TextInput = ({ placeholder, inputType }: Props) => {
     <div className="w-full">
       <input
         type={inputType}
-        className="outline-none w-full bg-lightGray p-3 rounded-md"
+        className="outline-none border-none focus:outline-none focus:border-none w-full bg-lightGray p-3 rounded-md"
         placeholder={placeholder}
       />
     </div>

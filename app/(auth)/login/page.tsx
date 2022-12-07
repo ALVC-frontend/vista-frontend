@@ -27,7 +27,11 @@ export default function Page() {
 
             {/* Remember me checkbox  */}
             <div className="flex items-center gap-x-4">
-              <input type="checkbox" name="checkbox" className="" />
+              <input
+                type="checkbox"
+                name="checkbox"
+                className="text-primary rounded-sm outline-none border border-primary active:outline-none"
+              />
               <small className="text-primary">Remember me</small>
             </div>
 

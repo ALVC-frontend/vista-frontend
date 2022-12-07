@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@components/index";
 import admin1 from "@assets/images/admin-1.png";
@@ -22,7 +23,13 @@ export default function Page() {
           />
         </div>
         <div className="">
-          <Button text="New admin" primary />
+          <Link href="/admins/add">
+            <Button
+              text="New admin"
+              primary
+              extraStyles="font-thin text-sm px-4 py-3"
+            />
+          </Link>
         </div>
       </header>
 

@@ -10,7 +10,7 @@ type Props = {
 };
 
 const SidebarItem = ({ name, path }: Props) => {
-  const active = usePathname() === path;
+  const active = usePathname()?.startsWith(path);
 
   return (
     <Link href={path}>

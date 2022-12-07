@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["./assets/*"],
-      "@components/*": ["./components/*"]
+      "@components/*": ["./components/*"],
+      "@lib/*": ["./lib/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

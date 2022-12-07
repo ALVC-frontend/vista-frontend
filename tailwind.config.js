@@ -10,14 +10,14 @@ module.exports = {
       colors: {
         primary: "#4461F2",
         lightGray: "#EAF0F7",
-        background: "#e5e5e5"
+        background: "#e5e5e5",
       },
       fontFamily: {
         poppins: ["Poppins"],
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require("@tailwindcss/forms")],
 
   daisyui: {
     themes: false,
