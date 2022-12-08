@@ -19,11 +19,11 @@ export default function Page() {
           <input
             type="text"
             placeholder="Search branch managers"
-            className="outline-none border-none placeholder:text-sm"
+            className="outline-none border-none"
           />
         </div>
         <div className="">
-          <Link href="/branch-managers/add">
+          <Link href="/admins/add">
             <Button
               text="New branch manager"
               primary
@@ -60,7 +60,7 @@ export default function Page() {
                 </div>
               </th>
               <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
+              <th>12345667</th>
             </tr>
 
             {/* admin 2  */}
@@ -78,7 +78,7 @@ export default function Page() {
                 </div>
               </th>
               <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
+              <th>12345667</th>
             </tr>
             {/* admin 3  */}
             <tr>
@@ -95,7 +95,7 @@ export default function Page() {
                 </div>
               </th>
               <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
+              <th>12345667</th>
             </tr>
           </tbody>
         </table>

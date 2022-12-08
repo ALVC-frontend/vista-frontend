@@ -23,3 +23,14 @@ export const verifyAdminCrumbs: BreadLink[] = [
     textToDisplay: "New Admin",
   },
 ];
+
+export const branchManagerCrumbs: BreadLink[] = [
+  {
+    link: "/branch-managers",
+    textToDisplay: "Branch Managers",
+  },
+  {
+    link: "/branch-managers/add",
+    textToDisplay: "New Branch Manager",
+  },
+];

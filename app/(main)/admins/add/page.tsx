@@ -29,7 +29,7 @@ export default function Page() {
             <div className="dropdown">
               <div
                 tabIndex={0}
-                className="form-select bg-lightGray border-none py-3 rounded-md m-1"
+                className="form-select bg-lightGray border-none p-3 rounded-md m-1"
               >
                 +1
               </div>

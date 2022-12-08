@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
-import { crumbs } from "@lib/dummy";
+import { branchManagerCrumbs } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
@@ -11,13 +11,18 @@ export default function Page() {
   return (
     <section className="w-full ml-6">
       <header>
-        <BreadCrumb crumbs={crumbs} />
+        <BreadCrumb crumbs={branchManagerCrumbs} />
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">Edit Admin</h2>
+        <h2 className="text-2xl font-semibold">Edit Branch Manager</h2>
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
+          <TextInput
+            inputType="text"
+            value="Seeded branch 96"
+            placeholder="Assigned branches"
+          />
           <TextInput inputType="number" placeholder="Employee ID" value={123} />
           <TextInput inputType="text" placeholder="First name" value="Tahir" />
           <TextInput inputType="text" placeholder="Last name" value="Ramzan" />
