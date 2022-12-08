@@ -1,7 +1,13 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { crumbs } from "@lib/dummy";
 
 export default function Page() {
+  const { push } = useRouter();
+
   return (
     <section className="w-full ml-6">
       <header>
@@ -32,10 +38,10 @@ export default function Page() {
                 className="dropdown-content menu p-2 shadow bg-lightGray rounded-box w-52"
               >
                 <li>
-                  <a>Item 1</a>
+                  <a>+255</a>
                 </li>
                 <li>
-                  <a>Item 2</a>
+                  <a>+254</a>
                 </li>
               </ul>
             </div>
@@ -44,7 +50,11 @@ export default function Page() {
 
           {/* Form navigation  */}
 
-          <FormNav />
+          <FormNav
+            rightBtnText="Next"
+            // redirect to verify admin page
+            rightBtnAction={() => push("/admins/add/verify")}
+          />
         </form>
       </main>
     </section>

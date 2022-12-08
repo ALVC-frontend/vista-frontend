@@ -1,16 +1,32 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import { Button } from ".";
 
-type Props = {};
+type Props = {
+  rightBtnAction?: () => any;
+  rightBtnText: string;
+};
 
-const FormNav = (props: Props) => {
+const FormNav = ({ rightBtnAction, rightBtnText }: Props) => {
+  const router = useRouter();
+
   return (
-    <div className="w-full flex items-center justify-around">
+    <div className="w-full flex items-center justify-between px-1">
       <Button
         text="Cancel"
+        onPress={() => router.back()}
         subtle
-        extraStyles="text-red-500 underline basis-3/4"
+        extraStyles="md:w-1/5"
       />
-      <Button text="Next" primary extraStyles="basis-1/4" />
+
+      <Button
+        onPress={rightBtnAction}
+        text={rightBtnText}
+        primary
+        extraStyles="md:w-1/5"
+      />
     </div>
   );
 };

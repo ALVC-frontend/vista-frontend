@@ -11,7 +11,7 @@ type Props = {
 
 const BreadCrumb = ({ crumbs }: Props) => {
   return (
-    <div className="text-sm breadcrumbs">
+    <div className="text-sm breadcrumbs my-6 ml-4">
       <ul>
         {crumbs.map(({ link, textToDisplay }) => {
           const active = usePathname() === link;

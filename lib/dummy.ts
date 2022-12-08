@@ -12,6 +12,14 @@ export const crumbs: BreadLink[] = [
   },
   {
     link: "/admins/add",
-    textToDisplay: "Add",
+    textToDisplay: "New Admin",
+  },
+];
+
+export const verifyAdminCrumbs: BreadLink[] = [
+  ...crumbs,
+  {
+    link: "/admins/add/verify",
+    textToDisplay: "New Admin",
   },
 ];

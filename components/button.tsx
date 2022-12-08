@@ -1,15 +1,23 @@
-import { subtle } from "crypto";
+"use client";
 
 type Props = {
   extraStyles?: string;
-  text: string;
+  onPress?: () => any;
   primary?: boolean;
   subtle?: boolean;
+  text: string;
 };
 
-const button = ({ extraStyles, primary = false, text }: Props) => {
+const button = ({
+  extraStyles,
+  onPress,
+  primary = false,
+  subtle,
+  text,
+}: Props) => {
   return (
     <button
+      onClick={onPress}
       className={`p-2 ${
         primary
           ? "bg-primary text-white"
