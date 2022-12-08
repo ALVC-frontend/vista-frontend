@@ -34,3 +34,14 @@ export const branchManagerCrumbs: BreadLink[] = [
     textToDisplay: "New Branch Manager",
   },
 ];
+
+export const businessUnitCrumbs: BreadLink[] = [
+  {
+    link: "/business-unit",
+    textToDisplay: "Business units",
+  },
+  {
+    link: "/business-unit/add",
+    textToDisplay: "New Business Unit",
+  },
+];

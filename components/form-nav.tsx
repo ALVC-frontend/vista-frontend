@@ -5,15 +5,24 @@ import { useRouter } from "next/navigation";
 import { Button } from ".";
 
 type Props = {
+  extraStyles?: string;
   rightBtnAction?: () => any;
+  rightBtnStyles?: string;
   rightBtnText: string;
 };
 
-const FormNav = ({ rightBtnAction, rightBtnText }: Props) => {
+const FormNav = ({
+  extraStyles,
+  rightBtnAction,
+  rightBtnStyles,
+  rightBtnText,
+}: Props) => {
   const router = useRouter();
 
   return (
-    <div className="w-full flex items-center justify-between px-1">
+    <div
+      className={`w-full flex items-center justify-between px-1 ${extraStyles}`}
+    >
       <Button
         text="Cancel"
         onPress={() => router.back()}
@@ -22,10 +31,10 @@ const FormNav = ({ rightBtnAction, rightBtnText }: Props) => {
       />
 
       <Button
+        extraStyles={`md:w-1/5 ${rightBtnStyles}`}
         onPress={rightBtnAction}
         text={rightBtnText}
         primary
-        extraStyles="md:w-1/5"
       />
     </div>
   );
