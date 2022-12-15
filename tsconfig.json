@@ -6,6 +6,7 @@
     "paths": {
       "@assets/*": ["./assets/*"],
       "@components/*": ["./components/*"],
+      "@hooks/*":["./hooks/*"],
       "@lib/*": ["./lib/*"]
     },
     "allowJs": true,

@@ -45,3 +45,26 @@ export const businessUnitCrumbs: BreadLink[] = [
     textToDisplay: "New Business Unit",
   },
 ];
+
+export const staffMembersCrumb: BreadLink[] = [
+  {
+    link: "/staff-members",
+    textToDisplay: "Staff Members",
+  },
+];
+
+export const addStaffMemberCrumb: BreadLink[] = [
+  ...staffMembersCrumb,
+  {
+    link: "/staff-members/add",
+    textToDisplay: "Add staff member",
+  },
+];
+
+export const editStaffMemberCrumbs: BreadLink[] = [
+  ...staffMembersCrumb,
+  {
+    link: "/staff-members/edit",
+    textToDisplay: "Edit Staff Member",
+  },
+];

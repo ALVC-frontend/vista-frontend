@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button, BadgeContainer } from "@components/index";
+import { Button } from "@components/index";
 
 export default function Page() {
   return (
@@ -36,16 +36,14 @@ export default function Page() {
             {/* admin 3  */}
             <tr>
               <td className="text-primary">
-                <Link href="/business-unit/">Developer Division</Link>
+                <Link href="/business-unit/developer-division">Developer Division</Link>
               </td>
             </tr>
           </tbody>
         </table>
       </article>
 
-      <div className="w-3/5">
-        <BadgeContainer />
-      </div>
+   
     </section>
   );
 }

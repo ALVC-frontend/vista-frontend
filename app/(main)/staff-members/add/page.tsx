@@ -2,8 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-import { BadgeContainer,BreadCrumb, FormNav, TextInput } from "@components/index";
-import { branchManagerCrumbs } from "@lib/dummy";
+import {
+  BadgeContainer,
+  BreadCrumb,
+  FormNav,
+  TextInput,
+} from "@components/index";
+import { addStaffMemberCrumb } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
@@ -11,17 +16,17 @@ export default function Page() {
   return (
     <section className="w-full ml-6">
       <header>
-        <BreadCrumb crumbs={branchManagerCrumbs} />
+        <BreadCrumb crumbs={addStaffMemberCrumb} />
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">New Branch Manager</h2>
+        <h2 className="text-2xl font-semibold">New Staff Member</h2>
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
           {/* <TextInput placeholder="Assigned Branches" inputType="text" /> */}
 
           {/* Edit assigned branches  */}
-          <BadgeContainer editableBadges={[]} placeholder="Assigned Branches"/>
+          <BadgeContainer editableBadges={[]} placeholder="Assigned Branches" />
           <TextInput inputType="number" placeholder="Employee ID" />
           <TextInput inputType="text" placeholder="First name" />
           <TextInput inputType="text" placeholder="Last name" />
@@ -51,13 +56,15 @@ export default function Page() {
             </div>
             <TextInput inputType="tel" placeholder="Mobile no" />
           </div>
+          <TextInput inputType="tel" placeholder="PIN" />
+          <TextInput inputType="tel" placeholder="PIN confirmation" />
 
           {/* Form navigation  */}
 
           <FormNav
-            rightBtnText="Next"
+            rightBtnText="Create Staff member"
             // redirect to verify admin page
-            rightBtnAction={() => push("/admins/add/verify")}
+            rightBtnAction={() => push("/staff-members/add")}
           />
         </form>
       </main>

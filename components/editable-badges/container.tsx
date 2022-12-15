@@ -3,10 +3,13 @@
 import { useState, useCallback, useRef } from "react";
 import Badge from "./badge";
 
-type Props = {};
+type Props = {
+  editableBadges: string[];
+  placeholder?: string;
+};
 
-const BadgeContainer = (props: Props) => {
-  const [badges, setBadges] = useState(["branch 1", "branch2"]);
+const BadgeContainer = ({ editableBadges, placeholder = "" }: Props) => {
+  const [badges, setBadges] = useState(editableBadges);
   const [newBadge, setNewBadge] = useState("");
   const badgeRef = useRef(null);
 
@@ -20,6 +23,7 @@ const BadgeContainer = (props: Props) => {
   const handleChange = (e: any) => setNewBadge(e.target.value);
 
   const onEnter = (e: any) => {
+    e.preventdefault();
     if (e.keyCode === 13) {
       //@ts-ignore
       setBadges((prev) => [...prev, newBadge]);
@@ -45,6 +49,7 @@ const BadgeContainer = (props: Props) => {
         className="bg-lightGray outline-none p-2"
         value={newBadge}
         onChange={handleChange}
+        placeholder={placeholder}
         onKeyUp={onEnter}
         ref={badgeRef}
       />
