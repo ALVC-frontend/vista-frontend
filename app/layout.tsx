@@ -6,7 +6,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html>
       <head />
-      <body className="font-poppins overflow-hidden max-w-[100vw]">
+      <body className="font-poppins overflow-auto max-w-[100vw]">
         {children}
       </body>
     </html>
