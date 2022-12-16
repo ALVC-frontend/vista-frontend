@@ -50,7 +50,7 @@ export default function MainLayout({
             </p>
           </div>
         </div>
-        <div className="col-span-5 md:col-span-4 bg-background h-[100vh] max-h-[100vh]">
+        <div className="col-span-5 md:col-span-4 bg-background h-[100vh] overflow-y-auto overflow-x-hidden max-h-[100vh]">
           {children}
         </div>
 
