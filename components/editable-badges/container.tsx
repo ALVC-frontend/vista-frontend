@@ -23,8 +23,9 @@ const BadgeContainer = ({ editableBadges, placeholder = "" }: Props) => {
   const handleChange = (e: any) => setNewBadge(e.target.value);
 
   const onEnter = (e: any) => {
-    e.preventdefault();
-    if (e.keyCode === 13) {
+    e.preventDefault();
+
+    if (e.keyCode === 32) {
       //@ts-ignore
       setBadges((prev) => [...prev, newBadge]);
       setNewBadge("");
@@ -49,7 +50,7 @@ const BadgeContainer = ({ editableBadges, placeholder = "" }: Props) => {
         className="bg-lightGray outline-none p-2"
         value={newBadge}
         onChange={handleChange}
-        placeholder={placeholder}
+        placeholder={badges.length ? "" : placeholder}
         onKeyUp={onEnter}
         ref={badgeRef}
       />

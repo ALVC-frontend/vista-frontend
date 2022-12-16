@@ -39,7 +39,9 @@ export default function Page() {
             {/* admin 3  */}
             <tr>
               <td>
-                <p>Staff Member</p>
+                <Link href="/staff-members/edit">
+                  <p>Staff Member</p>
+                </Link>
               </td>
               <td>
                 <p className="text-primary">7646464</p>
