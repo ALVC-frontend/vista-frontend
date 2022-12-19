@@ -21,7 +21,7 @@ const SideBar = ({ sidebarItems }: Props) => {
   return (
     <>
       <div
-        className={`col-span-1 md:flex flex-col gap-y-6 items-center my-10 ${
+        className={`col-span-1 md:flex h-[100vh] flex-col gap-y-6 overflow-y-auto items-center py-4 ${
           isSidebarOpen
             ? "absolute bg-white w-[50vw] my-0 h-[100vh] top-0 z-20"
             : "hidden"

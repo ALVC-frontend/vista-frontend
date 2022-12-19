@@ -1,9 +1,9 @@
 /**
  * usable react hook for updating badges in the badge container
+ * This is temporarily unused
  */
 
 import { useCallback, useRef, useState } from "react";
-
 
 const editableBadges = ["hello"];
 

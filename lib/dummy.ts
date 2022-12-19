@@ -68,3 +68,28 @@ export const editStaffMemberCrumbs: BreadLink[] = [
     textToDisplay: "Edit Staff Member",
   },
 ];
+
+// -------Main navigation crumbs-------
+
+const videoCrumbs: BreadLink[] = [
+  {
+    link: "/videos",
+    textToDisplay: "Videos",
+  },
+];
+
+export const newVideoCrumbs: BreadLink[] = [
+  ...videoCrumbs,
+  {
+    link: "/videos/new",
+    textToDisplay: "New Video",
+  },
+];
+
+export const editVideoCrumbs: BreadLink[] = [
+  ...videoCrumbs,
+  {
+    link: "/videos/edit",
+    textToDisplay: "Edit Video",
+  },
+];

@@ -2,7 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-import { BadgeContainer,BreadCrumb, FormNav, TextInput } from "@components/index";
+import {
+  BadgeContainer,
+  BreadCrumb,
+  FormNav,
+  TextInput,
+} from "@components/index";
 import { branchManagerCrumbs } from "@lib/dummy";
 
 export default function Page() {
@@ -21,7 +26,7 @@ export default function Page() {
           {/* <TextInput placeholder="Assigned Branches" inputType="text" /> */}
 
           {/* Edit assigned branches  */}
-          <BadgeContainer editableBadges={[]} placeholder="Assigned Branches"/>
+          <BadgeContainer editableBadges={[]} placeholder="Assigned Branches" />
           <TextInput inputType="number" placeholder="Employee ID" />
           <TextInput inputType="text" placeholder="First name" />
           <TextInput inputType="text" placeholder="Last name" />
@@ -57,7 +62,7 @@ export default function Page() {
           <FormNav
             rightBtnText="Next"
             // redirect to verify admin page
-            rightBtnAction={() => push("/admins/add/verify")}
+            rightBtnAction={() => push("/branch-managers")}
           />
         </form>
       </main>

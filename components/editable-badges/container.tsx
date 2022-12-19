@@ -34,7 +34,7 @@ const BadgeContainer = ({ editableBadges, placeholder = "" }: Props) => {
 
   return (
     <div
-      className="w-full flex p-1 flex-wrap bg-lightGray overflow-hidden"
+      className="w-full flex p-1 flex-wrap rounded-md bg-lightGray overflow-hidden"
       onClick={() => {
         //@ts-ignore
         badgeRef.current.focus();

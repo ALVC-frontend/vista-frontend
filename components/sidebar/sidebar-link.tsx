@@ -15,7 +15,7 @@ const SidebarItem = ({ name, path }: Props) => {
   return (
     <Link href={path}>
       <p
-        className={`flex items-center gap-x-1 my-4 p-2 ${
+        className={`flex items-center gap-x-1 text-sm my-4 p-2 ${
           active ? "text-white bg-primary rounded-md" : ""
         }`}
       >
