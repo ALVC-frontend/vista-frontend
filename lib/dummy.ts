@@ -93,3 +93,14 @@ export const editVideoCrumbs: BreadLink[] = [
     textToDisplay: "Edit Video",
   },
 ];
+
+export const newArticleCrumbs: BreadLink[] = [
+  {
+    link: "/articles",
+    textToDisplay: "Articles",
+  },
+  {
+    link: "/articles/new",
+    textToDisplay: "New article",
+  },
+];
