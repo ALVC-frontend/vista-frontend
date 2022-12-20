@@ -104,3 +104,49 @@ export const newArticleCrumbs: BreadLink[] = [
     textToDisplay: "New article",
   },
 ];
+
+const cityCrumbs: BreadLink[] = [
+  {
+    link: "/cities",
+    textToDisplay: "Cities",
+  },
+];
+
+export const newCityCrumbs: BreadLink[] = [
+  ...cityCrumbs,
+  {
+    link: "/cities/new",
+    textToDisplay: "New City",
+  },
+];
+
+export const editCityCrumbs: BreadLink[] = [
+  ...cityCrumbs,
+  {
+    link: "/cities/edit",
+    textToDisplay: "Edit city",
+  },
+];
+
+const partnerCategories: BreadLink[] = [
+  {
+    link: "/partner-categories",
+    textToDisplay: "Partner Categories",
+  },
+];
+
+export const newPartnerCategories: BreadLink[] = [
+  ...partnerCategories,
+  {
+    link: "/partner-categories/new",
+    textToDisplay: "New category",
+  },
+];
+
+export const editPartnerCategories: BreadLink[] = [
+  ...partnerCategories,
+  {
+    link: "/partner-categories/edit",
+    textToDisplay: "Edit category",
+  },
+];

@@ -9,7 +9,7 @@ import {
   FormNav,
   TextInput,
 } from "@components/index";
-import { newArticleCrumbs } from "@lib/dummy";
+import { newCityCrumbs } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
@@ -17,35 +17,14 @@ export default function Page() {
   return (
     <section className="w-full pl-6">
       <header>
-        <BreadCrumb crumbs={newArticleCrumbs} />
+        <BreadCrumb crumbs={newCityCrumbs} />
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">New article</h2>
+        <h2 className="text-2xl font-semibold">New city</h2>
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
-          <div className="flex w-full">
-            {/* <TextInput inputType="text" placeholder="No file selected" /> */}
-            <input
-              type="file"
-              className="file-input file-input-ghost bg-lightGray w-full max-w-xs"
-            />
-          </div>
-          <TextInput inputType="text" placeholder="Title" />
-          {/* Add a warning or error component here  */}
-
-          <textarea
-            cols={30}
-            rows={5}
-            placeholder="Description"
-            className="p-3 bg-lightGray outline-none rounded-md"
-          ></textarea>
-
-          <BadgeContainer
-            editableBadges={[]}
-            placeholder="Content categories"
-          />
-          {/* Dropdown  */}
+          <TextInput inputType="text" placeholder="Name" />
 
           <div className="flex w-full items-center">
             <div className="dropdown w-full">
@@ -53,7 +32,7 @@ export default function Page() {
                 tabIndex={0}
                 className="w-full bg-lightGray border-none p-3 rounded-md m-1 flex items-center justify-between"
               >
-                <small className="opacity-[0.44]">Publish at</small>
+                <small className="opacity-[0.44]">Status</small>
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
               <ul
@@ -61,10 +40,16 @@ export default function Page() {
                 className="dropdown-content menu p-2 w-full shadow bg-lightGray rounded-box"
               >
                 <li>
-                  <a>11/12/2022</a>
+                  <input type="text" className="w-full" />
                 </li>
                 <li>
-                  <a>10/12/2022</a>
+                  <a className="text-primary">Enabled</a>
+                </li>
+                <li>
+                  <a className="text-primary">Disabled</a>
+                </li>
+                <li>
+                  <p className="text-primary">Coming soon</p>
                 </li>
               </ul>
             </div>
@@ -73,9 +58,9 @@ export default function Page() {
           {/* Form navigation  */}
 
           <FormNav
-            rightBtnText="Update article"
+            rightBtnText="Create city"
             // redirect to verify admin page
-            rightBtnAction={() => push("/articles")}
+            rightBtnAction={() => push("/cities")}
           />
         </form>
       </main>
