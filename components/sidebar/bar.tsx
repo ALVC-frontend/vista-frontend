@@ -31,7 +31,7 @@ const SideBar = ({ sidebarItems }: Props) => {
           <div className="w-4/5" key={item.name}>
             <h2 className="opacity-[0.44]">{item.name}</h2>
             {item.links.map(({ displayName, link }: any) => (
-              <SidebarItem name={displayName} path={link} />
+              <SidebarItem name={displayName} path={link} key={link} />
             ))}
           </div>
         ))}

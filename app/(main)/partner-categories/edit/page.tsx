@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editPartnerCategories } from "@lib/dummy";
@@ -28,7 +27,7 @@ export default function Page() {
           <FormNav
             rightBtnText="Update partner category"
             // redirect to verify admin page
-            rightBtnAction={() => push("/cities")}
+            rightBtnAction={() => push("/partner-categories")}
           />
         </form>
       </main>

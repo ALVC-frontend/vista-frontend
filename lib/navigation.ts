@@ -58,7 +58,7 @@ export const mainNav = [
     links: [
       {
         displayName: "Organizations",
-        link: "/admins",
+        link: "/organisations",
       },
       {
         displayName: "Partner categories",

@@ -6,6 +6,7 @@ import { Button } from ".";
 
 type Props = {
   extraStyles?: string;
+  leftBtnText?: string;
   rightBtnAction?: () => any;
   rightBtnStyles?: string;
   rightBtnText: string;
@@ -13,6 +14,7 @@ type Props = {
 
 const FormNav = ({
   extraStyles,
+  leftBtnText = "Cancel",
   rightBtnAction,
   rightBtnStyles,
   rightBtnText,
@@ -24,7 +26,7 @@ const FormNav = ({
       className={`w-full flex items-center justify-between px-1 ${extraStyles}`}
     >
       <Button
-        text="Cancel"
+        text={leftBtnText}
         onPress={() => router.back()}
         subtle
         extraStyles="md:w-1/5"

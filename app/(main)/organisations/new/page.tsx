@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
-import { newPartnerCategories } from "@lib/dummy";
+import { newOrganisation } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
@@ -11,14 +11,15 @@ export default function Page() {
   return (
     <section className="w-full pl-6">
       <header>
-        <BreadCrumb crumbs={newPartnerCategories} />
+        <BreadCrumb crumbs={newOrganisation} />
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">New partner category</h2>
+        <h2 className="text-2xl font-semibold">New organisation</h2>
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
-          <TextInput inputType="text" placeholder="Title" />
+          <TextInput inputType="text" placeholder="Name" />
+          <TextInput inputType="text" placeholder="About" />
 
           <input
             type="file"
@@ -28,9 +29,9 @@ export default function Page() {
           {/* Form navigation  */}
 
           <FormNav
-            rightBtnText="Create partner category"
+            rightBtnText="Create organisation"
             // redirect to verify admin page
-            rightBtnAction={() => push("/partner-categories")}
+            rightBtnAction={() => push("/organisations")}
           />
         </form>
       </main>

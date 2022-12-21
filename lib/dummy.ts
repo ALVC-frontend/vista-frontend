@@ -150,3 +150,25 @@ export const editPartnerCategories: BreadLink[] = [
     textToDisplay: "Edit category",
   },
 ];
+
+export const newOrganisation: BreadLink[] = [
+  {
+    link: "/organisations",
+    textToDisplay: "Organisations",
+  },
+  {
+    link: "/organisations/new",
+    textToDisplay: "New Organisation",
+  },
+];
+
+export const editOrganisation: BreadLink[] = [
+  {
+    link: "/organisations",
+    textToDisplay: "Organisations",
+  },
+  {
+    link: "/organisations/edit",
+    textToDisplay: "Edit Organisation",
+  },
+];
