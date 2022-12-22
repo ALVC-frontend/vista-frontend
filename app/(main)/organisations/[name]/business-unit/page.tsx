@@ -53,7 +53,9 @@ export default function Page({ params }: any) {
             {/* admin 3  */}
             <tr>
               <td className="text-primary">
-                <Link href="/business-unit/developer-division">
+                <Link
+                  href={`/organisations/${params.name}/business-unit/developer-division/branches`}
+                >
                   Developer Division
                 </Link>
               </td>
