@@ -172,3 +172,36 @@ export const editOrganisation: BreadLink[] = [
     textToDisplay: "Edit Organisation",
   },
 ];
+
+export const newDataImports: BreadLink[] = [
+  {
+    link: "/data-imports",
+    textToDisplay: "Data Imports",
+  },
+  {
+    link: "/data-imports/new",
+    textToDisplay: "New Data imports",
+  },
+];
+
+export const statusDataImports: BreadLink[] = [
+  {
+    link: "/data-imports",
+    textToDisplay: "Data Imports",
+  },
+  {
+    link: "/data-imports/status",
+    textToDisplay: "status",
+  },
+];
+
+export const releases: BreadLink[] = [
+  {
+    link: "/releases",
+    textToDisplay: "Releases",
+  },
+  {
+    link: "/releases/status",
+    textToDisplay: "status",
+  },
+];
