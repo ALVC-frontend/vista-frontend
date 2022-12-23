@@ -205,3 +205,69 @@ export const releases: BreadLink[] = [
     textToDisplay: "status",
   },
 ];
+
+export const newPreferenceGroup: BreadLink[] = [
+  {
+    link: "/preference-group",
+    textToDisplay: "Preference Groups",
+  },
+  {
+    link: "/preference-group/new",
+    textToDisplay: "New preference group",
+  },
+];
+
+export const statusPreferenceGroup: BreadLink[] = [
+  {
+    link: "/preference-group",
+    textToDisplay: "Preference Groups",
+  },
+  {
+    link: "/preference-group/status",
+    textToDisplay: "Status",
+  },
+];
+
+export const statusQuestions: BreadLink[] = [
+  {
+    link: "/questions",
+    textToDisplay: "Questions",
+  },
+  {
+    link: "/questions",
+    textToDisplay: "Status",
+  },
+];
+
+export const newQuestion: BreadLink[] = [
+  {
+    link: "/questions",
+    textToDisplay: "Questions",
+  },
+  {
+    link: "/questions/new",
+    textToDisplay: "New Question",
+  },
+];
+
+export const statusCategories: BreadLink[] = [
+  {
+    link: "/categories",
+    textToDisplay: "Categories",
+  },
+  {
+    link: "/categories",
+    textToDisplay: "Status",
+  },
+];
+
+export const newCategories: BreadLink[] = [
+  {
+    link: "/categories",
+    textToDisplay: "Categories",
+  },
+  {
+    link: "/categories/new",
+    textToDisplay: "New Category",
+  },
+];
