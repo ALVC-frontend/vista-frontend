@@ -2,10 +2,10 @@
 
 import {
   ArrowLeftOnRectangleIcon,
-  Bars3Icon,
+  ChevronLeftIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { SidebarItem } from "@components/index";
 
@@ -15,6 +15,7 @@ type Props = {
 
 const SideBar = ({ sidebarItems }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navBarDiv = useRef<HTMLDivElement>();
 
   const toggleSideBar = () => setIsSidebarOpen((prev) => !prev);
 
@@ -23,15 +24,31 @@ const SideBar = ({ sidebarItems }: Props) => {
       <div
         className={`col-span-1 md:flex h-[100vh] flex-col gap-y-6 overflow-y-auto items-center py-4 ${
           isSidebarOpen
-            ? "absolute bg-white w-[50vw] my-0 h-[100vh] top-0 z-20"
+            ? "absolute bg-white w-[60vw] my-0 h-[100vh] top-0 z-20"
             : "hidden"
         }`}
+        //@ts-ignore
+        ref={navBarDiv}
+        onClick={(e: any) => {
+          console.log(navBarDiv.current?.contains(e.target));
+        }}
       >
+        <div className="relative left-[85%]">
+          <XMarkIcon
+            className="w-6 h-6 cursor-pointer"
+            onClick={toggleSideBar}
+          />
+        </div>
         {sidebarItems.map((item: any) => (
           <div className="w-4/5" key={item.name}>
             <h2 className="opacity-[0.44]">{item.name}</h2>
             {item.links.map(({ displayName, link }: any) => (
-              <SidebarItem name={displayName} path={link} key={link} />
+              <SidebarItem
+                name={displayName}
+                path={link}
+                key={link}
+                toggle={toggleSideBar}
+              />
             ))}
           </div>
         ))}
@@ -47,21 +64,12 @@ const SideBar = ({ sidebarItems }: Props) => {
 
       {/* swap to display the sidebar on mobile devices  */}
 
-      <label className="btn bg-primary hover:bg-primary hover:border-primary border-primary btn-circle md:hidden absolute bottom-2 right-2 z-10 swap swap-rotate">
-        <input type="checkbox" />
-
-        {/* hamburger icon  */}
-        <Bars3Icon
+      {!isSidebarOpen && (
+        <ChevronLeftIcon
+          className="w-6 h-6 md:hidden absolute cursor-pointerm top-1/2 text-white -right-2 z-30 bg-primary rounded-full"
           onClick={toggleSideBar}
-          className="w-6 h-6 swap-off fill-current"
         />
-
-        {/* close icon  */}
-        <XMarkIcon
-          onClick={toggleSideBar}
-          className="w-6 h-6 swap-on fill-current"
-        />
-      </label>
+      )}
     </>
   );
 };
