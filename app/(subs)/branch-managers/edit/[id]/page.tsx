@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { branchManagerCrumbs } from "@lib/dummy";

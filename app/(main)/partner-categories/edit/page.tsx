@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editPartnerCategories } from "@lib/dummy";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 import {
