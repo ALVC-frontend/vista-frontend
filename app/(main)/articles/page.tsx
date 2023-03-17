@@ -1,9 +1,21 @@
+'use client'
+import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-
-import { Button } from "@components/index";
-
+import  Article  from "models/article";
+import  getArticles from "utils/admin/articles/articles";
+import { BreadCrumb, Button } from "@components/index";
 export default function Page() {
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const data = await getArticles();
+      setArticles(data);
+    };
+    fetchArticles();
+  }, []);
+
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -43,46 +55,20 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <p>T1</p>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Published
-                </p>
-              </td>
-              <td>
-                <small>5/07/2022 at 11:30</small>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p>T2</p>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Published
-                </p>
-              </td>
-              <td>
-                <small>5/07/2022 at 11:30</small>
-              </td>
-            </tr>{" "}
-            <tr>
-              <td>
-                <p>T3</p>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Published
-                </p>
-              </td>
-              <td>
-                <small>5/07/2022 at 11:30</small>
-              </td>
-            </tr>
-          </tbody>
+  {articles && articles.map((article) => (
+    <tr key={article.id}>
+      <td>
+        <p>{article.title}</p>
+        <Link href={`/articles/${article.slug}`}>
+          <a>Read More</a>
+        </Link>
+      </td>
+      <td>{article.category}</td>
+      <td>{formatDate(article.date)}</td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </article>
     </section>
