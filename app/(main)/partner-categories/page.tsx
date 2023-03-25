@@ -1,9 +1,20 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-
 import { Button } from "@components/index";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Page() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("your_api_endpoint_url");
+      setCategories(result.data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -41,48 +52,15 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Travel</p>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Spas</p>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Resorts</p>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Hotels</p>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Bars</p>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link href="/partner-categories/edit">
-                  <p className="text-primary">Restaurants</p>
-                </Link>
-              </td>
-            </tr>
+            {categories.map((category) => (
+              <tr key={category.id}>
+                <td>
+                  <Link href={`/partner-categories/${category.id}`}>
+                    <p className="text-primary">{category.name}</p>
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>

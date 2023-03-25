@@ -1,14 +1,22 @@
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-
 import { BreadCrumb, Button } from "@components/index";
-import { statusQuestions } from "@lib/dummy";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Page() {
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/questions").then((res) => {
+      setQuestions(res.data);
+    });
+  }, []);
+
   return (
     <section className="">
       <header>
-        <BreadCrumb crumbs={statusQuestions} />
+        <BreadCrumb crumbs={[]} />
         <div className="flex items-center justify-between px-4">
           <h2 className="font-semibold text-xl flex-grow">Questions</h2>
           <Link href="/questions/new">
@@ -54,108 +62,32 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <p className="text-primary">Hotel</p>
-              </td>
-              <td>
-                <p>What are your main reasons to visit a hotel?</p>
-              </td>
-              <td>
-                <small>Unordered list</small>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  True
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p className="text-primary">Hotel</p>
-              </td>
-              <td>
-                <p>
-                  Will your trip to the hotel be organized through a travel
-                  agency or another organizer?
-                </p>
-              </td>
-              <td>
-                <small>Option</small>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  True
-                </p>
-              </td>
-            </tr>{" "}
-            <tr>
-              <td>
-                <p className="text-primary">Hotel</p>
-              </td>
-              <td>
-                <p>Who will accompany you on your visit to hotel?</p>
-              </td>
-              <td>
-                <small>Unordered list</small>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  True
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p className="text-primary">Hotel</p>
-              </td>
-              <td>
-                <p>How often do you stay at hotels?</p>
-              </td>
-              <td>
-                <small>Option</small>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  True
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p className="text-primary">Hotel</p>
-              </td>
-              <td>
-                <p>What booking method do you prefer to use?</p>
-              </td>
-              <td>
-                <small>Unordered list</small>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  True
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p className="text-primary">Hotel/Budget</p>
-              </td>
-              <td>
-                <p>
-                  How much do you plan to spend during your visit to the hotel
-                  on restaurants/cafe?
-                </p>
-              </td>
-              <td>
-                <small>Unordered list</small>
-              </td>
-              <td>
-                <p className="badge bg-red-200 text-red-400 text-sm border-red-200 p-4">
-                  False
-                </p>
-              </td>
-            </tr>
+            {questions.map((question) => (
+              <tr key={question.id}>
+                <td>
+                  <p className="text-primary">{question.category}</p>
+                </td>
+                <td>
+                  <Link href={`/questions/${question.id}`}>
+                    <a className="text-primary hover:underline">
+                      {question.title}
+                    </a>
+                  </Link>
+                </td>
+                <td>
+                  <small>{question.kind}</small>
+                </td>
+                <td>
+                  <p
+                    className={`badge ${
+                      question.intro ? "bg-background" : "bg-red-200"
+                    } text-primary text-sm border-background p-4`}
+                  >
+                    {question.intro ? "True" : "False"}
+                  </p>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>
