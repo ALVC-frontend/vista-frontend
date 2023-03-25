@@ -1,18 +1,19 @@
-'use client'
+"use client"
 import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import  Article  from "models/article";
-import  getArticles from "utils/admin/articles/articles";
 import { BreadCrumb, Button } from "@components/index";
+import axios from "axios";
+
 export default function Page() {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    const fetchArticles = async () => {
-      const data = await getArticles();
-      setArticles(data);
-    };
+    async function fetchArticles() {
+      const response = await axios.get("/api/articles");
+      setArticles(response.data);
+    }
+
     fetchArticles();
   }, []);
 
@@ -42,7 +43,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
+      {/* Articles table  */}
 
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
@@ -55,20 +56,19 @@ export default function Page() {
           </thead>
 
           <tbody>
-  {articles && articles.map((article) => (
-    <tr key={article.id}>
-      <td>
-        <p>{article.title}</p>
-        <Link href={`/articles/${article.slug}`}>
-          <a>Read More</a>
-        </Link>
-      </td>
-      <td>{article.category}</td>
-      <td>{formatDate(article.date)}</td>
-    </tr>
-  ))}
-</tbody>
-
+            {articles.map((article) => (
+              <tr key={article.id}>
+                <td>
+                  <p>{article.title}</p>
+                  <Link href={`/articles/${article.slug}`}>
+                    <a>Read More</a>
+                  </Link>
+                </td>
+                <td>{article.status}</td>
+                <td>{article.published_at}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </article>
     </section>

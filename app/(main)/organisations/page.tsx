@@ -1,9 +1,19 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import { Button } from "@components/index";
 
 export default function Page() {
+  const [organizations, setOrganizations] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/organizations").then((res) => {
+      setOrganizations(res.data);
+    });
+  }, []);
+
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -30,7 +40,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
+      {/* Organizations table  */}
 
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
@@ -41,13 +51,15 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <Link href="/organisations/Kanso">
-                  <p className="text-primary">Kanso</p>
-                </Link>
-              </td>
-            </tr>
+            {organizations.map((org) => (
+              <tr key={org.id}>
+                <td>
+                  <Link href={`/organisations/${org.name}`}>
+                    <p className="text-primary">{org.name}</p>
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>

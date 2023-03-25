@@ -1,7 +1,7 @@
-"use client";
-
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 
 import {
   BadgeContainer,
@@ -13,6 +13,27 @@ import { newArticleCrumbs } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
+  const [formData, setFormData] = useState({});
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("/api/articles", formData);
+      console.log(response.data);
+      // redirect to verify admin page
+      push("/articles");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section className="w-full pl-6">
@@ -23,29 +44,41 @@ export default function Page() {
       <main>
         <h2 className="text-2xl font-semibold">New article</h2>
 
-        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
+        <form
+          className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]"
+          onSubmit={handleSubmit}
+        >
           <div className="flex w-full">
-            {/* <TextInput inputType="text" placeholder="No file selected" /> */}
             <input
               type="file"
               className="file-input file-input-ghost bg-lightGray w-full max-w-xs"
+              name="file"
+              onChange={handleInputChange}
             />
           </div>
-          <TextInput inputType="text" placeholder="Title" />
-          {/* Add a warning or error component here  */}
+
+          <TextInput
+            inputType="text"
+            placeholder="Title"
+            name="title"
+            onChange={handleInputChange}
+          />
 
           <textarea
             cols={30}
             rows={5}
             placeholder="Description"
             className="p-3 bg-lightGray outline-none rounded-md"
+            name="description"
+            onChange={handleInputChange}
           ></textarea>
 
           <BadgeContainer
             editableBadges={[]}
             placeholder="Content categories"
+            name="categories"
+            onChange={handleInputChange}
           />
-          {/* Dropdown  */}
 
           <div className="flex w-full items-center">
             <div className="dropdown w-full">
@@ -74,8 +107,7 @@ export default function Page() {
 
           <FormNav
             rightBtnText="Update article"
-            // redirect to verify admin page
-            rightBtnAction={() => push("/articles")}
+            type="submit"
           />
         </form>
       </main>

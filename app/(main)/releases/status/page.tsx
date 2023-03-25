@@ -1,9 +1,22 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
-
 import { BreadCrumb, Button } from "@components/index";
 import { releases } from "@lib/dummy";
+import axios from "axios";
 
 export default function Page() {
+  const [statuses, setStatuses] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/statuses")
+      .then((response) => {
+        setStatuses(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -41,7 +54,7 @@ export default function Page() {
             <tr>
               <td>
                 <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Completed
+                  {status}
                 </p>
               </td>
 
@@ -58,7 +71,7 @@ export default function Page() {
             <tr>
               <td>
                 <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Completed
+                {status}
                 </p>
               </td>
 

@@ -1,9 +1,18 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Button } from "@components/index";
 
 export default function Page() {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/videos").then((response) => {
+      setVideos(response.data);
+    });
+  }, []);
+
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -11,7 +20,7 @@ export default function Page() {
         <div className="hidden md:block">
           <h3 className="font-semibold">Videos</h3>
         </div>
-        <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
+        <<div className="bg-white rounded-md flex items-center gap-x-2 p-2">
           <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
           <input
             type="text"
@@ -30,8 +39,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
-
+      {/* Videos table  */}
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -45,27 +53,27 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <Link href="/videos/edit">
-                  <p>Sample Video</p>
-                </Link>
-              </td>
-              <td>
-                <p>Placeholder seeded video for development purposes...</p>
-              </td>
-              <td>
-                <p className="text-primary">Vista</p>
+            {videos.map((video) => (
+              <tr key={video.id}>
+                <td>
+                  <Link href={`/videos/${video.id}`}>
+                    <p>{video.name}</p>
+                  </Link>
+                </td>
+                <td>
+                  <p>{video.description}</p>
+                </td>
+                <td>
+                <p className="text-primary">{video.partner}</p>
               </td>
               <td>
                 <p className="badge bg-background text-primary text-sm border-background p-4">
-                  Published
+                {video.published_at}
                 </p>
               </td>
-              <td>
-                <small>5/07/2022 at 11:30</small>
-              </td>
+        
             </tr>
+            ))}
           </tbody>
         </table>
       </article>
