@@ -1,25 +1,9 @@
-import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import axios from "axios";
 
 import { Button } from "@components/index";
 
 export default function Page() {
-  const [cities, setCities] = useState([]);
-
-  useEffect(() => {
-    async function getCities() {
-      try {
-        const response = await axios.get("/api/cities");
-        setCities(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getCities();
-  }, []);
-
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -46,7 +30,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Cities table  */}
+      {/* Admins table  */}
 
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
@@ -57,13 +41,11 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {cities.map((city) => (
-              <tr key={city.id}>
-                <td>
-                  <p>{city.name}</p>
-                </td>
-              </tr>
-            ))}
+            <tr>
+              <td>
+                <p>Cardiff</p>
+              </td>
+            </tr>
           </tbody>
         </table>
       </article>

@@ -1,6 +1,7 @@
+"use client";
+
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import axios from "axios"; // import Axios library
 
 import {
   BadgeContainer,
@@ -13,31 +14,6 @@ import { newVideoCrumbs } from "@lib/dummy";
 export default function Page() {
   const { push } = useRouter();
 
-  // function to create a new video
-  const createVideo = async (event) => {
-    event.preventDefault(); // prevent form from submitting
-
-    // get form data
-    const name = event.target.elements.name.value;
-    const url = event.target.elements.url.value;
-    const description = event.target.elements.description.value;
-    const published = event.target.elements.published.checked;
-
-    // make POST request to create new video
-    try {
-      const response = await axios.post("/api/videos", {
-        name,
-        url,
-        description,
-        published,
-      });
-      console.log(response.data);
-      push("/videos"); // redirect to videos page
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <section className="w-full pl-6">
       <header>
@@ -47,17 +23,16 @@ export default function Page() {
       <main>
         <h2 className="text-2xl font-semibold">New Video</h2>
 
-        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5" onSubmit={createVideo}>
-          <TextInput inputType="text" placeholder="Name" name="name" />
-          <TextInput inputType="url" placeholder="URL" name="url" />
-          {/* Add a warning or error component here  */}
+        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
+          <TextInput inputType="text" placeholder="Name" />
+          <TextInput inputType="url" placeholder="URL" />
+          {/* Add a warning or error componen here  */}
 
           <textarea
             cols={30}
             rows={5}
             placeholder="Description"
             className="p-3 bg-lightGray outline-none rounded-md"
-            name="description"
           ></textarea>
 
           {/* Dropdown  */}
@@ -88,25 +63,21 @@ export default function Page() {
             editableBadges={[]}
             placeholder="Content categories"
           />
-<div className="">
-  <label className="cursor-pointer flex gap-x-2 items-center">
-    <input type="checkbox" className="" />
-    <span className="label-text text-primary">Published</span>
-  </label>
-</div>
 
-<BadgeContainer
-  editableBadges={[]}
-  placeholder="Content categories"
-/>
+          <div className="">
+            <label className="cursor-pointer flex gap-x-2 items-center">
+              <input type="checkbox" className="" />
+              <span className="label-text text-primary">Published</span>
+            </label>
+          </div>
+          {/* Form navigation  */}
 
-{/* Form navigation  */}
-<FormNav
-  rightBtnText="Create video"
-  // redirect to verify admin page
-  rightBtnAction={() => push("/videos")}
-/>
-</form>
+          <FormNav
+            rightBtnText="Create video"
+            // redirect to verify admin page
+            rightBtnAction={() => push("/videos")}
+          />
+        </form>
       </main>
     </section>
   );

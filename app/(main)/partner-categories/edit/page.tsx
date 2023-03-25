@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editPartnerCategories } from "@lib/dummy";
-import axios from "axios";
-
 
 export default function Page() {
   const { push } = useRouter();
@@ -27,23 +25,10 @@ export default function Page() {
           {/* Form navigation  */}
 
           <FormNav
-  rightBtnText="Update partner category"
-  rightBtnAction={async () => {
-    const name = document.getElementById("name-input").value;
-    const image = document.getElementById("image-input").files[0];
-    const id = "123"; // replace with actual partner category ID
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("image", image);
-    try {
-      const response = await axios.put(`/api/partner-categories/${id}`, formData);
-      console.log(response.data);
-      push("/partner-categories");
-    } catch (error) {
-      console.error(error);
-    }
-  }}
-/>
+            rightBtnText="Update partner category"
+            // redirect to verify admin page
+            rightBtnAction={() => push("/partner-categories")}
+          />
         </form>
       </main>
     </section>

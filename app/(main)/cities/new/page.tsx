@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
 
 import {
   BadgeContainer,
@@ -14,21 +14,6 @@ import { newCityCrumbs } from "@lib/dummy";
 export default function Page() {
   const { push } = useRouter();
 
-  const [name, setName] = useState("");
-  const [status, setStatus] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await axios.post("/api/cities", { name, status });
-      console.log(res.data);
-      push("/cities");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <section className="w-full pl-6">
       <header>
@@ -38,16 +23,8 @@ export default function Page() {
       <main>
         <h2 className="text-2xl font-semibold">New city</h2>
 
-        <form
-          className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]"
-          onSubmit={handleSubmit}
-        >
-          <TextInput
-            inputType="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
+          <TextInput inputType="text" placeholder="Name" />
 
           <div className="flex w-full items-center">
             <div className="dropdown w-full">
@@ -63,36 +40,16 @@ export default function Page() {
                 className="dropdown-content menu p-2 w-full shadow bg-lightGray rounded-box"
               >
                 <li>
-                  <input
-                    type="text"
-                    className="w-full"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  />
+                  <input type="text" className="w-full" />
                 </li>
                 <li>
-                  <a
-                    className="text-primary"
-                    onClick={() => setStatus("Enabled")}
-                  >
-                    Enabled
-                  </a>
+                  <a className="text-primary">Enabled</a>
                 </li>
                 <li>
-                  <a
-                    className="text-primary"
-                    onClick={() => setStatus("Disabled")}
-                  >
-                    Disabled
-                  </a>
+                  <a className="text-primary">Disabled</a>
                 </li>
                 <li>
-                  <p
-                    className="text-primary"
-                    onClick={() => setStatus("Coming soon")}
-                  >
-                    Coming soon
-                  </p>
+                  <p className="text-primary">Coming soon</p>
                 </li>
               </ul>
             </div>
@@ -103,7 +60,7 @@ export default function Page() {
           <FormNav
             rightBtnText="Create city"
             // redirect to verify admin page
-            rightBtnAction={handleSubmit}
+            rightBtnAction={() => push("/cities")}
           />
         </form>
       </main>

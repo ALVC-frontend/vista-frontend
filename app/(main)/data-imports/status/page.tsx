@@ -1,28 +1,9 @@
 import Link from "next/link";
-import { useState } from "react";
-import axios from "axios";
 
 import { BreadCrumb, Button } from "@components/index";
 import { statusDataImports } from "@lib/dummy";
 
 export default function Page() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleImportClick = async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await axios.post("/api/import-data");
-      console.log(response.data);
-      // handle success response here
-    } catch (error) {
-      console.log(error);
-      // handle error response here
-    }
-
-    setIsLoading(false);
-  };
-
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
@@ -33,13 +14,13 @@ export default function Page() {
         </div>
 
         <div className="">
-          <Button
-            text="Import data"
-            primary
-            extraStyles="font-thin text-sm px-4 py-3"
-            onClick={handleImportClick}
-            disabled={isLoading}
-          />
+          <Link href="/data-imports/new">
+            <Button
+              text="Import data"
+              primary
+              extraStyles="font-thin text-sm px-4 py-3"
+            />
+          </Link>
         </div>
       </header>
 

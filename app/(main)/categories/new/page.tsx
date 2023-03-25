@@ -1,5 +1,5 @@
 import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
-import axios from "axios";
+
 import { BreadCrumb, Button, TextInput } from "@components/index";
 import { newCategories } from "@lib/dummy";
 import Link from "next/link";

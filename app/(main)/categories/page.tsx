@@ -1,8 +1,5 @@
-"use client";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
 
 import { BreadCrumb, Button } from "@components/index";
 import { statusCategories } from "@lib/dummy";
@@ -13,17 +10,6 @@ import beauty3 from "@assets/images/beauty4.png";
 import beauty4 from "@assets/images/beauty4.png";
 
 export default function Page() {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    async function fetchCategories() {
-      const response = await axios.get("/api/categories");
-      setCategories(response.data);
-    }
-
-    fetchCategories();
-  }, []);
-
   return (
     <section className="pl-3">
       <header>
@@ -36,15 +22,26 @@ export default function Page() {
         </div>
       </header>
       <main className="mt-3">
-        {categories.map((category) => (
-          <div
-            key={category.id}
-            className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]"
-          >
-            <Image src={category.image} alt={category.name} />
-            <p className="text-primary">{category.name}</p>
-          </div>
-        ))}
+        <div className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]">
+          <Image src={beauty} alt="beauty" />
+          <p className="text-primary">Beauty</p>
+        </div>
+        <div className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]">
+          <Image src={beauty1} alt="beauty1" />
+          <p className="text-primary">Beauty/bbb</p>
+        </div>
+        <div className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]">
+          <Image src={beauty2} alt="beauty2" />
+          <p className="text-primary">Clothes</p>
+        </div>
+        <div className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]">
+          <Image src={beauty3} alt="beauty3" />
+          <p className="text-primary">Shoes</p>
+        </div>
+        <div className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]">
+          <Image src={beauty4} alt="beauty4" />
+          <p className="text-primary">T-shirts</p>
+        </div>
       </main>
     </section>
   );

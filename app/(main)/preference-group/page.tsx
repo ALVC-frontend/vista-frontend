@@ -1,28 +1,13 @@
-import { useState, useEffect } from "react";
 import Link from "next/link";
+
 import { BreadCrumb, Button } from "@components/index";
-import axios from "axios";
+import { statusPreferenceGroup } from "@lib/dummy";
 
 export default function Page() {
-  const [preferenceGroups, setPreferenceGroups] = useState([]);
-
-  useEffect(() => {
-    async function fetchPreferenceGroups() {
-      try {
-        const response = await axios.get("/api/preference-groups");
-        setPreferenceGroups(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchPreferenceGroups();
-  }, []);
-
   return (
     <section className="w-full pl-1 pt-3">
-      <BreadCrumb crumbs={[{ label: "Preference Groups", link: "#" }]} />
-
+      <BreadCrumb crumbs={statusPreferenceGroup} />
+      {/* Header  */}
       <header className="flex items-center justify-between px-4 my-4">
         <div className="hidden md:block">
           <h3 className="font-semibold">Preference Groups</h3>
@@ -39,6 +24,8 @@ export default function Page() {
         </div>
       </header>
 
+      {/* Admins table  */}
+
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -48,13 +35,11 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {preferenceGroups.map((preferenceGroup) => (
-              <tr key={preferenceGroup.id}>
-                <td>
-                  <p>{preferenceGroup.name}</p>
-                </td>
-              </tr>
-            ))}
+            <tr>
+              <td>
+                <p>Hotel</p>
+              </td>
+            </tr>
           </tbody>
         </table>
       </article>
