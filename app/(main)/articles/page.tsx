@@ -1,21 +1,56 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { BreadCrumb, Button } from "@components/index";
 import axios from "axios";
 
+interface Article {
+  id: number;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  slug: string;
+  description: string;
+  content: string;
+  published_at: string;
+  // Add other properties of the article here
+}
+
+interface ArticlesResponse {
+  title: string;
+  admin_articles: {
+    breadcrumb: string;
+    content: {
+      hero_right: {
+        new_article_url: string;
+      };
+      articles: Article[];
+      paginate: string;
+    };
+  };
+}
+
 export default function Page() {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
     async function fetchArticles() {
-      const response = await axios.get("/api/articles");
-      setArticles(response.data);
+      try {
+        const response = await axios.get<ArticlesResponse>("http://localhost:4000/admin/articles");
+        setArticles(response.data.admin_articles.content.articles);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     fetchArticles();
   }, []);
+
+  console.log("articles:", articles);
 
   return (
     <section className="w-full pl-1 pt-3">
@@ -54,23 +89,30 @@ export default function Page() {
               <th className="bg-lightGray">Published at</th>
             </tr>
           </thead>
-
           <tbody>
-            {articles.map((article) => (
-              <tr key={article.id}>
-                <td>
-                  <p>{article.title}</p>
-                  <Link href={`/articles/${article.slug}`}>
-                    <a>Read More</a>
-                  </Link>
-                </td>
-                <td>{article.status}</td>
-                <td>{article.published_at}</td>
+            {Array.isArray(articles) && articles.length > 0 ? (
+              articles.map((article) => (
+                <tr key={article.id}>
+                  <td>
+                    <p>{article.title}</p>
+                    <Link href={`/articles/${article.id}`}>
+                      Read More
+                    </Link>
+
+                  </td>
+                  <td>{article.status}</td>
+                  <td>{article.publish_at}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">No articles found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </article>
     </section>
   );
 }
+

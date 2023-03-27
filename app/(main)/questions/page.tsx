@@ -1,3 +1,4 @@
+"use client";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { BreadCrumb, Button } from "@components/index";
 import Link from "next/link";
@@ -8,7 +9,7 @@ export default function Page() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/questions").then((res) => {
+    axios.get("http://localhost:4000/api/admin/questions").then((res) => {
       setQuestions(res.data);
     });
   }, []);

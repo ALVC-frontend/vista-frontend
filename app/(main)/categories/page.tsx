@@ -17,7 +17,7 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchCategories() {
-      const response = await axios.get("/api/categories");
+      const response = await axios.get("http://localhost:4000/api/admin/categories");
       setCategories(response.data);
     }
 
