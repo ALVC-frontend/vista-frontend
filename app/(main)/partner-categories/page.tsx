@@ -1,19 +1,43 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { Button } from "@components/index";
+"use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+import { Button } from "@components/index";
+
+interface Category {
+  id: number;
+  title: string;
+  breadcrumb: string;
+  link_to: string[];
+  icon: string;
+  paginate: {
+    id: number;
+    title: string;
+    position: number;
+    created_at: string;
+    updated_at: string;
+  }[];
+}
 
 export default function Page() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("your_api_endpoint_url");
-      setCategories(result.data);
-    };
-    fetchData();
+    async function fetchCategories() {
+      try {
+        const response = await axios.get<Category[]>("http://localhost:4000/admin/partner_categories");
+        setCategories(response.data.paginate);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchCategories();
   }, []);
+
+  console.log("categories:", categories);
 
   return (
     <section className="w-full pl-1 pt-3">
@@ -41,7 +65,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
+      {/* Categories table  */}
 
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
@@ -52,15 +76,21 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {categories.map((category) => (
-              <tr key={category.id}>
-                <td>
-                  <Link href={`/partner-categories/${category.id}`}>
-                    <p className="text-primary">{category.name}</p>
-                  </Link>
-                </td>
+            {Array.isArray(categories) && categories.length > 0 ? (
+              categories.map((category) => (
+                <tr key={category.id}>
+                  <td>
+                    <Link href={`/partner-categories/${category.id}`}>
+                      <p className="text-primary">{category.title}</p>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="1">No categories found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </article>

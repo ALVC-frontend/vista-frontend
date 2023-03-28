@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
@@ -25,14 +26,14 @@ export default function Page() {
 
   return (
     <section className="w-full pl-1 pt-3">
-      {/* Header  */}
+      {/* Header */}
       <BreadCrumb crumbs={statusDataImports} />
       <header className="flex items-center justify-between px-10 my-4">
         <div className="hidden md:block">
           <h3 className="font-semibold">Data imports</h3>
         </div>
 
-        <div className="">
+        <div>
           <Button
             text="Import data"
             primary
@@ -43,8 +44,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
-
+      {/* Table */}
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -57,12 +57,14 @@ export default function Page() {
           </thead>
 
           <tbody>
+            {/* Add more rows dynamically based on imported data */}
             <tr>
               <td>
                 <p className="text-primary">file1.docx</p>
               </td>
               <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
+                {/* Change badge color based on status */}
+                <p className="badge bg-success text-primary text-sm border-background p-4">
                   Finished
                 </p>
               </td>

@@ -1,18 +1,44 @@
+"use client";
 import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import axios from "axios";
 
-import { Button } from "@components/index";
+import Button from "@components/button";
+
+interface City {
+  city_name_url: string;
+}
+
+interface TableData {
+  thead: {
+    tr: {
+      th: string;
+    }
+  }
+  tbody: City[];
+}
+
+interface ApiResponse {
+  title: string;
+  breadcrumb: string;
+  table: TableData[];
+}
 
 export default function Page() {
-  const [cities, setCities] = useState([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [title, setTitle] = useState("");
+  const [breadcrumb, setBreadcrumb] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function getCities() {
       try {
-        const response = await axios.get("/api/cities");
-        setCities(response.data);
+        const response = await axios.get<ApiResponse>("http://localhost:4000/admin/cities");
+          setCities(response.data.table[0].tbody);
+          setTitle(response.data.title);
+          setBreadcrumb(response.data.breadcrumb);
+          console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -20,12 +46,13 @@ export default function Page() {
     getCities();
   }, []);
 
+
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
       <header className="flex items-center justify-around my-4">
         <div className="hidden md:block">
-          <h3 className="font-semibold">Cities</h3>
+          <h3 className="font-semibold">{title}</h3>
         </div>
         <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
           <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
@@ -33,6 +60,8 @@ export default function Page() {
             type="text"
             placeholder="Search city"
             className="outline-none border-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="">
@@ -52,18 +81,26 @@ export default function Page() {
         <table className="table w-full">
           <thead>
             <tr>
-              <th className="bg-lightGray">Name</th>
+              <th className="bg-lightGray">{breadcrumb}</th>
             </tr>
           </thead>
 
           <tbody>
-            {cities.map((city) => (
-              <tr key={city.id}>
-                <td>
-                  <p>{city.name}</p>
+          {Array.isArray(cities) && cities.length > 0 ? (
+              cities.map((city, index) => (
+                  <tr key={index}>
+                    <td>
+                      <p>{city.city_name_url}</p>
+                    </td>
+                  </tr>
+                ))
+            ) : (
+              <tr>
+                <td className="text-center py-4" colSpan={1}>
+                  No cities found.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </article>

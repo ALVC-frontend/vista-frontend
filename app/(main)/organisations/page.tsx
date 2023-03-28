@@ -1,18 +1,30 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
+"use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import { Button } from "@components/index";
+import Link from "next/link";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+
+interface Organization {
+  id: number;
+  name: string;
+  // Add other properties of the organization here
+}
 
 export default function Page() {
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
 
   useEffect(() => {
-    axios.get("/api/organizations").then((res) => {
+    axios.get<Organization[]>("/api/organizations").then((res) => {
       setOrganizations(res.data);
     });
   }, []);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredOrganizations = organizations.filter((org) =>
+    org.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <section className="w-full pl-1 pt-3">
@@ -27,10 +39,12 @@ export default function Page() {
             type="text"
             placeholder="Search organisations"
             className="outline-none border-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="">
-          <Link href="/organisations/new">
+          <Link href="/organizations/new">
             <Button
               text="New organisation"
               primary
@@ -41,7 +55,6 @@ export default function Page() {
       </header>
 
       {/* Organizations table  */}
-
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -49,17 +62,22 @@ export default function Page() {
               <th className="bg-lightGray">Name</th>
             </tr>
           </thead>
-
           <tbody>
-            {organizations.map((org) => (
-              <tr key={org.id}>
-                <td>
-                  <Link href={`/organisations/${org.name}`}>
-                    <p className="text-primary">{org.name}</p>
-                  </Link>
-                </td>
+            {filteredOrganizations.length === 0 ? (
+              <tr>
+                <td>No organizations found</td>
               </tr>
-            ))}
+            ) : (
+              filteredOrganizations.map((org) => (
+                <tr key={org.id}>
+                  <td>
+                    <Link href={`/organizations/${org.name}`}>
+                      <p className="text-primary">{org.name}</p>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </article>

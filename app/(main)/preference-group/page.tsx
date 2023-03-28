@@ -1,16 +1,25 @@
+"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BreadCrumb, Button } from "@components/index";
 import axios from "axios";
 
+interface PreferenceGroup {
+  id: number;
+  name: string;
+  // Add other properties of the preference group here
+}
+
 export default function Page() {
-  const [preferenceGroups, setPreferenceGroups] = useState([]);
+  const [preferenceGroups, setPreferenceGroups] = useState<PreferenceGroup[]>([]);
 
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
-        const response = await axios.get("/api/preference-groups");
+        const response = await axios.get<PreferenceGroup[]>("/api/preference-groups");
         setPreferenceGroups(response.data);
+        console.log("Response status:", response.status);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -18,6 +27,8 @@ export default function Page() {
 
     fetchPreferenceGroups();
   }, []);
+
+  console.log("preferenceGroups:", preferenceGroups);
 
   return (
     <section className="w-full pl-1 pt-3">

@@ -1,21 +1,40 @@
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BreadCrumb, Button } from "@components/index";
 import { releases } from "@lib/dummy";
 import axios from "axios";
 
+interface Release {
+  id: number;
+  status: string;
+  created_at: string;
+  download_url: string;
+}
+
 export default function Page() {
-  const [statuses, setStatuses] = useState([]);
+  const [releases, setReleases] = useState<Release[]>([]);
 
   useEffect(() => {
-    axios.get("/api/statuses")
+    axios.get("/api/releases")
       .then((response) => {
-        setStatuses(response.data);
+        setReleases(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  const handleDelete = (id: number) => {
+    axios.delete(`/api/releases/${id}`)
+      .then(() => {
+        const updatedReleases = releases.filter((release) => release.id !== id);
+        setReleases(updatedReleases);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <section className="w-full pl-1 pt-3">
@@ -37,8 +56,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Admins table  */}
-
+      {/* Releases table  */}
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -51,40 +69,34 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                  {status}
-                </p>
-              </td>
-
-              <td>
-                <small>2022-11-23 12:25:40 UTC</small>
-              </td>
-              <td>
-                <p className="text-primary">Download</p>
-              </td>
-              <td>
-                <small className="text-red-400 underline">Delete</small>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                {status}
-                </p>
-              </td>
-
-              <td>
-                <small>2022-11-23 12:25:40 UTC</small>
-              </td>
-              <td>
-                <p className="text-primary">Download</p>
-              </td>
-              <td>
-                <small className="text-red-400 underline">Delete</small>
-              </td>
-            </tr>
+            {releases.length > 0 ? (
+              releases.map((release) => (
+                <tr key={release.id}>
+                  <td>
+                    <p className="badge bg-background text-primary text-sm border-background p-4">
+                      {release.status}
+                    </p>
+                  </td>
+                  <td>
+                    <small>{release.created_at}</small>
+                  </td>
+                  <td>
+                    <Link href={release.download_url}>
+                      <a className="text-primary">Download</a>
+                    </Link>
+                  </td>
+                  <td>
+                    <button className="text-red-400 underline" onClick={() => handleDelete(release.id)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4">No releases found.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </article>

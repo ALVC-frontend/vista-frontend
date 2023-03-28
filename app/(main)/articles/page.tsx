@@ -8,28 +8,26 @@ import axios from "axios";
 interface Article {
   id: number;
   title: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  slug: string;
-  description: string;
   content: string;
-  published_at: string;
-  // Add other properties of the article here
+  publish_at: string;
+  created_at: string;
+  status: string;
+  // add any other properties here as needed
 }
 
 interface ArticlesResponse {
   title: string;
   admin_articles: {
     breadcrumb: string;
-    content: {
-      hero_right: {
-        new_article_url: string;
-      };
-      articles: Article[];
-      paginate: string;
-    };
   };
+  admin_articles_path: {
+    filters: {
+      text: string;
+    }
+  };
+  content: Article[];
+  articles: Article[];
+  paginate: Article[];
 }
 
 export default function Page() {
@@ -39,7 +37,7 @@ export default function Page() {
     async function fetchArticles() {
       try {
         const response = await axios.get<ArticlesResponse>("http://localhost:4000/admin/articles");
-        setArticles(response.data.admin_articles.content.articles);
+        setArticles(response.data.articles);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -57,7 +55,7 @@ export default function Page() {
       {/* Header  */}
       <header className="flex items-center justify-around my-4">
         <div className="hidden md:block">
-          <h3 className="font-semibold">Articles</h3>
+          <h3 className="font-semibold">{articles.length > 0 ? articles[0].title : ""}</h3>
         </div>
         <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
           <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
@@ -98,7 +96,6 @@ export default function Page() {
                     <Link href={`/articles/${article.id}`}>
                       Read More
                     </Link>
-
                   </td>
                   <td>{article.status}</td>
                   <td>{article.publish_at}</td>
@@ -115,4 +112,3 @@ export default function Page() {
     </section>
   );
 }
-

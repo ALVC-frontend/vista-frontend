@@ -5,14 +5,32 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+interface Question {
+  id: number;
+  title: string;
+  category: string;
+  kind: string;
+}
+
 export default function Page() {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/admin/questions").then((res) => {
-      setQuestions(res.data);
-    });
+    async function fetchQuestions() {
+      try {
+        const response = await axios.get<Question[]>("http://localhost:4000/api/admin/questions");
+        setQuestions(response.data);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchQuestions();
   }, []);
+
+  console.log("questions:", questions);
 
   return (
     <section className="">
@@ -55,40 +73,30 @@ export default function Page() {
         <table className="table w-full">
           <thead>
             <tr>
-              <th className="bg-lightGray">Category</th>
               <th className="bg-lightGray">Title</th>
+              <th className="bg-lightGray">Category</th>
               <th className="bg-lightGray">Kind</th>
-              <th className="bg-lightGray">Intro</th>
             </tr>
           </thead>
-
           <tbody>
-            {questions.map((question) => (
-              <tr key={question.id}>
-                <td>
-                  <p className="text-primary">{question.category}</p>
-                </td>
-                <td>
-                  <Link href={`/questions/${question.id}`}>
-                    <a className="text-primary hover:underline">
-                      {question.title}
-                    </a>
-                  </Link>
-                </td>
-                <td>
-                  <small>{question.kind}</small>
-                </td>
-                <td>
-                  <p
-                    className={`badge ${
-                      question.intro ? "bg-background" : "bg-red-200"
-                    } text-primary text-sm border-background p-4`}
-                  >
-                    {question.intro ? "True" : "False"}
-                  </p>
-                </td>
+            {Array.isArray(questions) && questions.length > 0 ? (
+              questions.map((question) => (
+                <tr key={question.id}>
+                  <td>
+                    <p>{question.title}</p>
+                    <Link href={`/questions/${question.id}`}>
+                      Read More
+                    </Link>
+                  </td>
+                  <td>{question.category}</td>
+                  <td>{question.kind}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">No questions found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </article>

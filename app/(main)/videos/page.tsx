@@ -1,17 +1,41 @@
+"use client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@components/index";
 
+interface Video {
+  id: number;
+  name: string;
+  description: string;
+  partner: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
+  // Add other properties of the video here
+}
+
 export default function Page() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
-    axios.get("/api/videos").then((response) => {
-      setVideos(response.data);
-    });
+    async function fetchVideos() {
+      try {
+        const response = await axios.get<Video[]>("/api/videos");
+        setVideos(response.data);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchVideos();
   }, []);
+
+  console.log("videos:", videos);
 
   return (
     <section className="w-full pl-1">
@@ -20,7 +44,7 @@ export default function Page() {
         <div className="hidden md:block">
           <h3 className="font-semibold">Videos</h3>
         </div>
-        <<div className="bg-white rounded-md flex items-center gap-x-2 p-2">
+        <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
           <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
           <input
             type="text"
@@ -53,27 +77,33 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {videos.map((video) => (
-              <tr key={video.id}>
-                <td>
-                  <Link href={`/videos/${video.id}`}>
-                    <p>{video.name}</p>
-                  </Link>
-                </td>
-                <td>
-                  <p>{video.description}</p>
-                </td>
-                <td>
-                <p className="text-primary">{video.partner}</p>
-              </td>
-              <td>
-                <p className="badge bg-background text-primary text-sm border-background p-4">
-                {video.published_at}
-                </p>
-              </td>
-        
-            </tr>
-            ))}
+            {Array.isArray(videos) && videos.length > 0 ? (
+              videos.map((video) => (
+                <tr key={video.id}>
+                  <td>
+                    <Link href={`/videos/${video.id}`}>
+                      <p>{video.name}</p>
+                    </Link>
+                  </td>
+                  <td>
+                    <p>{video.description}</p>
+                  </td>
+                  <td>
+                    <p className="text-primary">{video.partner}</p>
+                  </td>
+                  <td>
+                    <p>{video.status}</p>
+                  </td>
+                  <td>
+                    <p>{video.published_at}</p>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">No videos found.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </article>
