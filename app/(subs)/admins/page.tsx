@@ -1,105 +1,67 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import Link from "next/link";
+"use client";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/auth/actions";
+import styles from "./login.module.css";
 
-import { Button } from "@components/index";
-import admin1 from "@assets/images/admin-1.png";
-import admin2 from "@assets/images/admin-2.png";
+const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-export default function Page() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await dispatch(login(email, password, rememberMe));
+    if (res.success) {
+      localStorage.setItem("accessToken", res.data.accessToken);
+      router.push("/");
+    } else {
+      setErrorMessage(res.error);
+    }
+  };
+
   return (
-    <section className="w-full pl-1">
-      {/* Header  */}
-      <header className="flex items-center justify-around my-4">
-        <div className="hidden md:block">
-          <h3 className="font-semibold">Admins</h3>
-        </div>
-        <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
-          <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h2 className={styles.title}>Login</h2>
+        <div className={styles.inputWrapper}>
           <input
-            type="text"
-            placeholder="Search admin"
-            className="outline-none border-none"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
           />
         </div>
-        <div className="">
-          <Link href="/admins/add">
-            <Button
-              text="New admin"
-              primary
-              extraStyles="font-thin text-sm px-4 py-3"
-            />
-          </Link>
+        <div className={styles.inputWrapper}>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
         </div>
-      </header>
-
-      {/* Admins table  */}
-
-      <article className="w-full overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Profile</th>
-              <th>Name</th>
-              <th>Employee id</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin1} alt="Admin 1" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th>12345667</th>
-            </tr>
-
-            {/* admin 2  */}
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin2} alt="Admin 1" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th>12345667</th>
-            </tr>
-            {/* admin 3  */}
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin1} alt="Admin 1" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th>12345667</th>
-            </tr>
-          </tbody>
-        </table>
-      </article>
-    </section>
+        <div className={styles.checkboxWrapper}>
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            id="remember-me"
+          />
+          <label htmlFor="remember-me">Remember me</label>
+        </div>
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+        <button className={styles.button} type="submit">
+          Login
+        </button>
+      </form>
+    </div>
   );
-}
+};
+
+export default LoginPage;
