@@ -9,7 +9,7 @@ export default function Page() {
     const formData = new FormData(event.target);
 
     try {
-      const response = await axios.post('/api/data-imports', formData);
+      const response = await axios.post('http://localhost:4000/api/data-imports', formData);
 
       console.log(response.data); // do something with the response data
     } catch (error) {

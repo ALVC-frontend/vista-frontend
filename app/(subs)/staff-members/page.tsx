@@ -1,10 +1,25 @@
 "use client";
-
 import Link from "next/link";
-
+import { useState, useEffect } from "react";
 import { Button } from "@components/index";
+import axios from "axios";
 
 export default function Page() {
+  const [staffMembers, setStaffMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/staff-members");
+        setStaffMembers(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -36,17 +51,18 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {/* admin 3  */}
-            <tr>
-              <td>
-                <Link href="/staff-members/edit">
-                  <p>Staff Member</p>
-                </Link>
-              </td>
-              <td>
-                <p className="text-primary">7646464</p>
-              </td>
-            </tr>
+            {staffMembers.map((staffMember) => (
+              <tr key={staffMember.id}>
+                <td>
+                  <Link href={`/staff-members/${staffMember.id}/edit`}>
+                    <p>{`${staffMember.first_name} ${staffMember.last_name}`}</p>
+                  </Link>
+                </td>
+                <td>
+                  <p className="text-primary">{staffMember.employee_id}</p>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>

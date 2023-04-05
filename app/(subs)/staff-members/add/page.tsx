@@ -1,6 +1,7 @@
 "use client";
-
-import { useRouter } from "next/router";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import {
   BadgeContainer,
@@ -12,6 +13,32 @@ import { addStaffMemberCrumb } from "@lib/dummy";
 
 export default function Page() {
   const { push } = useRouter();
+  const [error, setError] = useState(null);
+
+  const rightBtnAction = async () => {
+    const firstName = document.querySelector('input[placeholder="First name"]').value;
+    const lastName = document.querySelector('input[placeholder="Last name"]').value;
+    const email = document.querySelector('input[placeholder="Email"]').value;
+    const mobileNo = document.querySelector('input[placeholder="Mobile no"]').value;
+    const pin = document.querySelector('input[placeholder="PIN"]').value;
+
+    const data = {
+      firstName,
+      lastName,
+      email,
+      mobileNo,
+      pin,
+    };
+
+    try {
+      const response = await axios.post("/api/staff-members", data);
+      console.log(response.data);
+      push("/staff-members/add");
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while adding the staff member. Please try again.");
+    }
+  };
 
   return (
     <section className="w-full ml-6">
@@ -21,6 +48,8 @@ export default function Page() {
 
       <main>
         <h2 className="text-2xl font-semibold">New Staff Member</h2>
+
+        {error && <p className="text-red-500">{error}</p>}
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
           {/* <TextInput placeholder="Assigned Branches" inputType="text" /> */}
@@ -64,7 +93,7 @@ export default function Page() {
           <FormNav
             rightBtnText="Create Staff member"
             // redirect to verify admin page
-            rightBtnAction={() => push("/staff-members/add")}
+            rightBtnAction={rightBtnAction}
           />
         </form>
       </main>

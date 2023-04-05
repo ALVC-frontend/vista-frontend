@@ -1,8 +1,28 @@
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Link from "next/link";
 
 import { Button } from "@components/index";
 
+interface BusinessUnit {
+  id: number;
+  name: string;
+  description?: string;
+  parentUnitId?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function Page() {
+  const [businessUnits, setBusinessUnits] = useState<BusinessUnit[]>([]);
+
+  useEffect(() => {
+    axios.get("/api/business-units").then((response) => {
+      setBusinessUnits(response.data);
+    });
+  }, []);
+
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -23,7 +43,6 @@ export default function Page() {
       </header>
 
       {/* business units table  */}
-
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -33,17 +52,18 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {/* admin 3  */}
-            <tr>
-              <td className="text-primary">
-                <Link href="/business-unit/developer-division">Developer Division</Link>
-              </td>
-            </tr>
+            {businessUnits.map((businessUnit) => (
+              <tr key={businessUnit.id}>
+                <td className="text-primary">
+                  <Link href={`/business-unit/${businessUnit.id}`}>
+                    {businessUnit.name}
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>
-
-   
     </section>
   );
 }

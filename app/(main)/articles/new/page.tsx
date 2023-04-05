@@ -1,19 +1,16 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
 import {
-  BadgeContainer,
   BreadCrumb,
-  FormNav,
   TextInput,
+  Button,
 } from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
 
 export default function Page() {
-  const { push } = useRouter();
   const [formData, setFormData] = useState({});
 
   const handleInputChange = (event) => {
@@ -27,10 +24,10 @@ export default function Page() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/api/articles", formData);
+      const response = await axios.post("http://localhost:4000/admin/articles", formData);
       console.log(response.data);
       // redirect to verify admin page
-      push("/articles");
+      window.location.href = "/articles";
     } catch (error) {
       console.error(error);
     }
@@ -74,13 +71,6 @@ export default function Page() {
             onChange={handleInputChange}
           ></textarea>
 
-          <BadgeContainer
-            editableBadges={[]}
-            placeholder="Content categories"
-            name="categories"
-            onChange={handleInputChange}
-          />
-
           <div className="flex w-full items-center">
             <div className="dropdown w-full">
               <div
@@ -106,10 +96,22 @@ export default function Page() {
 
           {/* Form navigation  */}
 
-          <FormNav
-            rightBtnText="Update article"
-            type="submit"
-          />
+          <div className="w-full flex items-center justify-between px-1">
+            <Button
+              text="Cancel"
+              onPress={() => window.history.back()}
+              subtle
+              extraStyles="md:w-1/5"
+            />
+
+            <Button
+              extraStyles="md:w-1/5"
+              onPress={handleSubmit}
+              text="Update article"
+              primary
+              type="submit"
+            />
+          </div>
         </form>
       </main>
     </section>

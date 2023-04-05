@@ -13,7 +13,6 @@ import {
 import { newCityCrumbs } from "@lib/dummy";
 
 export default function Page() {
-  const { push } = useRouter();
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
@@ -22,7 +21,7 @@ export default function Page() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/api/cities", { name, status });
+      const res = await axios.post("http://localhost:4000/api/cities", { name, status });
       console.log(res.data);
       push("/cities");
     } catch (err) {

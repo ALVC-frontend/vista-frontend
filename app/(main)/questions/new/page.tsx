@@ -1,10 +1,63 @@
+"use client";
+import axios from 'axios';
+import { useState } from 'react';
 import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
-
 import { BreadCrumb, Button, TextInput } from "@components/index";
 import { newQuestion } from "@lib/dummy";
 import Link from "next/link";
 
 export default function Page() {
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [kind, setKind] = useState('');
+  const [intro, setIntro] = useState(false);
+  const [allowsNote, setAllowsNote] = useState(true);
+  const [noteTitle, setNoteTitle] = useState('');
+  const [file, setFile] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [lockingCondition, setLockingCondition] = useState('');
+  const [textStyle, setTextStyle] = useState('');
+  const [blurBackground, setBlurBackground] = useState(false);
+  const [backgroundOverlay, setBackgroundOverlay] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('category', category);
+    formData.append('kind', kind);
+    formData.append('intro', intro);
+    formData.append('allowsNote', allowsNote);
+    formData.append('noteTitle', noteTitle);
+    if (file) {
+      formData.append('file', file);
+    }
+    formData.append('answers', JSON.stringify(answers));
+    formData.append('lockingCondition', lockingCondition);
+    formData.append('textStyle', textStyle);
+    formData.append('blurBackground', blurBackground);
+    formData.append('backgroundOverlay', backgroundOverlay);
+    const response = await axios.post('http://localhost:4000/admin/questions', formData);
+    console.log(response.data);
+  };
+
+  const handleAnswerChange = (event, index) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index] = event.target.value;
+    setAnswers(updatedAnswers);
+  };
+
+  const addAnswer = () => {
+    setAnswers([...answers, '']);
+  };
+
+  const handleAnswerRemove = (index) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers.splice(index, 1);
+    setAnswers(updatedAnswers);
+  };
+
+
   return (
     <section className="pl-4">
       <header>
@@ -53,33 +106,7 @@ export default function Page() {
                 </ul>
               </div>
             </div>
-            <div className="flex items-center gap-x-3">
-              <input type="checkbox" name="" id="" />
-              <small>Intro</small>
-            </div>
-            <div className="flex items-center gap-x-3">
-              <input type="checkbox" name="" id="" checked />
-              <small>Allows note</small>
-            </div>
-            <TextInput inputType="text" placeholder="Note title" />
-            <input
-              type="file"
-              className="file-input file-input-ghost bg-lightGray"
-            />
-            <div className="flex justify-between items-center bg-lightGray rounded-md p-2">
-              <TextInput inputType="text" placeholder="Answers" />
-              <Button
-                text="Add answer"
-                extraStyles="outline outline-1 outline-primary text-primary m-1"
-              />
-            </div>
-            <div className="flex justify-between items-center bg-lightGray rounded-md p-2">
-              <TextInput inputType="text" placeholder="Locking condition" />
-              <Button
-                text="Add condition"
-                extraStyles="outline outline-1 outline-primary text-primary m-1"
-              />
-            </div>
+
             <div className="flex justify-end my-6">
               <Link href="/questions">
                 <Button text="Create Question" primary />

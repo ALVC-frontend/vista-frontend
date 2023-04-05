@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation'
 import axios from "axios";
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { newPartnerCategories } from "@lib/dummy";

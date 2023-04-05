@@ -1,12 +1,27 @@
 "use client";
-
-import { useRouter } from "next/router";
-
-import { BreadCrumb, FormNav, TextInput } from "@components/index";
-import { crumbs } from "@lib/dummy";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Page() {
-  const { push } = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/admins", {
+        firstName,
+        lastName,
+        email,
+        mobileNo,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section className="w-full ml-6">
@@ -17,14 +32,27 @@ export default function Page() {
       <main>
         <h2 className="text-2xl font-semibold">Edit Admin</h2>
 
-        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
-          <TextInput inputType="number" placeholder="Employee ID" value={123} />
-          <TextInput inputType="text" placeholder="First name" value="Tahir" />
-          <TextInput inputType="text" placeholder="Last name" value="Ramzan" />
+        <form
+          className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5"
+          onSubmit={handleSubmit}
+        >
+          <TextInput
+            inputType="text"
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextInput
+            inputType="text"
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
           <TextInput
             inputType="email"
             placeholder="Email"
-            value="tahir@nappr.io"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           {/* Dropdown  */}
@@ -52,7 +80,8 @@ export default function Page() {
             <TextInput
               inputType="tel"
               placeholder="Mobile no"
-              value={+18398484848}
+              value={mobileNo}
+              onChange={(e) => setMobileNo(e.target.value)}
             />
           </div>
 

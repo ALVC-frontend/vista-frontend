@@ -15,7 +15,7 @@ export default function Page() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
 
   useEffect(() => {
-    axios.get<Organization[]>("/api/organizations").then((res) => {
+    axios.get<Organization[]>("http://localhost:4000/admin/organisations").then((res) => {
       setOrganizations(res.data);
     });
   }, []);
@@ -44,7 +44,7 @@ export default function Page() {
           />
         </div>
         <div className="">
-          <Link href="/organizations/new">
+          <Link href="/organisations/new">
             <Button
               text="New organisation"
               primary

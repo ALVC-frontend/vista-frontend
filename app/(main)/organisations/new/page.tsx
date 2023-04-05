@@ -1,12 +1,14 @@
+"use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import axios from "axios";
+import { useRouter } from 'next/navigation'
 
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { newOrganisation } from "@lib/dummy";
 
 export default function Page() {
-  const { push } = useRouter();
+   const { push } = useRouter();
+
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
   const [file, setFile] = useState(null);
@@ -32,7 +34,7 @@ export default function Page() {
     formData.append("file", file);
 
     try {
-      const response = await axios.post("/api/organisations", formData);
+      const response = await axios.post("http://localhost:4000/admin/organisations", formData);
       console.log(response.data);
       push("/organisations");
     } catch (error) {

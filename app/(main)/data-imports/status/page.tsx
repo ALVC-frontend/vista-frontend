@@ -13,7 +13,7 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/import-data");
+      const response = await axios.post("http://localhost:4000/api/import-data");
       console.log(response.data);
       // handle success response here
     } catch (error) {

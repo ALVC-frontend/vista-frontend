@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { BreadCrumb, Button, TextInput } from "@components/index";
@@ -5,6 +7,30 @@ import { newCategories } from "@lib/dummy";
 import Link from "next/link";
 
 export default function Page() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [parent, setParent] = useState("");
+  const [initial, setInitial] = useState(false);
+  const [visibilityConditions, setVisibilityConditions] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:4000/admin/categories", {
+        title,
+        description,
+        parent,
+        initial,
+        visibilityConditions,
+      });
+      console.log(response.data);
+      // Redirect to the categories page after successful creation
+      // You can use the router from Next.js or Link component to navigate to the categories page
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <section className="pl-4">
       <header>
@@ -14,9 +40,18 @@ export default function Page() {
       <main className="">
         <form className="flex gap-x-4 flex-col-reverse md:flex-row gap-y-2">
           <div className="flex flex-col gap-y-4 basis-2/3">
-            <TextInput placeholder="Title" inputType="text" />
-            <TextInput placeholder="Description" inputType="text" />
-
+            <TextInput
+              placeholder="Title"
+              inputType="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <TextInput
+              placeholder="Description"
+              inputType="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
             <div className="flex w-full items-center">
               <div className="dropdown w-full">
                 <div

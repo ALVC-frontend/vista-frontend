@@ -29,7 +29,7 @@ export default function Page() {
       title: title,
       questions: questions.filter((question) => question !== ""),
     };
-    axios.post("/api/preference-group", data).then(() => {
+    axios.post("http://localhost:4000/admin/preference-group", data).then(() => {
       push("/preference-group");
     });
   };

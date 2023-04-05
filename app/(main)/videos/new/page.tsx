@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+"use client";
+import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios"; // import Axios library
 
@@ -25,7 +26,7 @@ export default function Page() {
 
     // make POST request to create new video
     try {
-      const response = await axios.post("/api/videos", {
+      const response = await axios.post("http://localhost:4000/admin/videos", {
         name,
         url,
         description,

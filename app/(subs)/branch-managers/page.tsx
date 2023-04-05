@@ -1,12 +1,28 @@
+"use client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 import { Button } from "@components/index";
 import admin1 from "@assets/images/admin-1.png";
 import admin2 from "@assets/images/admin-2.png";
 
 export default function Page() {
+  const [managers, setManagers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/managers")
+      .then((response) => {
+        setManagers(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -46,57 +62,26 @@ export default function Page() {
           </thead>
 
           <tbody>
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin1} alt="Admin 1" />
+            {managers.map((manager) => (
+              <tr key={manager.id}>
+                <th>
+                  <div className="flex items-center space-x-3">
+                    <div className="avatar">
+                      <div className="mask mask-squircle w-12 h-12">
+                        <Image src={manager.avatar} alt={manager.name} />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold opacity-[0.44]">
+                        {manager.username}
+                      </h4>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
-            </tr>
-
-            {/* admin 2  */}
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin2} alt="Admin 1" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
-            </tr>
-            {/* admin 3  */}
-            <tr>
-              <th>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <Image src={admin1} alt="Admin 1" />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
-                  </div>
-                </div>
-              </th>
-              <th>Tahir Ramzan</th>
-              <th className="text-primary">12345667</th>
-            </tr>
+                </th>
+                <th>{manager.name}</th>
+                <th className="text-primary">{manager.employee_id}</th>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>
