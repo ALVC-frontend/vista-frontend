@@ -6,7 +6,13 @@ type Props = {
   primary?: boolean;
   subtle?: boolean;
   text: string;
+  isLoading?: boolean;
+  onClick?: () => void;
+  OnSubmit?: () => any;
+  type?: string;
+  disabled?: boolean;
 };
+
 
 const button = ({
   extraStyles,

@@ -10,6 +10,7 @@ import admin2 from "@assets/images/admin-2.png";
 import { BreadLink } from "types/crumbs";
 
 interface Admin {
+  username: String;
   id: number;
   name: string;
   employeeId: string;
@@ -99,7 +100,7 @@ export default function Page({ params }: Props) {
         <div className="flex items-center space-x-3">
           <div className="avatar">
             <div className="mask mask-squircle w-12 h-12">
-              <Image src={admin.avatar} alt={`Admin ${admin.id}`} />
+              <Image src={admin1} alt={`Admin ${admin.id}`} />
             </div>
           </div>
           <div>

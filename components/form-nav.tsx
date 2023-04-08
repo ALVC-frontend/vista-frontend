@@ -7,9 +7,11 @@ import { Button } from ".";
 type Props = {
   extraStyles?: string;
   leftBtnText?: string;
-  rightBtnAction?: () => any;
+  rightBtnAction?:  any;
   rightBtnStyles?: string;
   rightBtnText: string;
+  disabled?: boolean;
+  type?:string;
 };
 
 const FormNav = ({

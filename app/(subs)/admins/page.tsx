@@ -1,20 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import Link from "next/link";
+import Button from "@components/button";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-import { Button } from "@components/index";
-import admin1 from "@assets/images/admin-1.png";
-import admin2 from "@assets/images/admin-2.png";
+interface Admin {
+  id: number;
+  username: string;
+  name: string;
+  employee_id: number;
+}
 
-export default function Page() {
-  const [admins, setAdmins] = useState([]);
+interface PageProps {}
+
+interface PageState {
+  admins: Admin[];
+}
+
+export default function Page(props: PageProps): JSX.Element {
+  const [admins, setAdmins] = useState<Admin[]>([]);
 
   useEffect(() => {
     async function fetchAdmins() {
-      const response = await axios.get("/api/admins");
+      const response = await axios.get<Admin[]>("/api/admins");
       setAdmins(response.data);
     }
 
@@ -37,7 +46,7 @@ export default function Page() {
           />
         </div>
         <div className="">
-          <Link href="/admins/add">
+          <Link to="/admins/add">
             <Button
               text="New admin"
               primary
@@ -58,13 +67,13 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-            {admins.map((admin) => (
+            {admins.map((admin: Admin) => (
               <tr key={admin.id}>
                 <th>
                   <div className="flex items-center space-x-3">
                     <div className="avatar">
                       <div className="mask mask-squircle w-12 h-12">
-                        <Image src={admin1} alt="Admin 1" />
+
                       </div>
                     </div>
                     <div>

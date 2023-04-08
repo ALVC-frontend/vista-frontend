@@ -14,7 +14,6 @@ interface Video {
   created_at: string;
   updated_at: string;
   published_at: string;
-  // Add other properties of the video here
 }
 
 export default function Page() {
@@ -23,10 +22,8 @@ export default function Page() {
   useEffect(() => {
     async function fetchVideos() {
       try {
-        const response = await axios.get<Video[]>("/api/videos");
+        const response = await axios.get<Video[]>("http://localhost:4000/admin/videos");
         setVideos(response.data);
-        console.log("Response status:", response.status);
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -34,9 +31,7 @@ export default function Page() {
 
     fetchVideos();
   }, []);
-
-  console.log("videos:", videos);
-
+ console.log(videos);
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -77,33 +72,35 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {Array.isArray(videos) && videos.length > 0 ? (
-              videos.map((video) => (
-                <tr key={video.id}>
-                  <td>
-                    <Link href={`/videos/${video.id}`}>
-                      <p>{video.name}</p>
-                    </Link>
-                  </td>
-                  <td>
-                    <p>{video.description}</p>
-                  </td>
-                  <td>
-                    <p className="text-primary">{video.partner}</p>
-                  </td>
-                  <td>
-                    <p>{video.status}</p>
-                  </td>
-                  <td>
-                    <p>{video.published_at}</p>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">No videos found.</td>
-              </tr>
-            )}
+          {Array.isArray(videos) && videos.length > 0 ? (
+  videos.map((video) => (
+    console.log("Rendering video:", video.id),
+    <tr key={video.id}>
+      <td>
+        <Link href={`/videos/${video.id}`}>
+          <p>{video.name}</p>
+        </Link>
+      </td>
+      <td>
+        <p>{video.description}</p>
+      </td>
+      <td>
+        <p className="text-primary">{video.partner}</p>
+      </td>
+      <td>
+        <p>{video.status}</p>
+      </td>
+      <td>
+        <p>{video.published_at}</p>
+      </td>
+    </tr>
+  ))
+) : (
+  <tr>
+    <td colSpan={5}>No videos found.</td>
+  </tr>
+)}
+
           </tbody>
         </table>
       </article>

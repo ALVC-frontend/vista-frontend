@@ -10,6 +10,8 @@ interface Category {
   breadcrumb: string;
   link_to: string[];
   icon: string;
+}
+interface CategoryResponse {
   paginate: {
     id: number;
     title: string;
@@ -18,7 +20,6 @@ interface Category {
     updated_at: string;
   }[];
 }
-
 export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -26,7 +27,7 @@ export default function Page() {
     async function fetchCategories() {
       try {
         const response = await axios.get<Category[]>("http://localhost:4000/admin/partner_categories");
-        setCategories(response.data.paginate);
+        setCategories(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -88,7 +89,7 @@ export default function Page() {
               ))
             ) : (
               <tr>
-                <td colSpan="1">No categories found.</td>
+                <td colSpan={1}>No categories found.</td>
               </tr>
             )}
           </tbody>

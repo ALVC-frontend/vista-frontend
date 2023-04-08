@@ -17,7 +17,7 @@ export default function Page() {
     mobileNo: 18398484848,
   });
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
       const response = await axios.post("/api/branchManagers", formData);
@@ -27,7 +27,7 @@ export default function Page() {
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
@@ -84,37 +84,44 @@ export default function Page() {
           {/* Dropdown  */}
 
           <div className="flex items-center">
-            <div className="dropdown">
-              <div
-                tabIndex={0}
-                className="form-select bg-lightGray border-none p-3 rounded-md m-1"
-              >
-                {formData.countryCode}
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 shadow bg-lightGray rounded-box w-52"
-              >
-                <li>
-                  <a
-                    onClick={() =>
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        countryCode: "+255",
-                      }))
-                    }
-                  >
-                    +255
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() =>
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        countryCode: "+254",
-                      }))
-
+  <div className="dropdown">
+    <div
+      tabIndex={0}
+      className="form-select bg-lightGray border-none p-3 rounded-md m-1"
+    >
+      {formData.countryCode}
+    </div>
+    <ul
+      tabIndex={0}
+      className="dropdown-content menu p-2 shadow bg-lightGray rounded-box w-52"
+    >
+      <li>
+        <a
+          onClick={() =>
+            setFormData((prevState) => ({
+              ...prevState,
+              countryCode: "+255",
+            }))
+          }
+        >
+          +255
+        </a>
+      </li>
+      <li>
+        <a
+          onClick={() =>
+            setFormData((prevState) => ({
+              ...prevState,
+              countryCode: "+254",
+            }))
+          }
+        >
+          +254
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
 
           {/* Form navigation  */}
 

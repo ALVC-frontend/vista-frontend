@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+"use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
@@ -6,13 +7,14 @@ import axios from "axios";
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editCityCrumbs } from "@lib/dummy";
 
+
 export default function Page() {
   const { push } = useRouter();
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Enabled");
   const [image, setImage] = useState(null);
 
-  const handleUpdateCity = async (e) => {
+  const handleUpdateCity = async (e:  any) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -28,7 +30,9 @@ export default function Page() {
       console.error(err);
     }
   };
-
+  interface Props {
+    rightBtnAction?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  }
   return (
     <section className="w-full pl-6">
       <header>
@@ -90,7 +94,7 @@ export default function Page() {
             </div>
           </div>
 
-          <ImagePicker onChange={(file) => setImage(file)} />
+          <ImagePicker />
 
           {/* Form navigation  */}
 

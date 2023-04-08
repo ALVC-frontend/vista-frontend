@@ -3,10 +3,10 @@ import { BreadCrumb, Button } from "@components/index";
 import { newDataImports } from "@lib/dummy";
 
 export default function Page() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
 
     try {
       const response = await axios.post('http://localhost:4000/api/data-imports', formData);

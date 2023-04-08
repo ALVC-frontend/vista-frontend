@@ -2,29 +2,51 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 import {
   BreadCrumb,
   TextInput,
   Button,
-} from "@components/index";
+} from "components/index";
 import { newArticleCrumbs } from "@lib/dummy";
 
 export default function Page() {
   const [formData, setFormData] = useState({});
+  const [file, setFile] = useState(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [publishDate, setPublishDate] = useState(new Date());
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    if (name === "title") {
+      setTitle(value);
+    }
+     if (name === "content") {
+      setContent(value);
+    }
   };
 
-  const handleSubmit = async (event) => {
+  const handleFileChange = (event: any) => {
+    setFile(event.target.files[0]);
+  }
+
+  const handleSubmit = async (event:  React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formDataWithFile = new FormData();
     try {
-      const response = await axios.post("http://localhost:4000/admin/articles", formData);
+      const response = await axios.post("http://localhost:4000/admin/articles", formDataWithFile, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       console.log(response.data);
       // redirect to verify admin page
       window.location.href = "/articles";
@@ -51,15 +73,16 @@ export default function Page() {
               type="file"
               className="file-input file-input-ghost bg-lightGray w-full max-w-xs"
               name="file"
-              onChange={handleInputChange}
+              onChange={handleFileChange}
             />
           </div>
 
-          <TextInput
-            inputType="text"
+          <input
+            type="text"
             placeholder="Title"
             name="title"
             onChange={handleInputChange}
+            value={title}
           />
 
           <textarea
@@ -67,31 +90,19 @@ export default function Page() {
             rows={5}
             placeholder="Description"
             className="p-3 bg-lightGray outline-none rounded-md"
-            name="description"
+            name="content"
             onChange={handleInputChange}
+            value={content}
           ></textarea>
 
           <div className="flex w-full items-center">
-            <div className="dropdown w-full">
-              <div
-                tabIndex={0}
-                className="w-full bg-lightGray border-none p-3 rounded-md m-1 flex items-center justify-between"
-              >
-                <small className="opacity-[0.44]">Publish at</small>
-                <ChevronDownIcon className="w-4 h-4" />
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 w-full shadow bg-lightGray rounded-box"
-              >
-                <li>
-                  <a>11/12/2022</a>
-                </li>
-                <li>
-                  <a>10/12/2022</a>
-                </li>
-              </ul>
-            </div>
+            <DatePicker
+              selected={publishDate}
+              onChange={(date: Date) => setPublishDate(date)}
+              dateFormat="MM/dd/yyyy"
+              placeholderText="Publish at"
+              className="w-full bg-lightGray border-none p-3 rounded-md m-1 flex items-center justify-between"
+            />
           </div>
 
           {/* Form navigation  */}
@@ -106,7 +117,7 @@ export default function Page() {
 
             <Button
               extraStyles="md:w-1/5"
-              onPress={handleSubmit}
+              onPress={() =>handleSubmit}
               text="Update article"
               primary
               type="submit"

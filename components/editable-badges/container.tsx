@@ -6,6 +6,8 @@ import Badge from "./badge";
 type Props = {
   editableBadges: string[];
   placeholder?: string;
+  onChange?: (tags: string[]) => void;
+  onBadgesChange?: any;
 };
 
 const BadgeContainer = ({ editableBadges, placeholder = "" }: Props) => {

@@ -16,12 +16,12 @@ export default function Page() {
   });
   const { push } = useRouter();
 
-  const handleFormChange = (e) => {
+  const handleFormChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:4000/admin/api/admins", formData);

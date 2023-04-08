@@ -1,8 +1,14 @@
 type Props = {
+  id?: String;
   placeholder: string;
   inputType: string;
   value?: any;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  name?: String;
+  Onsubmit?: any;
+  maxLength?: number;
+  onValueChange?: any;
+
 };
 
 const TextInput = ({ placeholder, inputType, value, onChange }: Props) => {

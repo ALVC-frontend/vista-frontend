@@ -15,7 +15,7 @@ export default function Page() {
   const { push } = useRouter();
 
   // function to create a new video
-  const createVideo = async (event) => {
+  const createVideo = async (event: any) => {
     event.preventDefault(); // prevent form from submitting
 
     // get form data

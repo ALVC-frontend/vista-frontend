@@ -1,14 +1,30 @@
 "use client";
-
-import { useRouter } from "next/router";
-
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
-import { editPartnerCategories } from "@lib/dummy";
 import axios from "axios";
-
-
+import { editPartnerCategories } from "@lib/dummy";
 export default function Page() {
   const { push } = useRouter();
+  const [name, setName] = useState("");
+  const [image, setImage] = useState(null);
+  const id = "replace-with-actual-category-id";
+
+  const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("name", name);
+    //formData.append("image", image);
+
+    try {
+      const response = await axios.put(`/api/partner-categories/${id}`, formData);
+      console.log(response.data);
+      push("/partner-categories");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <section className="w-full pl-6">
@@ -17,33 +33,21 @@ export default function Page() {
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">Editing Travel</h2>
+        <h2 className="text-2xl font-semibold">Editing {name}</h2>
 
-        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
-          <TextInput inputType="text" placeholder="Name" value="Travel" />
+        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]" onSubmit={handleSubmit}>
+          <TextInput
+            inputType="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-          <ImagePicker />
+          <ImagePicker  />
 
           {/* Form navigation  */}
 
-          <FormNav
-  rightBtnText="Update partner category"
-  rightBtnAction={async () => {
-    const name = document.getElementById("name-input").value;
-    const image = document.getElementById("image-input").files[0];
-    const id = "123"; // replace with actual partner category ID
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("image", image);
-    try {
-      const response = await axios.put(`/api/partner-categories/${id}`, formData);
-      console.log(response.data);
-      push("/partner-categories");
-    } catch (error) {
-      console.error(error);
-    }
-  }}
-/>
+          <FormNav rightBtnText="Update partner category" rightBtnAction={handleSubmit} />
         </form>
       </main>
     </section>

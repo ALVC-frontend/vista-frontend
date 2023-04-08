@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 import {
@@ -11,18 +11,31 @@ import {
 } from "@components/index";
 import { addStaffMemberCrumb } from "@lib/dummy";
 
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNo: string;
+  pin: string;
+}
+
 export default function Page() {
   const { push } = useRouter();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const rightBtnAction = async () => {
-    const firstName = document.querySelector('input[placeholder="First name"]').value;
-    const lastName = document.querySelector('input[placeholder="Last name"]').value;
-    const email = document.querySelector('input[placeholder="Email"]').value;
-    const mobileNo = document.querySelector('input[placeholder="Mobile no"]').value;
-    const pin = document.querySelector('input[placeholder="PIN"]').value;
+    const firstNameInput = document.querySelector<HTMLInputElement>('input[placeholder="First name"]');
+    const firstName = firstNameInput ? firstNameInput.value : '';
+    const lastNameInput = document.querySelector<HTMLInputElement>('input[placeholder="Last name"]');
+    const lastName = lastNameInput ? lastNameInput.value : '';
+    const emailInput = document.querySelector<HTMLInputElement>('input[placeholder="Email"]');
+    const email = emailInput ? emailInput.value : '';
+    const mobileNoInput = document.querySelector<HTMLInputElement>('input[placeholder="Mobile no"]');
+    const mobileNo = mobileNoInput ? mobileNoInput.value : '';
+    const pinInput = document.querySelector<HTMLInputElement>('input[placeholder="PIN"]');
+    const pin = pinInput ? pinInput.value : '';
 
-    const data = {
+    const data: FormData = {
       firstName,
       lastName,
       email,

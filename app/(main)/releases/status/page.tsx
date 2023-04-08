@@ -39,7 +39,7 @@ export default function Page() {
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}
-      <BreadCrumb crumbs={releases} />
+      <BreadCrumb crumbs={[]} />
       <header className="flex items-center justify-between px-10 my-4">
         <div className="hidden md:block">
           <h3 className="font-semibold text-xl">Releases</h3>
@@ -94,7 +94,7 @@ export default function Page() {
               ))
             ) : (
               <tr>
-                <td colSpan="4">No releases found.</td>
+                <td colSpan={4}>No releases found.</td>
               </tr>
             )}
           </tbody>

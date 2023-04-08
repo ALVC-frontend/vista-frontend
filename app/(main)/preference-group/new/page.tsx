@@ -1,31 +1,37 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
+"use client";
+import { ChangeEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 
-export default function Page() {
-  const { push } = useRouter();
-  const [title, setTitle] = useState("");
-  const [questions, setQuestions] = useState([]);
+interface FormData {
+  title: string;
+  questions: string[];
+}
 
-  const handleTitleChange = (event) => {
+export default function Page(): JSX.Element {
+  const { push } = useRouter();
+  const [title, setTitle] = useState<string>("");
+  const [questions, setQuestions] = useState<string[]>([]);
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
   };
 
-  const handleQuestionChange = (event, index) => {
+  const handleQuestionChange = (event: ChangeEvent<HTMLInputElement>, index: number): void => {
     const newQuestions = [...questions];
     newQuestions[index] = event.target.value;
     setQuestions(newQuestions);
   };
 
-  const addQuestion = () => {
+  const addQuestion = (): void => {
     setQuestions([...questions, ""]);
   };
 
-  const createPreferenceGroup = () => {
-    const data = {
+  const createPreferenceGroup = (): void => {
+    const data: FormData = {
       title: title,
       questions: questions.filter((question) => question !== ""),
     };
@@ -37,7 +43,7 @@ export default function Page() {
   return (
     <section className="w-full pl-6">
       <header>
-        <BreadCrumb crumbs={["New Preference Group"]} />
+        <BreadCrumb crumbs={[]} />
       </header>
 
       <main>

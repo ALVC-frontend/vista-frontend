@@ -1,26 +1,28 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-import { TextInput, Button } from "@components/index";
+import { TextInput, Button } from "components/index";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-
     try {
       const response = await axios.post("/users/password", { user: { email } });
       setMessage(response.data.message);
-    } catch (error) {
-      setMessage(error.response.data.error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.error ?? "An unknown error occurred");
+      } else {
+        setMessage("An unknown error occurred");
+      }
     }
-
     setIsLoading(false);
   };
 

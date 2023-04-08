@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
@@ -8,8 +9,9 @@ BadgeContainer,
 BreadCrumb,
 FormNav,
 TextInput,
-} from "@components/index";
+} from "components/index";
 import { editVideoCrumbs } from "@lib/dummy";
+import React from "react";
 
 export default function Page() {
 const { push } = useRouter();
@@ -23,7 +25,7 @@ const [videoDesc, setVideoDesc] = useState(
 const [videoCategory, setVideoCategory] = useState(["Men's fashion"]);
 const [isPublished, setIsPublished] = useState(true);
 
-const handleEditVideo = async (event) => {
+const handleEditVideo = async (event: { preventDefault: () => void; }) => {
 event.preventDefault();
 const data = {
 name: videoName,
@@ -33,7 +35,7 @@ category: videoCategory,
 isPublished,
 };
 try {
-const response = await axios.put(/api/videos/${VIDEO_ID}, data);
+  const response = await axios.put(`/api/videos/{VIDEO_ID}`, data);
 console.log(response.data);
 push("/videos");
 } catch (error) {
@@ -103,7 +105,7 @@ return (
       <BadgeContainer
   editableBadges={videoCategory}
   placeholder="Content categories"
-  onChange={(tags) => setVideoCategory(tags)}
+  onChange={(tags: React.SetStateAction<string[]>) => setVideoCategory(tags)}
 />
 
 <div className="">

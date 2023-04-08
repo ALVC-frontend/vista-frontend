@@ -9,13 +9,13 @@ import axios from "axios";
 export default function VerifyAdminPage() {
   const [pins, setPins] = useState(["", "", "", "", "", ""]);
 
-  const handlePinChange = (index, value) => {
+  const handlePinChange = (index: number, value: string) => {
     const newPins = [...pins];
     newPins[index] = value;
     setPins(newPins);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/create-admin", {

@@ -1,16 +1,25 @@
 "use client";
-import Link from "next/link";
 import { useState, useEffect } from "react";
+import axios, { AxiosResponse } from "axios";
+import Link from "next/link";
 import { Button } from "@components/index";
-import axios from "axios";
+
+type StaffMember = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  employee_id: string;
+};
 
 export default function Page() {
-  const [staffMembers, setStaffMembers] = useState([]);
+  const [staffMembers, setStaffMembers] = useState<StaffMember[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/staff-members");
+        const response: AxiosResponse<StaffMember[]> = await axios.get(
+          "/api/staff-members"
+        );
         setStaffMembers(response.data);
       } catch (error) {
         console.error(error);

@@ -1,14 +1,19 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { businessUnitCrumbs } from "@lib/dummy";
+import axios from "axios";
+
+const client = axios.create({
+  baseURL: "http://yourapi.com/api",
+});
 
 export default function Page() {
   const { push } = useRouter();
   const [name, setName] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const { data } = await client.post("/business-unit", { name });

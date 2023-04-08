@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { BreadCrumb, Button } from "@components/index";
+import { BreadCrumb, Button } from "components/index";
 import axios from "axios";
 
 interface Article {
@@ -25,7 +25,7 @@ interface ArticlesResponse {
       text: string;
     }
   };
-  content: Article[];
+
   articles: Article[];
   paginate: Article[];
 }
@@ -55,7 +55,7 @@ export default function Page() {
       {/* Header  */}
       <header className="flex items-center justify-around my-4">
         <div className="hidden md:block">
-          <h3 className="font-semibold">{articles.length > 0 ? articles[0].title : ""}</h3>
+        <h3 className="font-semibold">{articles && articles.length > 0 ? articles[0].title : ""}</h3>
         </div>
         <div className="bg-white rounded-md flex items-center gap-x-2 p-2">
           <MagnifyingGlassIcon className="w-5 h-5 opacity-[0.44]" />
@@ -103,7 +103,7 @@ export default function Page() {
               ))
             ) : (
               <tr>
-                <td colSpan="3">No articles found.</td>
+                <td colSpan={parseInt("3")}>No articles found.</td>
               </tr>
             )}
           </tbody>

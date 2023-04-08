@@ -94,7 +94,7 @@ export default function Page() {
               ))
             ) : (
               <tr>
-                <td colSpan="3">No questions found.</td>
+                <td colSpan={3}>No questions found.</td>
               </tr>
             )}
           </tbody>

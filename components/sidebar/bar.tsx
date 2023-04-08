@@ -15,7 +15,7 @@ type Props = {
 
 const SideBar = ({ sidebarItems }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const navBarDiv = useRef<HTMLDivElement>();
+  const navBarDiv = useRef<HTMLDivElement>(null);
 
   const toggleSideBar = () => setIsSidebarOpen((prev) => !prev);
 

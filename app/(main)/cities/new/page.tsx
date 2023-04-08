@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
@@ -16,14 +16,16 @@ export default function Page() {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:4000/api/cities", { name, status });
+      const res = await axios.post("http://localhost:4000/admin/cities", { name, status });
       console.log(res.data);
-      push("/cities");
+      router.push('/cities');
     } catch (err) {
       console.error(err);
     }

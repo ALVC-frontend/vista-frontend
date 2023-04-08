@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
-import { BreadCrumb, Button, TextInput } from "@components/index";
+import { BreadCrumb, Button, TextInput } from "components/index";
 import { newCategories } from "@lib/dummy";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ export default function Page() {
   const [initial, setInitial] = useState(false);
   const [visibilityConditions, setVisibilityConditions] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:4000/admin/categories", {
@@ -87,7 +87,7 @@ export default function Page() {
             />
 
             <div className="flex justify-between items-center bg-lightGray rounded-md p-2">
-              <TextInput inputType="text" placeholder="Visibility conditions" />
+              <input type="text" placeholder="Visibility conditions"  />
               <Button
                 text="Add condition"
                 extraStyles="outline outline-1 outline-primary text-primary m-1"

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
 import rocket from "@assets/svg/rocket.svg";
-import { TextInput, Button } from "@components/index";
+import { TextInput, Button } from "components/index";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,8 +12,8 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       const res = await axios.post("http://localhost:4000/auth/sign_in", {
         email,
@@ -55,13 +55,13 @@ export default function LoginPage() {
           type="text"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(event) => setEmail(event.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(event) => setPassword(event.target.value)}
         />
 
             <div className="flex items-center gap-x-4">
@@ -69,7 +69,7 @@ export default function LoginPage() {
                 type="checkbox"
                 name="checkbox"
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={(event) => setRememberMe(event.target.checked)}
                 className="text-primary rounded-sm outline-none border border-primary active:outline-none"
               />
               <label htmlFor="checkbox" className="text-primary">

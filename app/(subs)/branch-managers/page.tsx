@@ -4,13 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 import { Button } from "@components/index";
 import admin1 from "@assets/images/admin-1.png";
 import admin2 from "@assets/images/admin-2.png";
 
+interface Manager {
+  id: number;
+  name: string;
+  employee_id: string;
+  avatar: string;
+}
+
 export default function Page() {
-  const [managers, setManagers] = useState([]);
+  const [managers, setManagers] = useState<Manager[]>([]);
 
   useEffect(() => {
     axios
@@ -68,12 +74,17 @@ export default function Page() {
                   <div className="flex items-center space-x-3">
                     <div className="avatar">
                       <div className="mask mask-squircle w-12 h-12">
-                        <Image src={manager.avatar} alt={manager.name} />
+                        <Image
+                          src={manager.avatar}
+                          alt={manager.name}
+                          width={48}
+                          height={48}
+                        />
                       </div>
                     </div>
                     <div>
                       <h4 className="font-bold opacity-[0.44]">
-                        {manager.username}
+                        {manager.name}
                       </h4>
                     </div>
                   </div>
@@ -83,6 +94,8 @@ export default function Page() {
               </tr>
             ))}
           </tbody>
+
+
         </table>
       </article>
     </section>

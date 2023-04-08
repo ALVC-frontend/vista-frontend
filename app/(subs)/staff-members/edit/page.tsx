@@ -14,7 +14,7 @@ import { editStaffMemberCrumbs } from "@lib/dummy";
 export default function Page() {
   const { push } = useRouter();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; target: any; }) => {
     event.preventDefault();
 
     const form = event.target;

@@ -13,25 +13,25 @@ export default function Page() {
   const [about, setAbout] = useState("");
   const [file, setFile] = useState(null);
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event:any) => {
     setName(event.target.value);
   };
 
-  const handleAboutChange = (event) => {
+  const handleAboutChange = (event: any) => {
     setAbout(event.target.value);
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event:  React.FormEvent<HTMLFormElement> ) => {
     event.preventDefault();
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("about", about);
-    formData.append("file", file);
+    //formData.append("file", file);
 
     try {
       const response = await axios.post("http://localhost:4000/admin/organisations", formData);

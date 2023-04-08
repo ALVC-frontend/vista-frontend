@@ -1,4 +1,8 @@
 "use client";
+import BreadCrumb from "@components/breadcrumb";
+import FormNav from "@components/form-nav";
+import TextInput from "@components/text-input";
+import { crumbs } from "@lib/dummy";
 import axios from "axios";
 import { useState } from "react";
 
@@ -8,7 +12,7 @@ export default function Page() {
   const [email, setEmail] = useState("");
   const [mobileNo, setMobileNo] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/admins", {
@@ -22,6 +26,10 @@ export default function Page() {
       console.log(error);
     }
   };
+
+  function push(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <section className="w-full ml-6">

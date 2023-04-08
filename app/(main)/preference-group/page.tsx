@@ -32,7 +32,7 @@ export default function Page() {
 
   return (
     <section className="w-full pl-1 pt-3">
-      <BreadCrumb crumbs={[{ label: "Preference Groups", link: "#" }]} />
+      <BreadCrumb crumbs={[]} />
 
       <header className="flex items-center justify-between px-4 my-4">
         <div className="hidden md:block">
