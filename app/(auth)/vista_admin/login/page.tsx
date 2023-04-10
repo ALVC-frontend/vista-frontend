@@ -22,7 +22,7 @@ export default function LoginPage() {
       });
       localStorage.setItem("accessToken", res.data.accessToken);
       console.log(res.data);
-      window.location.href = "/"; // Redirect the user to the home page
+      window.location.href = "/articles"; // Redirect the user to the home page
     } catch (error) {
       console.error(error);
       setErrorMessage("Invalid email or password.");
