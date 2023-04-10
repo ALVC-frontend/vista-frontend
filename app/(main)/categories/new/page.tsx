@@ -17,7 +17,7 @@ export default function Page() {
   const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/admin/categories", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/admin/categories", {
         title,
         description,
         parent,

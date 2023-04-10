@@ -34,7 +34,7 @@ export default function Page() {
   useEffect(() => {
     async function getCities() {
       try {
-        const response = await axios.get<ApiResponse>("http://localhost:4000/admin/cities");
+        const response = await axios.get<ApiResponse>("https://vista-testing.herokuapp.com/admin/cities");
           setCities(response.data.table[0].tbody);
           setTitle(response.data.title);
           setBreadcrumb(response.data.breadcrumb);

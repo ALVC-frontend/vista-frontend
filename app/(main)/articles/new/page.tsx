@@ -1,56 +1,68 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 import {
+  BadgeContainer,
   BreadCrumb,
+  FormNav,
   TextInput,
-  Button,
-} from "components/index";
+} from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
-import React from "react";
 
 export default function Page() {
+  const [publishDate, setPublishDate] = useState(new Date());
+  const { push } = useRouter();
   const [formData, setFormData] = useState({});
-  const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [publishDate, setPublishDate] = useState(new Date());
 
-  const handleInputChange = (event: any) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    if (name === "title") {
-      setTitle(value);
-    }
-     if (name === "content") {
-      setContent(value);
+  const handleInputChange = (event) => {
+    const { name, value, type } = event.target;
+
+    if (type === "file") {
+      // handle file input fields
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: event.target.files[0],
+      }));
+    } else if (type === "checkbox") {
+      // handle checkbox input fields
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: event.target.checked,
+      }));
+    } else if (type === "date") {
+      // handle date input fields
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: new Date(value).toISOString(),
+      }));
+    } else {
+      // handle all other input fields
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
   };
 
-  const handleFileChange = (event: any) => {
-    setFile(event.target.files[0]);
-  }
-
-  const handleSubmit = async (event:  React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const formDataWithFile = new FormData();
     try {
-      const response = await axios.post("http://localhost:4000/admin/articles", formDataWithFile, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
+        title: formData.title,
+        content: formData.content,
+        categories: formData.categories, // assuming categories is an array
+        publish_at: publishDate.toISOString() // convert date to ISO string format
       });
       console.log(response.data);
       // redirect to verify admin page
-      window.location.href = "/articles";
+      push("/articles");
     } catch (error) {
       console.error(error);
     }
@@ -74,7 +86,7 @@ export default function Page() {
               type="file"
               className="file-input file-input-ghost bg-lightGray w-full max-w-xs"
               name="file"
-              onChange={handleFileChange}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -83,7 +95,6 @@ export default function Page() {
             placeholder="Title"
             name="title"
             onChange={handleInputChange}
-            value={title}
           />
 
           <textarea
@@ -93,8 +104,14 @@ export default function Page() {
             className="p-3 bg-lightGray outline-none rounded-md"
             name="content"
             onChange={handleInputChange}
-            value={content}
           ></textarea>
+
+          <BadgeContainer
+            editableBadges={[]}
+            placeholder="Content categories"
+            name="categories"
+            onChange={handleInputChange}
+          />
 
           <div className="flex w-full items-center">
             <DatePicker
@@ -108,22 +125,10 @@ export default function Page() {
 
           {/* Form navigation  */}
 
-          <div className="w-full flex items-center justify-between px-1">
-            <Button
-              text="Cancel"
-              onPress={() => window.history.back()}
-              subtle
-              extraStyles="md:w-1/5"
-            />
-
-            <Button
-              extraStyles="md:w-1/5"
-              onPress={() =>handleSubmit}
-              text="Update article"
-              primary
-              type="submit"
-            />
-          </div>
+          <FormNav
+            rightBtnText="Update article"
+            type="submit"
+          />
         </form>
       </main>
     </section>

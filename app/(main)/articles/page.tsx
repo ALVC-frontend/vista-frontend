@@ -36,7 +36,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const response = await axios.get<ArticlesResponse>("http://localhost:4000/admin/articles");
+        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles");
         setArticles(response.data.articles);
         console.log("Response status:", response.status);
         console.log(response.data);
@@ -98,7 +98,7 @@ export default function Page() {
                     </Link>
                   </td>
                   <td>{article.status}</td>
-                  <td>{article.publish_at}</td>
+                  <td>{article.publish_at?.slice(0, 10)}</td>
                 </tr>
               ))
             ) : (

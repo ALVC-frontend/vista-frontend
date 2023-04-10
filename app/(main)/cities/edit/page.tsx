@@ -23,7 +23,7 @@ export default function Page() {
       if (image) {
         formData.append("image", image);
       }
-      const res = await axios.put("http://localhost:4000/api/cities/:id", formData);
+      const res = await axios.put("https://vista-testing.herokuapp.com/api/cities/:id", formData);
       console.log(res.data);
       push("/cities");
     } catch (err) {

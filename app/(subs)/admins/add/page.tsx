@@ -24,7 +24,7 @@ export default function Page() {
   const handleFormSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/admin/api/admins", formData);
+      const response = await axios.post("https://vista-testing.herokuapp.com/admin/api/admins", formData);
       if (response.status === 201) {
         push("/admins/add/verify");
       }

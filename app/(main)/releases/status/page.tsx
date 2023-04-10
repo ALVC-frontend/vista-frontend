@@ -16,7 +16,7 @@ export default function Page() {
   const [releases, setReleases] = useState<Release[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/admin/releases")
+    axios.get("https://vista-testing.herokuapp.com/admin/releases")
       .then((response) => {
         setReleases(response.data);
       })

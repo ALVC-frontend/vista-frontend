@@ -26,7 +26,7 @@ export default function Page() {
 
     // make POST request to create new video
     try {
-      const response = await axios.post("http://localhost:4000/admin/videos", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/admin/videos", {
         name,
         url,
         description,

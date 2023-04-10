@@ -36,7 +36,7 @@ export default function Page(): JSX.Element {
       title: title,
       questions: questions.filter((question) => question !== ""),
     };
-    axios.post("http://localhost:4000/admin/preference-group", data).then(() => {
+    axios.post("https://vista-testing.herokuapp.com/admin/preference-group", data).then(() => {
       push("/preference-group");
     });
   };

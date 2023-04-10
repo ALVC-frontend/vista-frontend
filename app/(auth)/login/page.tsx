@@ -15,7 +15,7 @@ export default function LoginPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/auth/sign_in", {
+      const res = await axios.post("https://vista-testing.herokuapp.com/auth/sign_in", {
         email,
         password,
       });

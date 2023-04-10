@@ -23,7 +23,7 @@ export default function Page() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:4000/admin/cities", { name, status });
+      const res = await axios.post("https://vista-testing.herokuapp.com/admin/cities", { name, status });
       console.log(res.data);
       router.push('/cities');
     } catch (err) {

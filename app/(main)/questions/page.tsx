@@ -19,7 +19,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get<Question[]>("http://localhost:4000/admin/questions");
+        const response = await axios.get<Question[]>("https://vista-testing.herokuapp.com/admin/questions");
         setQuestions(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);

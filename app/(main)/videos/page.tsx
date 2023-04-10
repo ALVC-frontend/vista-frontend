@@ -22,7 +22,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchVideos() {
       try {
-        const response = await axios.get<Video[]>("http://localhost:4000/admin/videos");
+        const response = await axios.get<Video[]>("https://vista-testing.herokuapp.com/admin/videos");
         setVideos(response.data);
       } catch (error) {
         console.error(error);
