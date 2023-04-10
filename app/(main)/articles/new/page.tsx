@@ -13,15 +13,26 @@ import {
   TextInput,
 } from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
+import React from "react";
+
+interface FormData {
+  title: string;
+  content: string;
+  categories: string[];
+}
 
 export default function Page() {
   const [publishDate, setPublishDate] = useState(new Date());
   const { push } = useRouter();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<FormData>({
+    title: "",
+    content: "",
+    categories: [],
+  });
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: any) => {
     const { name, value, type } = event.target;
 
     if (type === "file") {
@@ -51,7 +62,7 @@ export default function Page() {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
       const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
@@ -109,7 +120,6 @@ export default function Page() {
           <BadgeContainer
             editableBadges={[]}
             placeholder="Content categories"
-            name="categories"
             onChange={handleInputChange}
           />
 
