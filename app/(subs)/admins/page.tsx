@@ -1,35 +1,13 @@
-"use client";
-import Button from "@components/button";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import Link from "next/link";
 
-interface Admin {
-  id: number;
-  username: string;
-  name: string;
-  employee_id: number;
-}
+import { Button } from "@components/index";
+import admin1 from "@assets/images/admin-1.png";
+import admin2 from "@assets/images/admin-2.png";
+import React from "react";
 
-interface PageProps {}
-
-interface PageState {
-  admins: Admin[];
-}
-
-export default function Page(props: PageProps): JSX.Element {
-  const [admins, setAdmins] = useState<Admin[]>([]);
-
-  useEffect(() => {
-    async function fetchAdmins() {
-      const response = await axios.get<Admin[]>("/api/admins");
-      setAdmins(response.data);
-    }
-
-    fetchAdmins();
-  }, []);
-
+export default function Page() {
   return (
     <section className="w-full pl-1">
       {/* Header  */}
@@ -46,7 +24,7 @@ export default function Page(props: PageProps): JSX.Element {
           />
         </div>
         <div className="">
-          <Link to="/admins/add">
+          <Link href="/admins/add">
             <Button
               text="New admin"
               primary
@@ -57,6 +35,7 @@ export default function Page(props: PageProps): JSX.Element {
       </header>
 
       {/* Admins table  */}
+
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -66,27 +45,59 @@ export default function Page(props: PageProps): JSX.Element {
               <th>Employee id</th>
             </tr>
           </thead>
-          <tbody>
-            {admins.map((admin: Admin) => (
-              <tr key={admin.id}>
-                <th>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
 
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-bold opacity-[0.44]">
-                        {admin.username}
-                      </h4>
+          <tbody>
+            <tr>
+              <th>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <Image src={admin1} alt="Admin 1" />
                     </div>
                   </div>
-                </th>
-                <th>{admin.name}</th>
-                <th>{admin.employee_id}</th>
-              </tr>
-            ))}
+                  <div>
+                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
+                  </div>
+                </div>
+              </th>
+              <th>Tahir Ramzan</th>
+              <th>12345667</th>
+            </tr>
+
+            {/* admin 2  */}
+            <tr>
+              <th>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <Image src={admin2} alt="Admin 1" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
+                  </div>
+                </div>
+              </th>
+              <th>Tahir Ramzan</th>
+              <th>12345667</th>
+            </tr>
+            {/* admin 3  */}
+            <tr>
+              <th>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <Image src={admin1} alt="Admin 1" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold opacity-[0.44]">tahir001</h4>
+                  </div>
+                </div>
+              </th>
+              <th>Tahir Ramzan</th>
+              <th>12345667</th>
+            </tr>
           </tbody>
         </table>
       </article>

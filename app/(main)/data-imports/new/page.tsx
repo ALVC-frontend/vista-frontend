@@ -1,6 +1,8 @@
+"use client";
 import axios from 'axios';
 import { BreadCrumb, Button } from "@components/index";
 import { newDataImports } from "@lib/dummy";
+import React from 'react';
 
 export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {

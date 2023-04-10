@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.10",
     "@heroicons/react": "^2.0.16",
+    "@types/axios": "^0.14.0",
     "@types/node": "18.11.10",
     "@types/react": "^16.8.0",
     "@types/react-dom": "18.0.9",

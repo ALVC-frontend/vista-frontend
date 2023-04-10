@@ -4,6 +4,7 @@ import { BreadCrumb, Button } from "@components/index";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import React from "react";
 
 interface Question {
   id: number;

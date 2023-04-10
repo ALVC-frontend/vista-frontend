@@ -5,11 +5,7 @@ import Image from "next/image";
 import axios from "axios";
 import { BreadCrumb, Button } from "@components/index";
 import { statusCategories } from "@lib/dummy";
-import beauty from "@assets/images/beauty.png";
-import beauty1 from "@assets/images/beauty2.png";
-import beauty2 from "@assets/images/beauty3.png";
-import beauty3 from "@assets/images/beauty4.png";
-import beauty4 from "@assets/images/beauty4.png";
+import React from "react";
 
 interface Category {
   id: number;

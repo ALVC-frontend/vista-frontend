@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { Button } from "@components/index";
+import { Button } from "components/index";
+import React from "react";
 
 interface Category {
   id: number;

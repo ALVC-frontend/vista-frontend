@@ -12,6 +12,7 @@ import {
   Button,
 } from "components/index";
 import { newArticleCrumbs } from "@lib/dummy";
+import React from "react";
 
 export default function Page() {
   const [formData, setFormData] = useState({});

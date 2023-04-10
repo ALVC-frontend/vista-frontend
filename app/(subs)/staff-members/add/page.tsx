@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
+
+import { useRouter } from "next/navigation";
 
 import {
   BadgeContainer,
@@ -10,48 +9,10 @@ import {
   TextInput,
 } from "@components/index";
 import { addStaffMemberCrumb } from "@lib/dummy";
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobileNo: string;
-  pin: string;
-}
+import React from "react";
 
 export default function Page() {
   const { push } = useRouter();
-  const [error, setError] = useState<string | null>(null);
-
-  const rightBtnAction = async () => {
-    const firstNameInput = document.querySelector<HTMLInputElement>('input[placeholder="First name"]');
-    const firstName = firstNameInput ? firstNameInput.value : '';
-    const lastNameInput = document.querySelector<HTMLInputElement>('input[placeholder="Last name"]');
-    const lastName = lastNameInput ? lastNameInput.value : '';
-    const emailInput = document.querySelector<HTMLInputElement>('input[placeholder="Email"]');
-    const email = emailInput ? emailInput.value : '';
-    const mobileNoInput = document.querySelector<HTMLInputElement>('input[placeholder="Mobile no"]');
-    const mobileNo = mobileNoInput ? mobileNoInput.value : '';
-    const pinInput = document.querySelector<HTMLInputElement>('input[placeholder="PIN"]');
-    const pin = pinInput ? pinInput.value : '';
-
-    const data: FormData = {
-      firstName,
-      lastName,
-      email,
-      mobileNo,
-      pin,
-    };
-
-    try {
-      const response = await axios.post("/api/staff-members", data);
-      console.log(response.data);
-      push("/staff-members/add");
-    } catch (error) {
-      console.error(error);
-      setError("An error occurred while adding the staff member. Please try again.");
-    }
-  };
 
   return (
     <section className="w-full ml-6">
@@ -61,8 +22,6 @@ export default function Page() {
 
       <main>
         <h2 className="text-2xl font-semibold">New Staff Member</h2>
-
-        {error && <p className="text-red-500">{error}</p>}
 
         <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-3/5">
           {/* <TextInput placeholder="Assigned Branches" inputType="text" /> */}
@@ -106,7 +65,7 @@ export default function Page() {
           <FormNav
             rightBtnText="Create Staff member"
             // redirect to verify admin page
-            rightBtnAction={rightBtnAction}
+            rightBtnAction={() => push("/staff-members/add")}
           />
         </form>
       </main>

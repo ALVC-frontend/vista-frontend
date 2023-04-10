@@ -1,34 +1,13 @@
-import { useRouter } from 'next/navigation';
-import axios from "axios";
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { newPartnerCategories } from "@lib/dummy";
+import React from "react";
 
-export default function Page(): JSX.Element {
+export default function Page() {
   const { push } = useRouter();
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // prevent default form submission
-
-    const titleInput = document.getElementById("title-input") as HTMLInputElement;
-    const title = titleInput.value;
-    console.log("Title:", title);
-
-    const fileInput = document.getElementById("file-input") as HTMLInputElement;
-    const file = fileInput.files ? fileInput.files[0] : null;
-    console.log("File:", file);
-
-    const formData = new FormData();
-    formData.append("title", title);
-    //formData.append("image", file);
-
-    try {
-      const response = await axios.post("/api/partner-categories", formData);
-      console.log("API response:", response.data);
-      push("/partner-categories");
-    } catch (error) {
-      console.error("API error:", error);
-    }
-  };
 
   return (
     <section className="w-full pl-6">
@@ -39,15 +18,11 @@ export default function Page(): JSX.Element {
       <main>
         <h2 className="text-2xl font-semibold">New partner category</h2>
 
-        <form
-          className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]"
-          onSubmit={handleSubmit}
-        >
-          <TextInput inputType="text" placeholder="Title" id="title-input" />
+        <form className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]">
+          <TextInput inputType="text" placeholder="Title" />
 
           <input
             type="file"
-            id="file-input"
             className="file-input file-input-ghost bg-lightGray"
           />
 
@@ -55,7 +30,8 @@ export default function Page(): JSX.Element {
 
           <FormNav
             rightBtnText="Create partner category"
-            rightBtnAction={handleSubmit}
+            // redirect to verify admin page
+            rightBtnAction={() => push("/partner-categories")}
           />
         </form>
       </main>

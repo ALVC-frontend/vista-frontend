@@ -5,6 +5,7 @@ import axios from "axios";
 import { BreadCrumb, Button, TextInput } from "components/index";
 import { newCategories } from "@lib/dummy";
 import Link from "next/link";
+import React from "react";
 
 export default function Page() {
   const [title, setTitle] = useState("");
