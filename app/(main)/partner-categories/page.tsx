@@ -27,7 +27,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await axios.get<Category[]>("https://vista-testing.herokuapp.com/admin/partner_categories");
+        const response = await axios.get<Category[]>("https://vista-testing.herokuapp.com/api/admin/partner_categories");
         setCategories(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);
