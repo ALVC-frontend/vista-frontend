@@ -11,7 +11,7 @@ export default function Page() {
     const formData = new FormData(event.currentTarget);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/admin/data-imports', formData);
+      const response = await axios.post('https://vista-testing.herokuapp.comapi/admin/data-imports', formData);
 
       console.log(response.data); // do something with the response data
     } catch (error) {
