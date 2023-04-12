@@ -65,7 +65,7 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/admin/articles", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
         title: formData.title,
         content: formData.content,
         categories: formData.categories, // assuming categories is an array

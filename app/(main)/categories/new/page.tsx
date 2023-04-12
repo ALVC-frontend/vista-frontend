@@ -22,7 +22,7 @@ export default function Page(): JSX.Element{
     }
     try {
       // Send a POST request to the server with the form data
-      const response = await axios.post("https://vista-testing.herokuapp.comapi/admin/categories", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/categories", {
         title,
         description,
         parent,
