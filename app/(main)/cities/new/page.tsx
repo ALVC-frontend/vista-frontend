@@ -11,23 +11,30 @@ import {
   TextInput,
 } from "@components/index";
 import { newCityCrumbs } from "@lib/dummy";
+import React from "react";
 
 export default function Page() {
-
+  const router = useRouter();
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
-  const router = useRouter();
 
-
-  const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://vista-testing.herokuapp.com/admin/cities", { name, status });
-      console.log(res.data);
-      router.push('/cities');
-    } catch (err) {
-      console.error(err);
+      const response = await axios.post(
+        "http://localhost:4000/api/admin/cities",
+        {
+          name,
+          status,
+          //photo,
+        }
+      );
+      console.log(response.data);
+      router.push("/cities"); // navigate to cities page
+    } catch (error) {
+      console.log(error);
+      window.alert("Error creating city"); // display error message
     }
   };
 

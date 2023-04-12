@@ -5,6 +5,7 @@ import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
 import { BreadCrumb, Button, TextInput } from "@components/index";
 import { newQuestion } from "@lib/dummy";
 import Link from "next/link";
+import React from 'react';
 
 export default function NewQuestionForm() {
   const [category, setCategory] = useState("");

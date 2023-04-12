@@ -9,9 +9,17 @@ import React from "react";
 
 interface Category {
   id: number;
-  name: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  ancestry: null | string;
   image: string;
+  initial:boolean;
   // Add other properties of the category here
+}
+
+interface ResponseData {
+  categories: Category[];
 }
 
 export default function Page() {
@@ -20,8 +28,10 @@ export default function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await axios.get<Category[]>("https://vista-testing.herokuapp.com/admin/categories");
-        setCategories(response.data);
+        const response = await axios.get<ResponseData>(
+          "http://localhost:4000/api/admin/categories"
+        );
+        setCategories(response.data.categories);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -46,20 +56,40 @@ export default function Page() {
         </div>
       </header>
       <main className="mt-3">
-        {Array.isArray(categories) && categories.length > 0 ? (
-          categories.map((category) => (
-            <div
-              key={category.id}
-              className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]"
-            >
-              <Image src={category.image} alt={category.name} />
-              <p className="text-primary">{category.name}</p>
-            </div>
-          ))
-        ) : (
-          <div>No categories found.</div>
-        )}
-      </main>
+  {Array.isArray(categories) && categories.length > 0 ? (
+    <>
+      {categories
+        .filter((category) => category.initial)
+        .map((category) => (
+          <div
+            key={category.id}
+            className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]"
+          >
+            <Image src={category.image} alt={category.title} />
+            <p className="text-primary">
+              ⭐️ {category.title}
+            </p>
+          </div>
+        ))}
+      {categories
+        .filter((category) => !category.initial)
+        .map((category) => (
+          <div
+            key={category.id}
+            className="flex items-center gap-x-5 bg-white py-2 rounded-sm pl-5 mb-[1px]"
+          >
+            <Image src={category.image} alt={category.title} />
+            <p className="text-primary">
+              {category.title}
+            </p>
+          </div>
+        ))}
+    </>
+  ) : (
+    <div>No categories found.</div>
+  )}
+</main>
+
     </section>
   );
 }
