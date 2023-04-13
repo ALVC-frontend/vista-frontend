@@ -1,51 +1,61 @@
 "use client";
-import Link from "next/link";
-import { useState } from "react";
 import axios from "axios";
-
 import { BreadCrumb, Button } from "@components/index";
 import { statusDataImports } from "@lib/dummy";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import React from "react";
 
+interface Import {
+  file: string;
+  status: string;
+  created: string;
+  finished: string;
+}
+
 export default function Page() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [imports, setImports] = useState<Import[]>([]);
 
-  const handleImportClick = async () => {
-    setIsLoading(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("https://vista-testing.herokuapp.com/api/admin/data_imports");
 
-    try {
-      const response = await axios.post("https://vista-testing.herokuapp.com/api/import-data");
-      console.log(response.data);
-      // handle success response here
-    } catch (error) {
-      console.log(error);
-      // handle error response here
-    }
+      const importData = response.data.paginate.map((importItem) => {
+        return {
+          file: importItem.file.url,
+          status: importItem.status,
+          created: importItem.created_at,
+          finished: importItem.finished_at,
+        };
+      });
 
-    setIsLoading(false);
-  };
+      setImports(importData);
+    };
+    fetchData();
+  }, []);
 
   return (
     <section className="w-full pl-1 pt-3">
-      {/* Header */}
+      {/* Header  */}
       <BreadCrumb crumbs={statusDataImports} />
       <header className="flex items-center justify-between px-10 my-4">
         <div className="hidden md:block">
           <h3 className="font-semibold">Data imports</h3>
         </div>
 
-        <div>
-          <Button
-            text="Import data"
-            primary
-            extraStyles="font-thin text-sm px-4 py-3"
-            onClick={handleImportClick}
-            disabled={isLoading}
-          />
+        <div className="">
+          <Link href="/data-imports/new">
+            <Button
+              text="Import data"
+              primary
+              extraStyles="font-thin text-sm px-4 py-3"
+            />
+          </Link>
         </div>
       </header>
 
-      {/* Table */}
+      {/* Admins table  */}
+
       <article className="w-full overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -58,24 +68,24 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {/* Add more rows dynamically based on imported data */}
-            <tr>
-              <td>
-                <p className="text-primary">file1.docx</p>
-              </td>
-              <td>
-                {/* Change badge color based on status */}
-                <p className="badge bg-success text-primary text-sm border-background p-4">
-                  Finished
-                </p>
-              </td>
-              <td>
-                <small>2022-11-23 12:25:40 UTC</small>
-              </td>
-              <td>
-                <small>2022-11-23 12:25:40 UTC</small>
-              </td>
-            </tr>
+            {imports.map((importData) => (
+              <tr key={importData.file}>
+                <td>
+                  <p className="text-primary">{importData.file}</p>
+                </td>
+                <td>
+                  <p className="badge bg-background text-primary text-sm border-background p-4">
+                    {importData.status}
+                  </p>
+                </td>
+                <td>
+                  <small>{importData.created}</small>
+                </td>
+                <td>
+                  <small>{importData.finished}</small>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>
