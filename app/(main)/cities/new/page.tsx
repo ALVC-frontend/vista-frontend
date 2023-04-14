@@ -23,7 +23,7 @@ export default function Page() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/admin/cities",
+        "https://vista-testing.herokuapp.comapi/admin/cities",
         {
           name,
           status,

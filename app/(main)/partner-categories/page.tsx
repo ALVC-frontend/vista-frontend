@@ -8,29 +8,26 @@ import React from "react";
 interface Category {
   id: number;
   title: string;
+  description: string;
   breadcrumb: string;
   link_to: string[];
   icon: string;
 }
+
 interface CategoryResponse {
-  paginate: {
-    id: number;
-    title: string;
-    position: number;
-    created_at: string;
-    updated_at: string;
-  }[];
+  paginate: Category[];
 }
+
 export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await axios.get<Category[]>("https://vista-testing.herokuapp.comapi/admin/partner_categories");
-        setCategories(response.data);
+        const response = await axios.get<CategoryResponse>("http://localhost:4000/api/admin/partner_categories");
+        setCategories(response.data.paginate);
         console.log("Response status:", response.status);
-        console.log(response.data);
+        console.log(response.data.paginate);
       } catch (error) {
         console.error(error);
       }
@@ -85,6 +82,7 @@ export default function Page() {
                     <Link href={`/partner-categories/${category.id}`}>
                       <p className="text-primary">{category.title}</p>
                     </Link>
+                    <p className="text-gray-500 text-sm mt-1">{category.description}</p>
                   </td>
                 </tr>
               ))

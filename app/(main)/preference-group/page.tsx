@@ -17,7 +17,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
-        const response = await axios.get<PreferenceGroup[]>("https://vista-testing.herokuapp.comapi/preference-groups");
+        const response = await axios.get<PreferenceGroup[]>("http://localhost:4000/api/admin/preference_groups");
         setPreferenceGroups(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);
@@ -60,13 +60,20 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {preferenceGroups.map((preferenceGroup) => (
-              <tr key={preferenceGroup.id}>
-                <td>
-                  <p>{preferenceGroup.name}</p>
-                </td>
+          {Array.isArray(preferenceGroups) && preferenceGroups.length > 0 ? (
+              preferenceGroups.map((preferenceGroup) => (
+                <tr key={preferenceGroup.id}>
+                  <td>
+                    <p>{preferenceGroup.name}</p>
+                  </td>
+
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={parseInt("3")}>No preferenceGroups found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </article>

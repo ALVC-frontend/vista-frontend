@@ -13,12 +13,12 @@ export default function Page() {
     locking_conditions: 0,
   });
 
-  const handleFileInputChange = (event) => {
+  const handleFileInputChange = (event: any) => {
     const file = event.target.files[0];
     setFormData((prevState) => ({ ...prevState, file }));
   };
 
-  const handleCheckboxInputChange = (event) => {
+  const handleCheckboxInputChange = (event: any) => {
     const { name } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: 1 }));
   };
@@ -44,7 +44,7 @@ export default function Page() {
       );
 
       console.log(response.data);
-      window.location.href = "/data-imports/status";
+       window.location.href = "/imports/status";
     } catch (error) {
       console.error(error);
     }

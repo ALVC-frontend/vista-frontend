@@ -1,44 +1,55 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from 'next/navigation'
-
-import { BreadCrumb, FormNav, TextInput } from "@components/index";
+import { useRouter } from "next/navigation";
+import { BreadCrumb, FormNav } from "components";
 import { newOrganisation } from "@lib/dummy";
+import React from "react";
+
+interface FormData {
+  name: string;
+  about: string;
+  logo: File | null;
+}
 
 export default function Page() {
-   const { push } = useRouter();
+  const { push } = useRouter();
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    about: "",
+    logo: null,
+  });
 
-  const [name, setName] = useState("");
-  const [about, setAbout] = useState("");
-  const [file, setFile] = useState(null);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = event.target;
 
-  const handleNameChange = (event:any) => {
-    setName(event.target.value);
+    if (type === "file") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: event.target.files[0],
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleAboutChange = (event: any) => {
-    setAbout(event.target.value);
-  };
-
-  const handleFileChange = (event: any) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleSubmit = async (event:  React.FormEvent<HTMLFormElement> ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("about", about);
-    //formData.append("file", file);
-
     try {
-      const response = await axios.post("http://localhost:4000/admin/organisations", formData);
+
+      const response = await axios.post(
+        "http://localhost:4000/api/admin/organisations",{
+          name: formData.name,
+          about: formData.about,
+        });
       console.log(response.data);
+      // redirect to verify admin page
       push("/organisations");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -55,30 +66,33 @@ export default function Page() {
           className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]"
           onSubmit={handleSubmit}
         >
-          <TextInput
-            inputType="text"
+          <input
+            type="text"
+            name="name"
             placeholder="Name"
-            value={name}
-            onChange={handleNameChange}
+            value={formData.name}
+            onChange={handleInputChange}
           />
-          <TextInput
-            inputType="text"
+          <input
+            type="text"
+            name="about"
             placeholder="About"
-            value={about}
-            onChange={handleAboutChange}
+            value={formData.about}
+            onChange={handleInputChange}
           />
 
           <input
             type="file"
+            name="logo"
             className="file-input file-input-ghost bg-lightGray"
-            onChange={handleFileChange}
+            onChange={handleInputChange}
           />
 
           {/* Form navigation  */}
-
           <FormNav rightBtnText="Create organisation" />
         </form>
       </main>
     </section>
   );
 }
+
