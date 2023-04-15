@@ -15,7 +15,7 @@ export default function Page() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
 
   useEffect(() => {
-    axios.get<Organization[]>("http://localhost:4000/api/admin/organisations").then((res) => {
+    axios.get<Organization[]>("https://vista-testing.herokuapp.com/api/admin/organisations").then((res) => {
       setOrganizations(res.data);
     });
   }, []);
