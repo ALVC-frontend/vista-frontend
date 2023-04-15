@@ -4,6 +4,15 @@ import { BreadCrumb, Button } from "@components/index";
 import { newDataImports } from "@lib/dummy";
 import React, { useState } from 'react';
 
+interface FormData {
+  file: null;
+  categories: number;
+  visibility_conditions: number;
+  questions: number;
+  locking_conditions: number;
+  [key: string]: any;
+}
+
 export default function Page() {
   const [formData, setFormData] = useState({
     file: null,
@@ -23,18 +32,25 @@ export default function Page() {
     setFormData((prevState) => ({ ...prevState, [name]: 1 }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
 
     const formDataToSend = new FormData();
 
     for (const key in formData) {
-      formDataToSend.append(`data_import[${key}]`, formData[key]);
+      if (Object.prototype.hasOwnProperty.call(formData, key)) {
+        const value = formData[key as keyof typeof formData];
+        if (typeof value === 'number') {
+          formDataToSend.append(`data_import[${key}]`, value.toString());
+        } else if (value !== null) {
+          formDataToSend.append(`data_import[${key}]`, value);
+        }
+      }
     }
 
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/admin/data_imports',
+        'https://vista-testing.herokuapp.com/api/admin/data_imports',
         formDataToSend,
         {
           headers: {

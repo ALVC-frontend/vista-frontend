@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
 
-interface Import {
+interface ImportData {
   file: string;
   status: string;
   created: string;
@@ -14,11 +14,11 @@ interface Import {
 }
 
 export default function Page() {
-  const [imports, setImports] = useState<Import[]>([]);
+  const [imports, setImports] = useState<ImportData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("https://vista-testing.herokuapp.com/api/admin/data_imports");
+      const response = await axios.get<{paginate: { file: { url: string }; status: string; created_at: string; finished_at: string }[] }>("https://vista-testing.herokuapp.com/api/admin/data_imports");
 
       const importData = response.data.paginate.map((importItem) => {
         return {

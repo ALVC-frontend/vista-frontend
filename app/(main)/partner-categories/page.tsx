@@ -24,7 +24,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await axios.get<CategoryResponse>("http://localhost:4000/api/admin/partner_categories");
+        const response = await axios.get<CategoryResponse>("https://vista-testing.herokuapp.com/api/admin/partner_categories");
         setCategories(response.data.paginate);
         console.log("Response status:", response.status);
         console.log(response.data.paginate);
@@ -56,7 +56,7 @@ export default function Page() {
         <div className="">
           <Link href="/partner-categories/new">
             <Button
-              text="New category"
+              text="New Partner category"
               primary
               extraStyles="font-thin text-sm px-4 py-3"
             />

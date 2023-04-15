@@ -6,11 +6,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
 
+interface Category {
+  id: number;
+  title: string;
+}
+
 interface Question {
   id: number;
   title: string;
-  category: string;
+  category_id: string;
   kind: string;
+  category: Category;
 }
 
 export default function Page() {
@@ -19,7 +25,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get<Question[]>("https://vista-testing.herokuapp.com/admin/questions");
+        const response = await axios.get<Question[]>("https://vista-testing.herokuapp.com/api/admin/questions");
         setQuestions(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);
@@ -89,7 +95,7 @@ export default function Page() {
                       Read More
                     </Link>
                   </td>
-                  <td>{question.category}</td>
+                  <td>{question.category.title}</td>
                   <td>{question.kind}</td>
                 </tr>
               ))

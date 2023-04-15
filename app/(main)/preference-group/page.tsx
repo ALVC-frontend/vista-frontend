@@ -7,18 +7,20 @@ import React from "react";
 
 interface PreferenceGroup {
   id: number;
-  name: string;
+  title: string;
   // Add other properties of the preference group here
 }
-
+interface partNerCategoryResponse {
+  preference_groups: PreferenceGroup[];
+}
 export default function Page() {
   const [preferenceGroups, setPreferenceGroups] = useState<PreferenceGroup[]>([]);
 
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
-        const response = await axios.get<PreferenceGroup[]>("http://localhost:4000/api/admin/preference_groups");
-        setPreferenceGroups(response.data);
+        const response = await axios.get<partNerCategoryResponse>("http://localhost:4000/api/admin/preference_groups");
+        setPreferenceGroups(response.data.preference_groups);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -64,7 +66,7 @@ export default function Page() {
               preferenceGroups.map((preferenceGroup) => (
                 <tr key={preferenceGroup.id}>
                   <td>
-                    <p>{preferenceGroup.name}</p>
+                    <p>{preferenceGroup.title}</p>
                   </td>
 
                 </tr>

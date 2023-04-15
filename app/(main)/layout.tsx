@@ -2,6 +2,7 @@
 
 import { SideBar } from "@components/index";
 import { mainNav } from "@lib/navigation";
+import React from "react";
 
 export default function MainLayout({
   children,

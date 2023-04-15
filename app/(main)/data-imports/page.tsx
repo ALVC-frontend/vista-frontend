@@ -13,6 +13,15 @@ interface Import {
   finished: string;
 }
 
+interface ImportItem {
+  file: {
+    url: string;
+  };
+  status: string;
+  created_at:string;
+  finished_at: string;
+}
+
 export default function Page() {
   const [imports, setImports] = useState<Import[]>([]);
 
@@ -20,7 +29,7 @@ export default function Page() {
     const fetchData = async () => {
       const response = await axios.get("https://vista-testing.herokuapp.com/api/admin/data_imports");
 
-      const importData = response.data.paginate.map((importItem) => {
+      const importData = response.data.paginate.map((importItem: ImportItem)=> {
         return {
           file: importItem.file.url,
           status: importItem.status,

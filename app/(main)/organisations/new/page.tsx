@@ -20,7 +20,7 @@ export default function Page() {
     logo: null,
   });
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: any) => {
     const { name, value, type } = event.target;
 
     if (type === "file") {
@@ -41,7 +41,7 @@ export default function Page() {
     try {
 
       const response = await axios.post(
-        "http://localhost:4000/api/admin/organisations",{
+        "https://vista-testing.herokuapp.com/api/admin/organisations",{
           name: formData.name,
           about: formData.about,
         });

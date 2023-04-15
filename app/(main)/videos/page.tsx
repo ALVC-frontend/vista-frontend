@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@components/index";
+import React from "react";
 
 interface Video {
   id: number;
@@ -13,7 +14,11 @@ interface Video {
   status: string;
   created_at: string;
   updated_at: string;
+  published: boolean;
   published_at: string;
+}
+interface VideoResponse {
+  paginate: Video[];
 }
 
 export default function Page() {
@@ -22,13 +27,12 @@ export default function Page() {
   useEffect(() => {
     async function fetchVideos() {
       try {
-        const response = await axios.get<Video[]>("https://vista-testing.herokuapp.com/api/admin/videos");
-        setVideos(response.data);
+        const response = await axios.get<VideoResponse>("https://vista-testing.herokuapp.com/api/admin/videos");
+        setVideos(response.data.paginate);
       } catch (error) {
         console.error(error);
       }
     }
-
     fetchVideos();
   }, []);
  console.log(videos);
@@ -85,10 +89,17 @@ export default function Page() {
         <p>{video.description}</p>
       </td>
       <td>
-        <p className="text-primary">{video.partner}</p>
-      </td>
+  {video.partner ? (
+    <p className="text-primary">{video.partner}</p>
+  ) : (
+    <p>No partner assigned</p>
+  )}
+</td>
       <td>
-        <p>{video.status}</p>
+      <td>
+     <p>{video.published ? 'Published' : 'Not Published'}</p>
+</td>
+
       </td>
       <td>
         <p>{video.published_at}</p>
