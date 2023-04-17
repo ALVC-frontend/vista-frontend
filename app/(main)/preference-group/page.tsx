@@ -19,7 +19,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
-        const response = await axios.get<partNerCategoryResponse>("https://vista-testing.herokuapp.com/api/admin/preference_groups");
+        const response = await axios.get<partNerCategoryResponse>("http://localhost:4000/api/admin/preference_groups");
         setPreferenceGroups(response.data.preference_groups);
         console.log("Response status:", response.status);
         console.log(response.data);

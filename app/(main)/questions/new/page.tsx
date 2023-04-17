@@ -1,84 +1,215 @@
+
 "use client";
-import axios from 'axios';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from "react";
 import { ChevronDownIcon, PencilIcon } from "@heroicons/react/20/solid";
 import { BreadCrumb, Button, TextInput } from "@components/index";
 import { newQuestion } from "@lib/dummy";
 import Link from "next/link";
-import React from 'react';
+import axios from "axios";
+import React from "react";
+import { useRouter } from "next/navigation";
 
-export default function NewQuestionForm() {
-  const [category, setCategory] = useState("");
-  const [title, setTitle] = useState("");
-  const [kind, setKind] = useState("");
-  const [intro, setIntro] = useState(false);
-  const [noteTitle, setNoteTitle] = useState("");
-  const [allowsNote, setAllowsNote] = useState(true);
-  const [answers, setAnswers] = useState<string>("");
-  const [lockingCondition, setLockingCondition] = useState("");
+interface Category {
+  id: number;
+  title: string;
+}
+interface Props {
+  categories: Category[];
+}
 
-  const createQuestion = async () => {
+interface FormData {
+  title: string;
+  category_id: number;
+  kind: string;
+  intro: string;
+}
+
+interface ResponseData {
+  categories: Category[];
+}
+
+
+const Categories = ({ categories, ...props }: Props & any): JSX.Element => {
+  return (
+    <select {...props} className="w-full h-12 p-3 bg-lightGray border-none rounded-md">
+      <option value="">Select a category...</option>
+      {categories.map((category: Category) => (
+        <option key={category.id} value={category.id}>
+          {category.title}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+
+export default function Page() {
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [intro, setIntro] = useState<string>("");
+  const [kind, setKind] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await axios.get<ResponseData>(
+          "http://localhost:4000/api/admin/categories"
+        );
+        setCategories(response.data.categories);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>): void => {
+    const categoryId = parseInt(event.target.value);
+    setSelectedCategory(categoryId);
+  };
+
+  console.log("categories:", categories);
+  const createQuestion = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    const data: FormData = {
+      title: title,
+      category_id: selectedCategory,
+      kind: kind,
+      intro: intro,
+    };
     try {
-      const response = await axios.post("/api/questions", {
-        question: {
-          category,
-          title,
-          kind,
-          intro,
-          note_title: noteTitle,
-          allows_note: allowsNote,
-          answers,
-          locking_condition: lockingCondition,
-        },
-      });
-      console.log(response.data);
+      const response = await axios.post("http://localhost:4000/api/admin/questions", data);
+      console.log("Question created successfully", response.data);
+      router.push("/questions");
     } catch (error) {
-      console.error(error);
+      console.error("Error creating question", error);
     }
   };
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    createQuestion();
-  };
-
-
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="category">Category:</label>
-        <input type="text" id="category" value={category} onChange={(event) => setCategory(event.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="title">Title:</label>
-        <input type="text" id="title" value={title} onChange={(event) => setTitle(event.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="kind">Kind:</label>
-        <input type="text" id="kind" value={kind} onChange={(event) => setKind(event.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="intro">Intro:</label>
-        <input type="checkbox" id="intro" checked={intro} onChange={(event) => setIntro(event.target.checked)} />
-      </div>
-      <div>
-        <label htmlFor="noteTitle">Note Title:</label>
-        <input type="text" id="noteTitle" value={noteTitle} onChange={(event) => setNoteTitle(event.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="allowsNote">Allows Note:</label>
-        <input type="checkbox" id="allowsNote" checked={allowsNote} onChange={(event) => setAllowsNote(event.target.checked)} />
-      </div>
-      <div>
-        <label htmlFor="answers">Answers:</label>
-        <input type="text" id="answers" value={answers} onChange={(event) => setAnswers(event.target.value)} />
-      </div>
-      <div>
-        <label htmlFor="lockingCondition">Locking Condition:</label>
-        <input type="text" id="lockingCondition" value={lockingCondition} onChange={(event) => setLockingCondition(event.target.value)} />
-      </div>
-      <button type="submit">Create Question</button>
-    </form>
+    <section className="pl-4">
+      <header>
+        <BreadCrumb crumbs={newQuestion} />
+        <h2 className="font-semibold text-xl mb-4">New Question</h2>
+      </header>
+      <main className="">
+        <form className="flex gap-x-4 flex-col-reverse md:flex-row gap-y-2" onSubmit={createQuestion}>
+          <div className="flex flex-col gap-y-4 basis-2/3">
+            <div className="flex w-full items-center">
+              <div className="dropdown w-full">
+              <Categories
+               categories={categories}
+               value={selectedCategory.toString()}
+               onChange={handleCategoryChange}
+               />
+              </div>
+            </div>
+
+                <TextInput
+                placeholder="Title"
+                inputType="text"
+                name="title"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+
+               <div className="flex w-full items-center">
+              <div className="dropdown w-full">
+                <select
+                  className="w-full bg-lightGray border-none p-3 rounded-md"
+                  defaultValue=""
+                  onChange={(event) => setKind(event.target.value)}
+                >
+                  <option  value={kind} disabled hidden>
+                    Kind
+                  </option>
+                  <option>text</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <input type="checkbox" name="intro" id="" />
+              <small>Intro</small>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <input type="checkbox" name="allow_note" id="" />
+              <small>Allows note</small>
+            </div>
+            <TextInput inputType="text" placeholder="Note title" />
+            <input
+              type="file"
+              className="file-input file-input-ghost bg-lightGray"
+            />
+            <div className="flex justify-between items-center bg-lightGray rounded-md p-2">
+              <TextInput inputType="text" placeholder="Answers" />
+              <Button
+                text="Add answer"
+                extraStyles="outline outline-1 outline-primary text-primary m-1"
+              />
+            </div>
+            <div className="flex justify-between items-center bg-lightGray rounded-md p-2">
+              <TextInput inputType="text" placeholder="Locking condition" />
+              <Button
+                text="Add condition"
+                extraStyles="outline outline-1 outline-primary text-primary m-1"
+              />
+            </div>
+            <div className="flex justify-end my-6">
+
+              <Button
+                text="Create Question"
+                primary
+                type="submit"
+              />
+
+            </div>
+          </div>
+
+          <div className="basis-1/3 flex flex-col gap-y-4 px-3 ">
+            <h3 className="font-semibold flex items-center gap-x-2 text-primary">
+              <span>Customize appearance </span>
+              <PencilIcon className="w-4 h-4" />
+            </h3>
+
+            <div className="flex w-full items-center">
+              <div className="dropdown w-full">
+              <select
+                  className="w-full bg-lightGray border-none p-3 rounded-md"
+                  defaultValue=""
+                >
+                  <option value="" disabled hidden>
+                    Text style
+                  </option>
+                  <option>Dark</option>
+                  <option>light</option>
+                  <option>Light-gold</option>
+                  <option>Dark-gold</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-x-3">
+              <input type="checkbox" />
+              <small className="text-primary">Blur background</small>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <input type="checkbox" />
+              <small className="text-primary">Background overlay</small>
+            </div>
+          </div>
+        </form>
+      </main>
+    </section>
   );
 }
+function push(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

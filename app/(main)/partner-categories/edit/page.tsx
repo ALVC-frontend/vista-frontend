@@ -18,7 +18,7 @@ export default function Page() {
     //formData.append("image", image);
 
     try {
-      const response = await axios.put(`/api/partner-categories/${id}`, formData);
+      const response = await axios.put(`https://vista-testing.herokuapp.com//api/partner-categories/${id}`, formData);
       console.log(response.data);
       push("/partner-categories");
     } catch (error) {

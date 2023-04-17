@@ -1,44 +1,88 @@
 "use client";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
-import { BreadCrumb, FormNav, TextInput } from "@components/index";
+import { BreadCrumb, FormNav,  TextInput } from "@components/index";
 import React from "react";
+
+interface Question {
+  id: number;
+  category_id: number;
+  title: string;
+  kind: string;
+  category: {
+    id: number;
+    name: string;
+  };
+}
 
 interface FormData {
   title: string;
-  questions: string[];
+  question_ids: number[];
 }
 
-export default function Page(): JSX.Element {
+interface Props {
+  questions: Question[];
+}
+
+const Questions = ({ questions, ...props }: Props & any): JSX.Element => {
+  return (
+    <select {...props} className="w-full h-12 p-3 bg-lightGray border-none rounded-md">
+      <option value="">Select a question...</option>
+      {questions.map((question: Question) => (
+        <option key={question.id} value={question.id}>
+          {question.title}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export default function PreferenceGroupForm(): JSX.Element {
   const { push } = useRouter();
   const [title, setTitle] = useState<string>("");
-  const [questions, setQuestions] = useState<string[]>([]);
+  const [selectedQuestion, setSelectedQuestion] = useState<number>(0);
+  const [questions, setQuestions] = useState<Question[]>([]);
+
+  const getQuestions = () => {
+    axios.get<Question[]>("https://vista-testing.herokuapp.com/api/admin/questions")
+      .then((response) => {
+        setQuestions(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getQuestions();
+  }, []);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
   };
 
-  const handleQuestionChange = (event: ChangeEvent<HTMLInputElement>, index: number): void => {
-    const newQuestions = [...questions];
-    newQuestions[index] = event.target.value;
-    setQuestions(newQuestions);
+  const handleQuestionChange = (event: ChangeEvent<HTMLSelectElement>): void => {
+    const questionId = parseInt(event.target.value);
+    setSelectedQuestion(questionId);
   };
-
-  const addQuestion = (): void => {
-    setQuestions([...questions, ""]);
-  };
-
-  const createPreferenceGroup = (): void => {
+  const createPreferenceGroup = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
     const data: FormData = {
       title: title,
-      questions: questions.filter((question) => question !== ""),
+      question_ids: [selectedQuestion],
     };
-    axios.post("https://vista-testing.herokuapp.com/admin/preference-group", data).then(() => {
-      push("/preference-group");
-    });
+    axios
+      .post("https://vista-testing.herokuapp.com/api/admin/preference_groups", data)
+      .then((response) => {
+        // Redirect to preference group page regardless of response data
+        push("/preference-group");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -58,43 +102,11 @@ export default function Page(): JSX.Element {
             onChange={handleTitleChange}
           />
 
-          <div className="flex w-full items-center">
-            <div className="dropdown w-full">
-              <div
-                tabIndex={0}
-                className="w-full bg-lightGray border-none p-3 rounded-md m-1 flex items-center justify-between"
-              >
-                <small className="opacity-[0.44]">Questions</small>
-                <ChevronDownIcon className="w-4 h-4" />
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 w-full shadow bg-lightGray rounded-box"
-              >
-                {questions.map((question, index) => (
-                  <li key={index}>
-                    <input
-                      type="text"
-                      className="w-full"
-                      value={question}
-                      onChange={(event) => handleQuestionChange(event, index)}
-                    />
-                  </li>
-                ))}
-                <li>
-                  <button
-                    type="button"
-                    className="text-blue-500 hover:underline"
-                    onClick={addQuestion}
-                  >
-                    Add question
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Form navigation  */}
+          <Questions
+            questions={questions}
+            value={selectedQuestion.toString()}
+            onChange={handleQuestionChange}
+          />
 
           <FormNav
             rightBtnText="Create group"
