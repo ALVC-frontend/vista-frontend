@@ -21,11 +21,13 @@ interface Question {
 
 export default function Page() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get<Question[]>("https://vista-testing.herokuapp.com/api/admin/questions");
+        const response = await axios.get<Question[]>(`http://localhost:4000/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}`);
         setQuestions(response.data);
         console.log("Response status:", response.status);
         console.log(response.data);
@@ -35,9 +37,19 @@ export default function Page() {
     }
 
     fetchQuestions();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   console.log("questions:", questions);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = questions.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(questions.length / itemsPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+  pageNumbers.push(i);
+  }
+
 
   return (
     <section className="">
@@ -86,27 +98,64 @@ export default function Page() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(questions) && questions.length > 0 ? (
-              questions.map((question) => (
-                <tr key={question.id}>
-                  <td>
-                    <p>{question.title}</p>
-                    <Link href={`/questions/${question.id}`}>
-                      Read More
-                    </Link>
-                  </td>
-                  <td>{question.category.title}</td>
-                  <td>{question.kind}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={3}>No questions found.</td>
-              </tr>
-            )}
-          </tbody>
+  {Array.isArray(currentItems) && currentItems.length > 0 ? (
+    currentItems.map((question) => (
+      <tr key={question.id}>
+        <td>
+          <p>{question.title}</p>
+          <Link href={`/questions/${question.id}`}>
+            Read More
+          </Link>
+        </td>
+        <td>{question.category.title}</td>
+        <td>{question.kind}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={3}>No questions found.</td>
+    </tr>
+  )}
+</tbody>
         </table>
+        <div className="flex justify-center items-center mt-4 ">
+  <button
+    onClick={() => setCurrentPage((prev) => prev - 1)}
+    disabled={currentPage === 1}
+  >
+    Prev
+  </button>
+  {pageNumbers
+    .filter(
+      (number) =>
+        number === 1 ||
+        number === currentPage ||
+        number === currentPage + 1 ||
+        number === currentPage - 1 ||
+        number === totalPages
+    )
+    .map((number, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentPage(number)}
+        className={`mx-2 rounded-full px-3 py-2 ${
+          currentPage === number ? "bg-blue-500 text-white" : "bg-white"
+        }`}
+      >
+        {number}
+      </button>
+    ))}
+  <button
+    onClick={() => setCurrentPage((prev) => prev + 1)}
+    disabled={currentItems.length < itemsPerPage}
+  >
+    Next
+  </button>
+</div>
+
+
       </article>
     </section>
+
   );
 }
