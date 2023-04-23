@@ -36,7 +36,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles");
+        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com//api/admin/articles");
         setArticles(response.data.articles);
         console.log("Response status:", response.status);
         console.log(response.data);
