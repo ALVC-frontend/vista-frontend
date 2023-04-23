@@ -8,3 +8,37 @@
     @apply w-[90%] md:w-4/5 mx-auto;
   }
 }
+
+.question select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+  width: 90%;
+  padding: 3px;
+  border-radius: 10px;
+  margin-left: 5px;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+select {
+  transition: background-color 0.2s ease-in-out;
+}
+select:hover {
+  background-color: #e6e6e6;
+}
+select:focus {
+  outline: none;
+  background-color: #f5f5f5;
+}
+select option{
+  margin-left: 10px;
+}

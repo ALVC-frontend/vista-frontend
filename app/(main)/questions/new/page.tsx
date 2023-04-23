@@ -84,7 +84,7 @@ export default function Page() {
       intro: intro,
     };
     try {
-      const response = await axios.post("http://localhost:4000/api/admin/questions", data);
+      const response = await axios.post("https://vista-testing.herokuapp.com//api/admin/questions", data);
       console.log("Question created successfully", response.data);
       router.push("/questions");
     } catch (error) {

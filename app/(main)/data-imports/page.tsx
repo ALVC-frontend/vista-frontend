@@ -27,7 +27,7 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("https://vista-testing.herokuapp.com/api/admin/data_imports");
+      const response = await axios.get("https://vista-testing.herokuapp.com//api/admin/data_imports");
 
       const importData = response.data.paginate.map((importItem: ImportItem)=> {
         return {
