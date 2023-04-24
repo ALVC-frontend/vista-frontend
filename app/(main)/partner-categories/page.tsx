@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Button } from "components/index";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface Category {
   id: number;
@@ -18,14 +19,18 @@ interface CategoryResponse {
   paginate: Category[];
 }
 
+
+
 export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
         const response = await axios.get<CategoryResponse>("https://vista-testing.herokuapp.com/api/admin/partner_categories");
         setCategories(response.data.paginate);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data.paginate);
       } catch (error) {
@@ -37,6 +42,11 @@ export default function Page() {
   }, []);
 
   console.log("categories:", categories);
+  const pageType= "Partner-Categories";
+
+if (isLoading) {
+  return <Loader variable={pageType} />
+}
 
   return (
     <section className="w-full pl-1 pt-3">

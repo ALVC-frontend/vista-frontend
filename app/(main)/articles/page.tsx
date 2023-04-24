@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { BreadCrumb, Button } from "components/index";
 import axios from "axios";
+import  Loader  from "@components/Loader";
 
 interface Article {
   id: number;
@@ -32,12 +33,14 @@ interface ArticlesResponse {
 
 export default function Page() {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchArticles() {
       try {
         const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com//api/admin/articles");
         setArticles(response.data.articles);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -49,6 +52,13 @@ export default function Page() {
   }, []);
 
   console.log("articles:", articles);
+
+  const pageType= "Articles";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
+
 
   return (
     <section className="w-full pl-1 pt-3">

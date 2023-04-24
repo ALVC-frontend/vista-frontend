@@ -6,6 +6,7 @@ import axios from "axios";
 import { BreadCrumb, Button } from "@components/index";
 import { statusCategories } from "@lib/dummy";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface Category {
   id: number;
@@ -24,6 +25,7 @@ interface ResponseData {
 
 export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -32,6 +34,7 @@ export default function Page() {
           "https://vista-testing.herokuapp.com/api/admin/categories"
         );
         setCategories(response.data.categories);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -43,6 +46,13 @@ export default function Page() {
   }, []);
 
   console.log("categories:", categories);
+
+  const pageType= "Categories";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
+
 
   return (
     <section className="pl-3">

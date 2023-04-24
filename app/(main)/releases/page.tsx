@@ -10,6 +10,7 @@ import { BreadCrumb, Button } from "@components/index";
 import { releases } from "@lib/dummy";
 import axios from "axios";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface Release {
   id: number;
@@ -23,11 +24,13 @@ interface ReleaseResponse {
 }
 export default function Page() {
   const [releases, setReleases] = useState<Release[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     async function fetchReleases() {
       try {
         const response = await  axios.get<ReleaseResponse>("https://vista-testing.herokuapp.com/api/admin/releases");
         setReleases(response.data.paginate);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data.paginate);
       } catch (error) {
@@ -49,6 +52,12 @@ export default function Page() {
       });
   };
   console.log("categories:", releases);
+
+  const pageType= "Releases";
+
+if (isLoading) {
+  return <Loader variable={pageType} />
+}
   return (
     <section className="w-full pl-1 pt-3">
       {/* Header  */}

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import axios from "axios";
+import  Loader  from "@components/Loader";
 
 import Button from "@components/button";
 
@@ -30,6 +31,7 @@ export default function Page() {
   const [title, setTitle] = useState("");
   const [breadcrumb, setBreadcrumb] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function getCities() {
@@ -38,6 +40,7 @@ export default function Page() {
           setCities(response.data.table[0].tbody);
           setTitle(response.data.title);
           setBreadcrumb(response.data.breadcrumb);
+          setIsLoading(false);
           console.log(response.data);
       } catch (error) {
         console.error(error);
@@ -46,6 +49,12 @@ export default function Page() {
     getCities();
   }, []);
 
+
+  const pageType= "Cities";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
 
   return (
     <section className="w-full pl-1 pt-3">

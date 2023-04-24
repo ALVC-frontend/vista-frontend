@@ -5,6 +5,7 @@ import { statusDataImports } from "@lib/dummy";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface ImportData {
   file: string;
@@ -15,6 +16,7 @@ interface ImportData {
 
 export default function Page() {
   const [imports, setImports] = useState<ImportData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,9 +32,16 @@ export default function Page() {
       });
 
       setImports(importData);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
+
+  const pageType= "Status";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
 
   return (
     <section className="w-full pl-1 pt-3">

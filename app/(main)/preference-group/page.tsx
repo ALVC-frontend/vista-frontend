@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BreadCrumb, Button } from "@components/index";
 import axios from "axios";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface PreferenceGroup {
   id: number;
@@ -15,12 +16,14 @@ interface partNerCategoryResponse {
 }
 export default function Page() {
   const [preferenceGroups, setPreferenceGroups] = useState<PreferenceGroup[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
         const response = await axios.get<partNerCategoryResponse>("https://vista-testing.herokuapp.com/api/admin/preference_groups");
         setPreferenceGroups(response.data.preference_groups);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -32,6 +35,12 @@ export default function Page() {
   }, []);
 
   console.log("preferenceGroups:", preferenceGroups);
+
+  const pageType= "Preference-groups";
+
+if (isLoading) {
+  return <Loader variable={pageType} />
+}
 
   return (
     <section className="w-full pl-1 pt-3">

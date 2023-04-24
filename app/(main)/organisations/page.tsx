@@ -4,6 +4,7 @@ import axios from "axios";
 import { Button } from "@components/index";
 import Link from "next/link";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import  Loader  from "@components/Loader";
 
 interface Organization {
   id: number;
@@ -13,10 +14,12 @@ interface Organization {
 
 export default function Page() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     axios.get<Organization[]>("https://vista-testing.herokuapp.com//api/admin/organisations").then((res) => {
       setOrganizations(res.data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -25,6 +28,12 @@ export default function Page() {
   const filteredOrganizations = organizations.filter((org) =>
     org.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const pageType= "Organisations";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
 
   return (
     <section className="w-full pl-1 pt-3">

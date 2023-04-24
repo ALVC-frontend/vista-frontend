@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@components/index";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface Video {
   id: number;
@@ -23,12 +24,14 @@ interface VideoResponse {
 
 export default function Page() {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchVideos() {
       try {
         const response = await axios.get<VideoResponse>("https://vista-testing.herokuapp.com/api/admin/videos");
         setVideos(response.data.paginate);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -36,6 +39,12 @@ export default function Page() {
     fetchVideos();
   }, []);
  console.log(videos);
+
+ const pageType= "Videos";
+
+if (isLoading) {
+  return <Loader variable={pageType} />
+}
   return (
     <section className="w-full pl-1">
       {/* Header  */}

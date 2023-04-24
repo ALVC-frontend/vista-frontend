@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
+import  Loader  from "@components/Loader";
 
 interface Category {
   id: number;
@@ -31,6 +32,7 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [kindFilter, setKindFilter] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
 
@@ -39,6 +41,7 @@ export default function Page() {
       try {
         const response = await axios.get<Question[]>(`https://vista-testing.herokuapp.com/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}&q=${searchTerm}${categoryFilter ? `&category_id=${categoryFilter}` : ""}${kindFilter ? `&kind=${kindFilter}` : ""}`);
         setQuestions(response.data);
+        setIsLoading(false);
         console.log("Response status:", response.status);
         console.log(response.data);
       } catch (error) {
@@ -86,6 +89,13 @@ export default function Page() {
     // Perform search based on categoryFilter
     console.log(`Searching for ${categoryFilter}`);
   };
+
+  const pageType= "Questions";
+
+  if (isLoading) {
+    return <Loader variable={pageType} />
+  }
+
   return (
     <section className="question">
       <header>
