@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import React, { useState, useEffect } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import axios from "axios";
+import {useRouter } from 'next/navigation';
+
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -13,7 +16,6 @@ import {
   TextInput,
 } from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
-import React from "react";
 
 interface FormData {
   title: string;
@@ -21,7 +23,37 @@ interface FormData {
   categories: string[];
 }
 
+interface Article {
+  id: number;
+  title: string;
+  content: string;
+  publish_at: string;
+  created_at: string;
+  status: string;
+  slug: string;
+  // add any other properties here as needed
+}
+
+interface ArticlesResponse {
+  title: string;
+  content :string;
+  publishedAt: string
+  admin_articles: {
+    breadcrumb: string;
+  };
+  admin_articles_path: {
+    filters: {
+      text: string;
+    }
+  };
+
+  articles: Article[];
+  paginate: Article[];
+}
+
 export default function Page() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [publishDate, setPublishDate] = useState(new Date());
   const { push } = useRouter();
   const [formData, setFormData] = useState<FormData>({
@@ -31,6 +63,30 @@ export default function Page() {
   });
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [publishedAt, setPublishedAt] = useState("");
+
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles/${id}");
+        setArticles(response.data.articles);
+        setIsLoading(false);
+        setTitle(response.data.title);
+        setContent(response.data.content);
+        setPublishedAt(response.data.publishedAt);
+        console.log("Response status:", response.status);
+        console.log(response.data);
+        console.log(response.data.title);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchArticles();
+  }, []);
+  console.log("articles:", articles);
+
+  const pageType= "Articles";
 
   const handleInputChange = (event: any) => {
     const { name, value, type } = event.target;
@@ -61,11 +117,10 @@ export default function Page() {
       }));
     }
   };
-
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://vista-testing.herokuapp.com//api/admin/articles", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
         title: formData.title,
         content: formData.content,
         categories: formData.categories, // assuming categories is an array
@@ -78,6 +133,7 @@ export default function Page() {
       console.error(error);
     }
   };
+
 
   return (
     <section className="w-full pl-6">
@@ -105,6 +161,7 @@ export default function Page() {
             type="text"
             placeholder="Title"
             name="title"
+            defaultValue={title}
             onChange={handleInputChange}
           />
 
@@ -114,6 +171,7 @@ export default function Page() {
             placeholder="Description"
             className="p-3 bg-lightGray outline-none rounded-md"
             name="content"
+            defaultValue={content}
             onChange={handleInputChange}
           ></textarea>
 

@@ -13,6 +13,7 @@ interface Article {
   publish_at: string;
   created_at: string;
   status: string;
+  slug: string;
   // add any other properties here as needed
 }
 
@@ -38,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com//api/admin/articles");
+        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles");
         setArticles(response.data.articles);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -103,7 +104,7 @@ export default function Page() {
                 <tr key={article.id}>
                   <td>
                     <p>{article.title}</p>
-                    <Link href={`/articles/${article.id}`}>
+                    <Link href={`/articles/edit?${article.id}`} passHref>
                       Read More
                     </Link>
                   </td>

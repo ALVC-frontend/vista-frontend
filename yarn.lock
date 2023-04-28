@@ -4006,7 +4006,7 @@
     "react-onclickoutside" "^6.12.2"
     "react-popper" "^2.3.0"
 
-"react-dom@^15.5.x || ^16.x || ^17.x || ^18.x", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0", "react-dom@^16.8.0 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.9.0 || ^17 || ^18", "react-dom@^18.2.0", "react-dom@>=16.8":
+"react-dom@^15.5.x || ^16.x || ^17.x || ^18.x", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0", "react-dom@^16.8.0 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.9.0 || ^17 || ^18", "react-dom@^18.2.0", "react-dom@>=16.8", "react-dom@>=17.0":
   "integrity" "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g=="
   "resolved" "https://registry.npmmirror.com/react-dom/-/react-dom-18.2.0.tgz"
   "version" "18.2.0"
@@ -4072,7 +4072,14 @@
   dependencies:
     "@remix-run/router" "1.5.0"
 
-"react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17 || ^18", "react@^18.2.0", "react@>= 16", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=16.8":
+"react-trix@^0.10.0":
+  "integrity" "sha512-sL0acJqN9lGIJQYSkJEoGj7FfgmmgMxljumppYYMc/KA+xM0tKQbhaiBBUjAo58HVGEhra01JlntQCD3bQSegw=="
+  "resolved" "https://registry.npmmirror.com/react-trix/-/react-trix-0.10.0.tgz"
+  "version" "0.10.0"
+  dependencies:
+    "trix" "^1.3.1"
+
+"react@^15.5.x || ^16.x || ^17.x || ^18.x", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17 || ^18", "react@^18.2.0", "react@>= 16", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=16.8", "react@>=17.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmmirror.com/react/-/react-18.2.0.tgz"
   "version" "18.2.0"
@@ -4719,6 +4726,16 @@
   "version" "1.0.1"
   dependencies:
     "punycode" "^2.1.0"
+
+"trix@^1.3.1":
+  "integrity" "sha512-BbH6mb6gk+AV4f2as38mP6Ucc1LE3OD6XxkZnAgPIduWXYtvg2mI3cZhIZSLqmMh9OITEpOBCCk88IVmyjU7bA=="
+  "resolved" "https://registry.npmmirror.com/trix/-/trix-1.3.1.tgz"
+  "version" "1.3.1"
+
+"trix@^2.0.4":
+  "integrity" "sha512-WOMKqwCVti0i3RVaDrMnrEZWs6XMpFoCfUvFCZNd15KndAy6MsYQscizxEpFiCLUlo+rXMkueK0ldRDo5xpVJA=="
+  "resolved" "https://registry.npmmirror.com/trix/-/trix-2.0.4.tgz"
+  "version" "2.0.4"
 
 "ts-invariant@^0.10.3":
   "version" "0.10.3"
