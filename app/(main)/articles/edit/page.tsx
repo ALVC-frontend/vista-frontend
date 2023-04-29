@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import axios from "axios";
-import {useRouter } from 'next/navigation';
-
+import { useRouter, useSearchParams } from 'next/navigation';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -52,23 +53,28 @@ interface ArticlesResponse {
 }
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  console.log(id);
+  const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [publishDate, setPublishDate] = useState(new Date());
-  const { push } = useRouter();
+
   const [formData, setFormData] = useState<FormData>({
     title: "",
     content: "",
     categories: [],
   });
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState<string>(formData.title);
+  const [content, setContent] = useState<string>(formData.content);
   const [publishedAt, setPublishedAt] = useState("");
 
   useEffect(() => {
     async function fetchArticles() {
+
       try {
-        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles/${id}");
+        const response = await axios.get<ArticlesResponse>(`http://localhost:4000/api/admin/articles/${id}`);
         setArticles(response.data.articles);
         setIsLoading(false);
         setTitle(response.data.title);
@@ -120,21 +126,24 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
-        title: formData.title,
-        content: formData.content,
-        categories: formData.categories, // assuming categories is an array
-        publish_at: publishDate.toISOString() // convert date to ISO string format
+      const response = await axios.put(`http://localhost:4000/api/admin/articles/${id}`, {
+        title,
+        content,
+        categories: formData.categories,
+        publish_at: publishDate.toISOString()
       });
       console.log(response.data);
-      // redirect to verify admin page
-      push("/articles");
+      router.push("/articles");
     } catch (error) {
       console.error(error);
     }
   };
 
-
+const modules = {
+  toolbar: {
+    autoHeight: true
+  }
+};
   return (
     <section className="w-full pl-6">
       <header>
@@ -142,7 +151,7 @@ export default function Page() {
       </header>
 
       <main>
-        <h2 className="text-2xl font-semibold">New article</h2>
+        <h2 className="text-2xl font-semibold">Edit article</h2>
 
         <form
           className="flex flex-col gap-y-6 my-4 w-[95%] md:w-[75%]"
@@ -156,30 +165,31 @@ export default function Page() {
               onChange={handleInputChange}
             />
           </div>
-
-          <input
-            type="text"
-            placeholder="Title"
+          <TextInput
+            inputType="text"
             name="title"
-            defaultValue={title}
-            onChange={handleInputChange}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder={""}          />
+
+          <ReactQuill
+          value={content}
+          onChange={setContent}
+          placeholder="Description"
+          className="p-3 bg-lightGray outline-none rounded-md"
+          style={{
+          minHeight: '300px',
+          border: '1px solid #d1d5db',
+          borderRadius: '0.25rem',
+          padding: '0.5rem',
+          fontSize: '1rem',
+          color: '#4b5563',
+          lineHeight: '1.5',
+          background:'white',
+          }}
           />
 
-          <textarea
-            cols={30}
-            rows={5}
-            placeholder="Description"
-            className="p-3 bg-lightGray outline-none rounded-md"
-            name="content"
-            defaultValue={content}
-            onChange={handleInputChange}
-          ></textarea>
 
-          <BadgeContainer
-            editableBadges={[]}
-            placeholder="Content categories"
-            onChange={handleInputChange}
-          />
 
           <div className="flex w-full items-center">
             <DatePicker
@@ -194,11 +204,15 @@ export default function Page() {
           {/* Form navigation  */}
 
           <FormNav
-            rightBtnText="Update article"
-            type="submit"
+            rightBtnText="Edit article"
+            rightBtnAction={handleSubmit}
           />
         </form>
       </main>
     </section>
   );
 }
+function push(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

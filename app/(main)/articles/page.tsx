@@ -39,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles");
+        const response = await axios.get<ArticlesResponse>("http://localhost:4000/api/admin/articles");
         setArticles(response.data.articles);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -104,7 +104,7 @@ export default function Page() {
                 <tr key={article.id}>
                   <td>
                     <p>{article.title}</p>
-                    <Link href={`/articles/edit?${article.id}`} passHref>
+                    <Link href={`/articles/edit?id=${article.id}`} passHref>
                       Read More
                     </Link>
                   </td>

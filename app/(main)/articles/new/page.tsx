@@ -5,6 +5,8 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import {
   BadgeContainer,
@@ -108,14 +110,22 @@ export default function Page() {
             onChange={handleInputChange}
           />
 
-          <textarea
-            cols={30}
-            rows={5}
-            placeholder="Description"
-            className="p-3 bg-lightGray outline-none rounded-md"
-            name="content"
-            onChange={handleInputChange}
-          ></textarea>
+         <ReactQuill
+          value={content}
+          onChange={setContent}
+          placeholder="Description"
+          className="p-3 bg-lightGray outline-none rounded-md"
+          style={{
+          minHeight: '300px',
+          border: '1px solid #d1d5db',
+          borderRadius: '0.25rem',
+          padding: '0.5rem',
+          fontSize: '1rem',
+          color: '#4b5563',
+          lineHeight: '1.5',
+          background:'white',
+          }}
+          />
 
           <BadgeContainer
             editableBadges={[]}
