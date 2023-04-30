@@ -9,6 +9,7 @@ import 'react-quill/dist/quill.snow.css';
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import dynamic from 'next/dynamic';
 
 import {
   BadgeContainer,
@@ -54,7 +55,7 @@ interface ArticlesResponse {
 
 export default function Page() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const id = searchParams ? searchParams.get('id') : null;
   console.log(id);
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
@@ -74,7 +75,7 @@ export default function Page() {
     async function fetchArticles() {
 
       try {
-        const response = await axios.get<ArticlesResponse>(`http://localhost:4000/api/admin/articles/${id}`);
+        const response = await axios.get<ArticlesResponse>(`https://vista-testing.herokuapp.com/api/admin/articles/${id}`);
         setArticles(response.data.articles);
         setIsLoading(false);
         setTitle(response.data.title);
@@ -93,7 +94,6 @@ export default function Page() {
   console.log("articles:", articles);
 
   const pageType= "Articles";
-
   const handleInputChange = (event: any) => {
     const { name, value, type } = event.target;
 
@@ -123,10 +123,11 @@ export default function Page() {
       }));
     }
   };
+
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:4000/api/admin/articles/${id}`, {
+      const response = await axios.put(`https://vista-testing.herokuapp.com/api/admin/articles/${id}`, {
         title,
         content,
         categories: formData.categories,
@@ -138,12 +139,9 @@ export default function Page() {
       console.error(error);
     }
   };
-
-const modules = {
-  toolbar: {
-    autoHeight: true
-  }
-};
+  const ReactQuill = dynamic(() => import('react-quill'), {
+    ssr: false
+  });
   return (
     <section className="w-full pl-6">
       <header>
@@ -213,7 +211,3 @@ const modules = {
     </section>
   );
 }
-function push(arg0: string) {
-  throw new Error("Function not implemented.");
-}
-

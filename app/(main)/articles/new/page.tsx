@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
 
 import {
   BadgeContainer,
@@ -80,6 +81,10 @@ export default function Page() {
       console.error(error);
     }
   };
+  const ReactQuill = dynamic(() => import('react-quill'), {
+    ssr: false
+  });
+
 
   return (
     <section className="w-full pl-6">
@@ -113,7 +118,7 @@ export default function Page() {
 
          <ReactQuill
           value={content}
-          onChange={setContent}
+          onChange={(content) => setContent(content)}
           placeholder="Description"
           className="p-3 bg-lightGray outline-none rounded-md"
           style={{
