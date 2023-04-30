@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ArrowLeftOnRectangleIcon,
   ChevronLeftIcon,
@@ -22,7 +20,9 @@ const SideBar = ({ sidebarItems }: Props) => {
   return (
     <>
       <div
-        className={`col-span-1 md:flex h-[100vh] flex-col gap-y-6 overflow-y-auto items-center py-4`}
+        className={`col-span-1 md:flex h-[100vh] flex-col gap-y-6 overflow-y-auto items-center py-4 ${
+          isSidebarOpen ? "" : "hidden md:block"
+        }`}
         //@ts-ignore
         ref={navBarDiv}
         onClick={(e: any) => {

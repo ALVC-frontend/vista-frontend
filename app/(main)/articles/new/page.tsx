@@ -103,12 +103,13 @@ export default function Page() {
             />
           </div>
 
-          <input
-            type="text"
-            placeholder="Title"
+          <TextInput
+            inputType="text"
             name="title"
-            onChange={handleInputChange}
-          />
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder={"Title"}
+            />
 
          <ReactQuill
           value={content}

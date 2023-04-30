@@ -170,7 +170,8 @@ const modules = {
             name="title"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
-            placeholder={""}          />
+            placeholder={"Title"}
+            />
 
           <ReactQuill
           value={content}
