@@ -10,7 +10,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dynamic from 'next/dynamic';
-
+import id from 'components/ids'
 import {
   BadgeContainer,
   BreadCrumb,
@@ -18,6 +18,7 @@ import {
   TextInput,
 } from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
+import ids from "components/ids";
 
 interface FormData {
   title: string;
@@ -54,9 +55,8 @@ interface ArticlesResponse {
 }
 
 export default function Page() {
-  const searchParams = useSearchParams();
-  const id = searchParams ? searchParams.get('id') : null;
-  console.log(id);
+  const articleId = ids();
+  console.log(articleId);
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -75,7 +75,7 @@ export default function Page() {
     async function fetchArticles() {
 
       try {
-        const response = await axios.get<ArticlesResponse>(`https://vista-testing.herokuapp.com/api/admin/articles/${id}`);
+        const response = await axios.get<ArticlesResponse>(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`);
         setArticles(response.data.articles);
         setIsLoading(false);
         setTitle(response.data.title);
@@ -127,7 +127,7 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`https://vista-testing.herokuapp.com/api/admin/articles/${id}`, {
+      const response = await axios.put(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`, {
         title,
         content,
         categories: formData.categories,
