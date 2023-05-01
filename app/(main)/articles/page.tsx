@@ -104,7 +104,7 @@ export default function Page() {
                 <tr key={article.id}>
                   <td>
                     <p>{article.title}</p>
-                    <Link href={`/articles/edit?id=${article.id}`} passHref>
+                    <Link href={`/articles/edit/${article.id}`} passHref>
                       Read More
                     </Link>
                   </td>

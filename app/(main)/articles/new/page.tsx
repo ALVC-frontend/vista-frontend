@@ -116,22 +116,23 @@ export default function Page() {
             placeholder={"Title"}
             />
 
-         <ReactQuill
-          value={content}
-          onChange={(content) => setContent(content)}
-          placeholder="Description"
-          className="p-3 bg-lightGray outline-none rounded-md"
-          style={{
-          minHeight: '300px',
-          border: '1px solid #d1d5db',
-          borderRadius: '0.25rem',
-          padding: '0.5rem',
-          fontSize: '1rem',
-          color: '#4b5563',
-          lineHeight: '1.5',
-          background:'white',
-          }}
-          />
+
+            <div>
+              <ReactQuill
+                value={content}
+                onChange={setContent}
+                placeholder="Description"
+                className="p-3 bg-white outline-none rounded-md"
+                style={{
+                  height: '100%',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.25rem',
+                  padding: '0.5rem',
+                  resize: 'vertical',
+                  backgroundColor: 'white',
+                }}
+              />
+            </div>
 
           <BadgeContainer
             editableBadges={[]}

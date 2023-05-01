@@ -1,9 +1,7 @@
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 export default function ids() {
-    const searchParams = useSearchParams();
-    const id = searchParams ? searchParams.get('id') : null;
-    console.log(id);
+    const  id  = useParams();
 
-    return id;
+    return id ? id.id : null;
 }

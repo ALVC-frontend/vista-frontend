@@ -1,11 +1,21 @@
 "use client";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import axios from "axios";
+import { useRouter, useSearchParams } from 'next/navigation';
 import 'react-quill/dist/quill.snow.css';
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dynamic from 'next/dynamic';
 import id from 'components/ids'
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false
+});
+
 
 import {
   BadgeContainer,
@@ -15,7 +25,6 @@ import {
 } from "@components/index";
 import { newArticleCrumbs } from "@lib/dummy";
 import ids from "components/ids";
-import { useRouter } from "next/navigation";
 
 interface FormData {
   title: string;
@@ -137,12 +146,7 @@ export default function Page() {
     }
   };
 
-
-  const ReactQuill = dynamic(() => import('react-quill'), {
-    ssr: false
-  });
   return (
-
     <section className="w-full pl-6">
       <header>
         <BreadCrumb crumbs={newArticleCrumbs} />
@@ -171,23 +175,24 @@ export default function Page() {
             placeholder={"Title"}
             />
 
-          <ReactQuill
-          theme="snow"
-          value={content}
-          onChange={setContent}
-          placeholder="Description"
-          className="p-3 bg-lightGray outline-none rounded-md"
-          style={{
-          minHeight: '300px',
-          border: '1px solid #d1d5db',
-          borderRadius: '0.25rem',
-          padding: '0.5rem',
-          fontSize: '1rem',
-          color: '#4b5563',
-          lineHeight: '1.5',
-          background:'white',
-          }}
-          />
+<div>
+  <ReactQuill
+    value={content}
+    onChange={setContent}
+    placeholder="Description"
+    className="p-3 bg-white outline-none rounded-md"
+    style={{
+      height: '100%',
+      border: '1px solid #d1d5db',
+      borderRadius: '0.25rem',
+      padding: '0.5rem',
+      resize: 'vertical',
+      backgroundColor: 'white',
+    }}
+  />
+</div>
+
+
 
 
 
