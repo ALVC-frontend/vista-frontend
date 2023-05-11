@@ -107,3 +107,43 @@ select option{
     overflow: none;
   }
 }
+body {
+  font-family: Arial, sans-serif;
+}
+
+
+#article-window {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  padding: 2em;
+  max-width: 80%;
+}
+
+.article-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 1em;
+  color:#646767;
+}
+
+.article-content {
+  font-size: 1.2em;
+  line-height: 1.5;
+  text-align: justify;
+}
+.pay_btn,.delete_btn{
+  font-weight: bold;
+  color:green;
+  position: relative;
+  right:0.5rem;
+  text-align:center;
+  color:blue;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   text-decoration: none;
+   padding: 5px 10px;
+}
+
