@@ -31,7 +31,7 @@ export default function Page() {
     async function fetchCategories() {
       try {
         const response = await axios.get<ResponseData>(
-          "https://vista-testing.herokuapp.com/api/admin/categories"
+          "http://localhost:4000/api/admin/categories"
         );
         setCategories(response.data.categories);
         setIsLoading(false);
@@ -91,6 +91,13 @@ export default function Page() {
             <Image src={category.image} alt={category.title} />
             <p className="text-primary">
               {category.title}
+              <br/>
+              <Link href={`/categories/edit/${category.id}`} passHref>
+                      edit
+              </Link> &nbsp;
+              <Link href={`/categories/edit/${category.id}`} passHref>
+                      view category
+              </Link>
             </p>
           </div>
         ))}

@@ -67,7 +67,7 @@ export default function Page() {
     async function fetchArticles() {
       try {
         const response = await axios.get<ArticlesResponse>(
-          `https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`
+          `http://localhost:4000/api/admin/articles/${articleId}`
         );
         setArticles(response.data.articles);
         setIsLoading(false);

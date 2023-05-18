@@ -39,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get<Question[]>(`https://vista-testing.herokuapp.com/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}&q=${searchTerm}${categoryFilter ? `&category_id=${categoryFilter}` : ""}${kindFilter ? `&kind=${kindFilter}` : ""}`);
+        const response = await axios.get<Question[]>(`http://localhost:4000/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}&q=${searchTerm}${categoryFilter ? `&category_id=${categoryFilter}` : ""}${kindFilter ? `&kind=${kindFilter}` : ""}`);
         setQuestions(response.data);
         setIsLoading(false);
         console.log("Response status:", response.status);
