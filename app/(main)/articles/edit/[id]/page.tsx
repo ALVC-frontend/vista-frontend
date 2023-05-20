@@ -80,7 +80,7 @@ export default function Page() {
     async function fetchArticles() {
 
       try {
-        const response = await axios.get<ArticlesResponse>(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`);
+        const response = await axios.get<ArticlesResponse>(`http://localhost:4000/api/admin/articles/${articleId}`);
         setArticles(response.data.articles);
         setIsLoading(false);
         setTitle(response.data.title);
@@ -132,7 +132,7 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`, {
+      const response = await axios.put(`http://localhost:4000/api/admin/articles/${articleId}`, {
         title,
         content,
         categories: formData.categories,

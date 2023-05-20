@@ -54,6 +54,7 @@ export default function Page() {
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [status, setStatus] = useState<string>();
   const [publishDate, setPublishDate] = useState<string>(
     new Date().toLocaleString()
   );
@@ -89,7 +90,7 @@ export default function Page() {
     fetchArticles();
   }, []);
 
-  const { title, content, status } = formData;
+  const { title, content } = formData;
 
   console.log("articles:", articles);
   return (

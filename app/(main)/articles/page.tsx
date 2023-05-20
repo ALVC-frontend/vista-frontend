@@ -105,7 +105,10 @@ export default function Page() {
                   <td>
                     <p>{article.title}</p>
                     <Link href={`/articles/edit/${article.id}`} passHref>
-                      Read More
+                      Edit
+                    </Link>&nbsp;
+                    <Link href={`/articles/show/${article.id}`} passHref>
+                      View
                     </Link>
                   </td>
                   <td>{article.status}</td>

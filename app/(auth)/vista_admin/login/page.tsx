@@ -20,6 +20,8 @@ export default function LoginPage() {
         password,
       });
       localStorage.setItem("accessToken", res.data.accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.accessToken}`;
+      console.log(res.data);
       console.log(res.data);
       window.location.href = "/questions"; // Redirect the user to the home page
     } catch (error) {
