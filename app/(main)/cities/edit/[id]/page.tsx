@@ -1,18 +1,66 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editCityCrumbs } from "@lib/dummy";
+import ids from "components/ids";
 
+interface City {
+  city_name_url: string;
+  name: string;
+  id : number;
+  status: string
+}
 
+interface TableData {
+  thead: {
+    tr: {
+      th: string;
+    }
+  }
+  tbody: City[];
+}
+
+interface Response {
+  name: string;
+  breadcrumb: string;
+  id : number;
+  status: string
+  table: TableData[];
+}
 export default function Page() {
+  const citiesId = ids();
+  console.log(citiesId);
   const { push } = useRouter();
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Enabled");
   const [image, setImage] = useState(null);
+  const [cities, setCities] = useState<City[]>([]);
+  const [title, setTitle] = useState("");
+  const [breadcrumb, setBreadcrumb] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+
+  useEffect(() => {
+    async function getCities() {
+      try {
+        const response = await axios.get<Response>(`http://localhost:4000/api/admin/cities/${citiesId}`);
+          setCities(response.data.table[0].tbody);
+          setName(response.data.name);
+          setBreadcrumb(response.data.breadcrumb);
+          setIsLoading(false);
+          console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getCities();
+  }, []);
+
 
   const handleUpdateCity = async (e:  any) => {
     e.preventDefault();
@@ -23,7 +71,7 @@ export default function Page() {
       if (image) {
         formData.append("image", image);
       }
-      const res = await axios.put("https://vista-testing.herokuapp.com/api/cities/:id", formData);
+      const res = await axios.put(`http://localhost:4000/api/admin/cities/${citiesId}`, formData);
       console.log(res.data);
       push("/cities");
     } catch (err) {
