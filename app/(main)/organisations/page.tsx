@@ -17,7 +17,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get<Organization[]>("https://vista-testing.herokuapp.com//api/admin/organisations").then((res) => {
+    axios.get<Organization[]>("https://vista-testing.herokuapp.com/api/admin/organisations").then((res) => {
       setOrganizations(res.data);
       setIsLoading(false);
     });
@@ -80,7 +80,7 @@ export default function Page() {
               filteredOrganizations.map((org) => (
                 <tr key={org.id}>
                   <td>
-                    <Link href={`/organizations/${org.name}`}>
+                  <Link href={`/organisations/${org.name}?organisation_id=${org.id}`} passHref>
                       <p className="text-primary">{org.name}</p>
                     </Link>
                   </td>

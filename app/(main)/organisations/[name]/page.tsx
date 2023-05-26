@@ -1,5 +1,8 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from 'next/navigation';
+
 
 import { BreadCrumb, Button } from "@components/index";
 import { BreadLink } from "types/crumbs";
@@ -7,6 +10,9 @@ import logo1 from "@assets/svg/orgs-logo-1.svg";
 import logo2 from "@assets/svg/two-ppl.svg";
 
 export default function Page({ params }: any) {
+  const searchParams = useSearchParams();
+  const search = searchParams?.get('organisation_id');
+  console.log(search);
   const links: BreadLink[] = [
     {
       link: "/organisations",
@@ -34,7 +40,7 @@ export default function Page({ params }: any) {
           <div className="">
             <Image src={logo1} alt="Business unit logo" />
           </div>
-          <Link href={`/organisations/${params.name}/business-unit`}>
+          <Link href={`/organisations/${params.name}/business-unit?organisation_id=${search}`}>
             <h4 className="text-primary">Business units</h4>
           </Link>
         </div>

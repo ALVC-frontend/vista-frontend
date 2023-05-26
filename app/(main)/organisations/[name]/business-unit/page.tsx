@@ -1,13 +1,31 @@
-import Link from "next/link";
+"use client";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
+import { BreadCrumb, Button } from '@components/index';
+import { BreadLink } from 'types/crumbs';
+import { useSearchParams } from 'next/navigation';
 
-import { BreadCrumb, Button } from "@components/index";
-import { BreadLink } from "types/crumbs";
+interface Unit {
+  id: number;
+  name: string;
+  // add any other properties here as needed
+}
 
+interface Params {
+  name: string;
+}
 export default function Page({ params }: any) {
+
+  const searchParams = useSearchParams();
+  const organisation_id = searchParams?.get('organisation_id');
+  const [businessUnits, setBusinessUnits] = useState<Unit[]>([]);
+
+
   const links: BreadLink[] = [
     {
-      link: "/organisations",
-      textToDisplay: "Organisations",
+      link: '/organisations',
+      textToDisplay: 'Organisations',
     },
     {
       link: `/organisations/${params.name}`,
@@ -15,9 +33,24 @@ export default function Page({ params }: any) {
     },
     {
       link: `/organisations/${params.name}/business-unit`,
-      textToDisplay: "Business units",
+      textToDisplay: 'Business units',
     },
   ];
+
+  useEffect(() => {
+    const fetchBusinessUnits = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/api/admin/organisations/${organisation_id}/business_units`
+        );
+        setBusinessUnits(response.data);
+      } catch (error) {
+        console.error('Error fetching business units:', error);
+      }
+    };
+
+    fetchBusinessUnits();
+  }, []);
 
   return (
     <section className="w-full pl-1">
@@ -50,16 +83,17 @@ export default function Page({ params }: any) {
           </thead>
 
           <tbody>
-            {/* admin 3  */}
-            <tr>
-              <td className="text-primary">
-                <Link
-                  href={`/organisations/${params.name}/business-unit/developer-division/branches`}
-                >
-                  Developer Division
-                </Link>
-              </td>
-            </tr>
+            {businessUnits.map((unit) => (
+              <tr key={unit.id}>
+                <td className="text-primary">
+                  <Link
+                    href={`/organisations/${params.name}/business-unit/${unit.id}/branches`}
+                  >
+                    {unit.name}
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </article>
