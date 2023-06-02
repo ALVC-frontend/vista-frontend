@@ -41,7 +41,7 @@ export default function Page({ params }: any) {
     const fetchBusinessUnits = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/admin/organisations/${organisation_id}/business_units`
+          `https://vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units`
         );
         setBusinessUnits(response.data);
         console.log(response.data);
