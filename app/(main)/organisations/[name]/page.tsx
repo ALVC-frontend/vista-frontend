@@ -48,7 +48,7 @@ export default function Page({ params }: any) {
           <div className="">
             <Image src={logo2} alt="two people logo" />
           </div>
-          <Link href={`/organisations/${params.name}/admins`}>
+          <Link href={`/organisations/${params.name}/admins?organisation_id=${search}`}>
             <h4 className="text-primary">Admins</h4>
           </Link>
         </div>

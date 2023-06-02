@@ -44,6 +44,8 @@ export default function Page({ params }: any) {
           `http://localhost:4000/api/admin/organisations/${organisation_id}/business_units`
         );
         setBusinessUnits(response.data);
+        console.log(response.data);
+
       } catch (error) {
         console.error('Error fetching business units:', error);
       }
@@ -82,19 +84,7 @@ export default function Page({ params }: any) {
             </tr>
           </thead>
 
-          <tbody>
-            {businessUnits.map((unit) => (
-              <tr key={unit.id}>
-                <td className="text-primary">
-                  <Link
-                    href={`/organisations/${params.name}/business-unit/${unit.id}/branches`}
-                  >
-                    {unit.name}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+
         </table>
       </article>
     </section>
