@@ -84,6 +84,19 @@ export default function Page({ params }: any) {
             </tr>
           </thead>
 
+          <tbody>
+            {businessUnits.map((unit) => (
+              <tr key={unit.id}>
+                <td className="text-primary">
+                  <Link
+                    href={`/organisations/${params.name}/business-unit/${unit.id}/branches?organisation_id=${organisation_id}`}
+                  >
+                    {unit.name}
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
         </table>
       </article>

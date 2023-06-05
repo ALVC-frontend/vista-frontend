@@ -1,14 +1,29 @@
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import axios from "axios";
 
 import { BreadCrumb, Button } from "@components/index";
 import { BreadLink } from "types/crumbs";
 import { convertFirstCapitals } from "@lib/helpers";
-import rect44 from "@assets/images/rect44.png";
-import rect45 from "@assets/images/rect45.png";
-import rect46 from "@assets/images/rect46.png";
-
+import { useSearchParams } from 'next/navigation';
 export default function Page({ params }: any) {
+  const searchParams = useSearchParams();
+  const organisation_id = searchParams?.get('organisation_id');
+  const [branches, setBranches] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units/${params.unit}/branches`)
+      .then(response => {
+        setBranches(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching branches:", error);
+      });
+  }, []);
+
   const links: BreadLink[] = [
     {
       link: "/organisations",
@@ -71,67 +86,38 @@ export default function Page({ params }: any) {
           <thead>
             <tr className="pl-3">
               <th className="bg-lightGray">Name</th>
-              <th className="bg-lightGray">Branch info</th>
+              <th className="bg-lightGray w-1/5">Branch info</th>
               <th className="bg-lightGray">Image</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr>
-              <td className="text-primary">
-                <Link
-                  href={`/organisations/${params.name}/business-unit/${params.unit}/branches/edit`}
-                >
-                  1 Hotel Brooklyn Bridge
-                </Link>
-              </td>
-              <td>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
-                labore.
-              </td>
-              <td>
-                <div className="max-w-full">
-                  <Image src={rect44} alt="rect 44" />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td className="text-primary">
-                <Link
-                  href={`/organisations/${params.name}/business-unit/${params.unit}/branches/edit`}
-                >
-                  11 mirrors
-                </Link>
-              </td>
-              <td>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
-                labore.
-              </td>
-              <td>
-                <div className="max-w-full">
-                  <Image src={rect45} alt="rect 45" />
-                </div>
-              </td>
-            </tr>{" "}
-            <tr>
-              <td className="text-primary">
-                <Link
-                  href={`/organisations/${params.name}/business-unit/${params.unit}/branches/edit`}
-                >
-                  1906 Lodge
-                </Link>
-              </td>
-              <td>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
-                labore.
-              </td>
-              <td>
-                <div className="max-w-full">
-                  <Image src={rect46} alt="rect 46" />
-                </div>
-              </td>
-            </tr>
-          </tbody>
+  {Array.isArray(branches) && branches.length > 0 ? (
+    branches.map((branch: any) => (
+      <tr key={branch.id}>
+        <td className="text-primary">
+          <Link
+            href={`/organisations/${params.name}/business-unit/${params.unit}/branches/edit`}
+          >
+            {branch.name}
+          </Link>
+        </td>
+        <td className=" w-1/5">{branch.about}</td>
+
+        <td>
+          <div className="max-w-full">
+            <Image src={branch.image} alt={branch.name} />
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={3}>No branches found.</td>
+    </tr>
+  )}
+</tbody>
+
+
         </table>
       </article>
     </section>

@@ -31,7 +31,7 @@ export default function Page({ params }: Props) {
     const fetchAdmin= async () => {
       try {
         const response = await axios.get(
-          `https://vista-testing.herokuapp.com/api/admin/staff/organisations/1/admins`
+          `https://vista-testing.herokuapp.com/api/admin/staff/organisations/${organisation_id}/admins`
         );
         setAdmins(response.data);
         console.log(response.data)
