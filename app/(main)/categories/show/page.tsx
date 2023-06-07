@@ -48,7 +48,7 @@ export default function Page(): JSX.Element{
     async function fetchCategories() {
       try {
         const response = await axios.get<ResponseData>(
-            `http://localhost:4000/api/admin/categories/${categoryId}`
+            `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`
         );
         setCategories(response.data.categories);
         setIsLoading(false);

@@ -41,7 +41,7 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/admin/partner_categories", {
+      const response = await axios.post("ista-testing.herokuapp.com/api/admin/partner_categories", {
         title: formData.title,
 
       });

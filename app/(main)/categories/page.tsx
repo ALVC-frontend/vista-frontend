@@ -31,7 +31,7 @@ export default function Page() {
     async function fetchCategories() {
       try {
         const response = await axios.get<ResponseData>(
-          "http://localhost:4000/api/admin/categories"
+          "https://vista-testing.herokuapp.com/api/admin/categories"
         );
         setCategories(response.data.categories);
         setIsLoading(false);

@@ -48,7 +48,7 @@ export default function Page() {
   useEffect(() => {
     async function getCities() {
       try {
-        const response = await axios.get<Response>(`http://localhost:4000/api/admin/cities/${citiesId}`);
+        const response = await axios.get<Response>(`https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`);
           setCities(response.data.table[0].tbody);
           setName(response.data.name);
           setBreadcrumb(response.data.breadcrumb);
@@ -71,7 +71,7 @@ export default function Page() {
       if (image) {
         formData.append("image", image);
       }
-      const res = await axios.put(`http://localhost:4000/api/admin/cities/${citiesId}`, formData);
+      const res = await axios.put(`https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`, formData);
       console.log(res.data);
       push("/cities");
     } catch (err) {

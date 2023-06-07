@@ -48,7 +48,7 @@ export default function Page(): JSX.Element{
     async function fetchCategories() {
       try {
         const response = await axios.get<ResponseData>(
-            `http://localhost:4000/api/admin/categories/${categoryId}`
+            `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`
         );
         setCategories(response.data.categories);
         setIsLoading(false);
@@ -72,7 +72,7 @@ export default function Page(): JSX.Element{
     }
     try {
       // Send a POST request to the server with the form data
-      const response = await axios.post("http://localhost:4000/api/admin/categories", {
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/categories", {
         title,
         description,
         parent,
