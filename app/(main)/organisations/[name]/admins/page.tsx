@@ -9,6 +9,8 @@ import admin1 from "@assets/images/admin-1.png";
 import admin2 from "@assets/images/admin-2.png";
 import { BreadLink } from "types/crumbs";
 import { useSearchParams } from 'next/navigation';
+import { useAuth } from "components/useAuth";
+
 
 interface Admin {
   username: string;
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export default function Page({ params }: Props) {
+  const { accessToken } = useAuth();
   const searchParams = useSearchParams();
   const organisation_id = searchParams?.get('organisation_id');
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -30,9 +33,15 @@ export default function Page({ params }: Props) {
   useEffect(() => {
     const fetchAdmin= async () => {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
         const response = await axios.get(
-          `https://vista-testing.herokuapp.com/api/admin/staff/organisations/${organisation_id}/admins`
-        );
+          `https://vista-testing.herokuapp.com/api/admin/staff/organisations/${organisation_id}/admins`,
+          {
+            headers: headers,
+          }
+          );
         setAdmins(response.data);
         console.log(response.data)
       } catch (error) {
@@ -41,7 +50,7 @@ export default function Page({ params }: Props) {
     };
 
     fetchAdmin();
-  }, []);
+  }, [accessToken]);
 
   const links: BreadLink[] = [
     {
@@ -129,9 +138,7 @@ export default function Page({ params }: Props) {
     <p>No admins found.</p>
   )}
 </tbody>
-
-
-        </table>
+      </table>
       </article>
     </section>
   );

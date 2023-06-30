@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import '@fortawesome/fontawesome-free/css/all.css';
 import Link from "next/link";
-
+import { useAuth } from "components/useAuth";
 import {
   Button,
   BreadCrumb,
@@ -49,6 +49,7 @@ interface ArticlesResponse {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const articleId = ids();
   console.log(articleId);
   const router = useRouter();
@@ -67,9 +68,15 @@ export default function Page() {
   useEffect(() => {
     async function fetchArticles() {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
         const response = await axios.get<ArticlesResponse>(
-          `https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`
+          `https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`,
+          { headers }
         );
+
         setArticles(response.data.articles);
         setIsLoading(false);
         setFormData({
@@ -88,7 +95,8 @@ export default function Page() {
     }
 
     fetchArticles();
-  }, []);
+  }, [accessToken]);
+
 
   const { title, content } = formData;
 

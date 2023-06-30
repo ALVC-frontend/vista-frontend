@@ -6,6 +6,7 @@ import axios from "axios";
 import { Button } from "@components/index";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Video {
   id: number;
@@ -23,21 +24,31 @@ interface VideoResponse {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [videos, setVideos] = useState<Video[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
   useEffect(() => {
     async function fetchVideos() {
       try {
-        const response = await axios.get<VideoResponse>("https://vista-testing.herokuapp.com/api/admin/videos");
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get<VideoResponse>(
+          "https://vista-testing.herokuapp.com/api/admin/videos",
+          { headers }
+        );
+
         setVideos(response.data.paginate);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     }
+
     fetchVideos();
-  }, []);
+  }, [accessToken]);
+
  console.log(videos);
 
  const pageType= "Videos";

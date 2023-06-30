@@ -2,7 +2,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import axios from "axios"; // import Axios library
+import axios from "axios";
+import { useAuth } from "components/useAuth";
 
 
 
@@ -49,6 +50,7 @@ const Organisations = ({ organisations, ...props }: Props & any): JSX.Element =>
 };
 
 export default function PreferenceGroupForm(): JSX.Element {
+  const { accessToken } = useAuth();
   const { push } = useRouter();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -57,7 +59,12 @@ export default function PreferenceGroupForm(): JSX.Element {
   const [organisation, setOrganization] = useState<Organisation[]>([]);
 
   const getOrganisations = () => {
-    axios.get<Organisation[]>("https://vista-testing.herokuapp.com/api/admin/organisations")
+    const headers = {
+      Authorization: 'Bearer your_token',
+      'Content-Type': 'application/json',
+    };
+
+    axios.get<Organisation[]>("https://vista-testing.herokuapp.com/api/admin/organisations", { headers })
       .then((response) => {
         setOrganization(response.data);
       })
@@ -66,9 +73,6 @@ export default function PreferenceGroupForm(): JSX.Element {
       });
   };
 
-  useEffect(() => {
-    getOrganisations();
-  }, []);
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
@@ -88,10 +92,15 @@ export default function PreferenceGroupForm(): JSX.Element {
       url: url,
       content_category_ids: []
     };
+
+
+  const headers = {
+    Authorization: "Bearer <your_access_token_here>",
+  };
+
     axios
-      .post("https://vista-testing.herokuapp.com/api/admin/videos", data)
+      .post("https://vista-testing.herokuapp.com/api/admin/videos", data, { headers })
       .then((response) => {
-        // Redirect to preference group page regardless of response data
         push("/videos");
       })
       .catch((error) => {

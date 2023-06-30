@@ -8,6 +8,7 @@ import Link from "next/link";
 import axios from "axios";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "components/useAuth";
 
 interface Category {
   id: number;
@@ -44,6 +45,7 @@ const Categories = ({ categories, ...props }: Props & any): JSX.Element => {
 
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [title, setTitle] = useState<string>("");
@@ -55,8 +57,13 @@ export default function Page() {
   useEffect(() => {
     async function fetchCategories() {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
         const response = await axios.get<ResponseData>(
-          "https://vista-testing.herokuapp.com/api/admin/categories"
+          "https://vista-testing.herokuapp.com/api/admin/categories",
+          { headers }
         );
         setCategories(response.data.categories);
         console.log("Response status:", response.status);
@@ -67,7 +74,7 @@ export default function Page() {
     }
 
     fetchCategories();
-  }, []);
+  }, [accessToken]);
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const categoryId = parseInt(event.target.value);
@@ -84,7 +91,10 @@ export default function Page() {
       intro: intro,
     };
     try {
-      const response = await axios.post("https://vista-testing.herokuapp.com//api/admin/questions", data);
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const response = await axios.post("https://vista-testing.herokuapp.com//api/admin/questions", data, { headers });
       console.log("Question created successfully", response.data);
       router.push("/questions");
     } catch (error) {

@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import rocket from "@assets/svg/rocket.svg";
 import { TextInput, Button } from "components/index";
+import { useAuth } from "components/useAuth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,21 +13,26 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      const res = await axios.post("https://vista-testing.herokuapp.com/auth/sign_in", {
-        email,
-        password,
-      });
-      localStorage.setItem("accessToken", res.data.accessToken);
-      console.log(res.data);
-      window.location.href = "/"; // Redirect the user to the home page
+      const res = await axios.post(
+        "https://vista-testing.herokuapp.com/api/admin/staff/login",
+        {
+          email,
+          password,
+        }
+      );
+      const accessToken = res.data.token;
+      localStorage.setItem("accessToken", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      window.location.href = "/questions"; // Redirect the user to the home page
     } catch (error) {
       console.error(error);
       setErrorMessage("Invalid email or password.");
     }
   };
+
 
 
   return (

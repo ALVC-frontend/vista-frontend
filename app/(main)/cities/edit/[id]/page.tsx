@@ -7,6 +7,7 @@ import axios from "axios";
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import { editCityCrumbs } from "@lib/dummy";
 import ids from "components/ids";
+import { useAuth } from "components/useAuth";
 
 interface City {
   city_name_url: string;
@@ -32,6 +33,7 @@ interface Response {
   table: TableData[];
 }
 export default function Page() {
+  const { accessToken } = useAuth();
   const citiesId = ids();
   console.log(citiesId);
   const { push } = useRouter();
@@ -44,25 +46,34 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-
   useEffect(() => {
     async function getCities() {
       try {
-        const response = await axios.get<Response>(`https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`);
-          setCities(response.data.table[0].tbody);
-          setName(response.data.name);
-          setBreadcrumb(response.data.breadcrumb);
-          setIsLoading(false);
-          console.log(response.data);
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get<Response>(
+          `https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`,
+          { headers }
+        );
+
+        setCities(response.data.table[0].tbody);
+        setName(response.data.name);
+        setBreadcrumb(response.data.breadcrumb);
+        setIsLoading(false);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
     }
+
     getCities();
   }, []);
 
 
-  const handleUpdateCity = async (e:  any) => {
+
+  const handleUpdateCity = async (e: any) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -71,13 +82,24 @@ export default function Page() {
       if (image) {
         formData.append("image", image);
       }
-      const res = await axios.put(`https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`, formData);
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const res = await axios.put(
+        `https://vista-testing.herokuapp.com/api/admin/cities/${citiesId}`,
+        formData,
+        { headers }
+      );
+
       console.log(res.data);
       push("/cities");
     } catch (err) {
       console.error(err);
     }
   };
+
   interface Props {
     rightBtnAction?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   }

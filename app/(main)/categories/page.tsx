@@ -7,6 +7,7 @@ import { BreadCrumb, Button } from "@components/index";
 import { statusCategories } from "@lib/dummy";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Category {
   id: number;
@@ -24,15 +25,22 @@ interface ResponseData {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
         const response = await axios.get<ResponseData>(
-          "https://vista-testing.herokuapp.com/api/admin/categories"
+          "https://vista-testing.herokuapp.com/api/admin/categories",
+          { headers: headers } // Include the headers in the request
         );
+
         setCategories(response.data.categories);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -43,7 +51,7 @@ export default function Page() {
     }
 
     fetchCategories();
-  }, []);
+  }, [accessToken]);
 
   console.log("categories:", categories);
 

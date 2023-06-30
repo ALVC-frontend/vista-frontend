@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Category {
   id: number;
@@ -26,6 +27,7 @@ interface ResponseData {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
@@ -39,7 +41,10 @@ export default function Page() {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get<Question[]>(`https://vista-testing.herokuapp.com/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}&q=${searchTerm}${categoryFilter ? `&category_id=${categoryFilter}` : ""}${kindFilter ? `&kind=${kindFilter}` : ""}`);
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get<Question[]>(`https://vista-testing.herokuapp.com/api/admin/questions?_page=${currentPage}&_limit=${itemsPerPage}&q=${searchTerm}${categoryFilter ? `&category_id=${categoryFilter}` : ""}${kindFilter ? `&kind=${kindFilter}` : ""}`, { headers: headers });
         setQuestions(response.data);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -51,7 +56,7 @@ export default function Page() {
 
     fetchQuestions();
 
-  }, [currentPage, itemsPerPage, searchTerm, categoryFilter, kindFilter]);
+  }, [currentPage, itemsPerPage, searchTerm, categoryFilter, kindFilter,accessToken]);
 
 
     const filteredItems = questions.filter((question) => {

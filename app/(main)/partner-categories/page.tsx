@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "components/index";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Category {
   id: number;
@@ -19,16 +20,19 @@ interface CategoryResponse {
   paginate: Category[];
 }
 
-
-
 export default function Page() {
+  const { accessToken } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await axios.get<CategoryResponse>("https://vista-testing.herokuapp.com/api/admin/partner_categories");
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get<CategoryResponse>("https://vista-testing.herokuapp.com/api/admin/partner_categories", { headers });
         setCategories(response.data.paginate);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -39,7 +43,7 @@ export default function Page() {
     }
 
     fetchCategories();
-  }, []);
+  }, [accessToken]);
 
   console.log("categories:", categories);
   const pageType= "Partner-Categories";

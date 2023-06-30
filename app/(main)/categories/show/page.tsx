@@ -8,6 +8,7 @@ import Link from "next/link";
 import React from "react";
 import  Loader  from "@components/Loader";
 import ids from "components/ids";
+import { useAuth } from "components/useAuth";
 
 interface Category {
     id: number;
@@ -34,7 +35,7 @@ interface Category {
 
 
 export default function Page(): JSX.Element{
-  // Define state variables for each input field
+  const { accessToken } = useAuth();
   const categoryId = ids();
   console.log(categoryId);
   const [title, setTitle] = useState("");
@@ -44,12 +45,19 @@ export default function Page(): JSX.Element{
   const [visibilityConditions, setVisibilityConditions] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [categories, setCategories] = useState<Category[]>([]);
+
   useEffect(() => {
     async function fetchCategories() {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
         const response = await axios.get<ResponseData>(
-            `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`
+          `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`,
+          { headers }
         );
+
         setCategories(response.data.categories);
         setIsLoading(false);
         setTitle(response.data.title);
@@ -62,7 +70,8 @@ export default function Page(): JSX.Element{
     }
 
     fetchCategories();
-  }, []);
+  }, [accessToken]);
+
 
   return (
     <section>

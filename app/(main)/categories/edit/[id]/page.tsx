@@ -8,6 +8,7 @@ import Link from "next/link";
 import React from "react";
 import  Loader  from "@components/Loader";
 import ids from "components/ids";
+import { useAuth } from "components/useAuth";
 
 interface Category {
     id: number;
@@ -34,7 +35,7 @@ interface Category {
 
 
 export default function Page(): JSX.Element{
-  // Define state variables for each input field
+  const { accessToken } = useAuth();
   const categoryId = ids();
   console.log(categoryId);
   const [title, setTitle] = useState("");
@@ -47,8 +48,12 @@ export default function Page(): JSX.Element{
   useEffect(() => {
     async function fetchCategories() {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
         const response = await axios.get<ResponseData>(
-            `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`
+            `https://vista-testing.herokuapp.com/api/admin/categories/${categoryId}`,
+            { headers: headers }
         );
         setCategories(response.data.categories);
         setIsLoading(false);
@@ -62,26 +67,28 @@ export default function Page(): JSX.Element{
     }
 
     fetchCategories();
-  }, []);
+  }, [accessToken]);
 
   console.log("categories:", categories);
-  // Define an async function to handle form submission
   const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
     if (e) {
       e.preventDefault();
     }
     try {
-      // Send a POST request to the server with the form data
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      };
+
       const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/categories", {
         title,
         description,
         parent,
         initial,
         visibilityConditions,
-      });
+      }, { headers });
+
       console.log(response.data);
-      // Redirect to the categories page after successful creation
-      // You can use the router from Next.js or Link component to navigate to the categories page
     } catch (error) {
       console.log(error);
     }

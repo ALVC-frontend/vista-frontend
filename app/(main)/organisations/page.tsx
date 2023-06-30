@@ -5,7 +5,7 @@ import { Button } from "@components/index";
 import Link from "next/link";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import  Loader  from "@components/Loader";
-
+import { useAuth } from "components/useAuth";
 interface Organization {
   id: number;
   name: string;
@@ -13,15 +13,24 @@ interface Organization {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get<Organization[]>("https://vista-testing.herokuapp.com/api/admin/organisations").then((res) => {
-      setOrganizations(res.data);
-      setIsLoading(false);
-    });
-  }, []);
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    axios.get<Organization[]>("https://vista-testing.herokuapp.com/api/admin/organisations", { headers })
+      .then((res) => {
+        setOrganizations(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching organizations:", error);
+      });
+  }, [accessToken]);
 
   const [searchTerm, setSearchTerm] = useState("");
 

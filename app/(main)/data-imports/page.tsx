@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Import {
   file: string;
@@ -24,27 +25,40 @@ interface ImportItem {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [imports, setImports] = useState<Import[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("https://vista-testing.herokuapp.com//api/admin/data_imports");
-
-      const importData = response.data.paginate.map((importItem: ImportItem)=> {
-        return {
-          file: importItem.file.url,
-          status: importItem.status,
-          created: importItem.created_at,
-          finished: importItem.finished_at,
+      try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
         };
-      });
 
-      setImports(importData);
-      setIsLoading(false);
+        const response = await axios.get(
+          "https://vista-testing.herokuapp.com/api/admin/data_imports",
+          { headers: headers }
+        );
+
+        const importData = response.data.paginate.map((importItem: ImportItem) => {
+          return {
+            file: importItem.file.url,
+            status: importItem.status,
+            created: importItem.created_at,
+            finished: importItem.finished_at,
+          };
+        });
+
+        setImports(importData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
     fetchData();
-  }, []);
+  }, [accessToken]);
 
   const pageType= "Data-imports";
 

@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import axios from "axios";
 import  Loader  from "@components/Loader";
-
+import { useAuth } from "components/useAuth";
 import Button from "@components/button";
 
 interface City {
@@ -27,6 +27,7 @@ interface ApiResponse {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [cities, setCities] = useState<City[]>([]);
   const [title, setTitle] = useState("");
   const [breadcrumb, setBreadcrumb] = useState("");
@@ -36,7 +37,14 @@ export default function Page() {
   useEffect(() => {
     async function getCities() {
       try {
-        const response = await axios.get<ApiResponse>("https://vista-testing.herokuapp.com/api/admin/cities");
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get<ApiResponse>("https://vista-testing.herokuapp.com/api/admin/cities",
+        {
+          headers: headers,
+        }
+      );
           setCities(response.data.table[0].tbody);
           setTitle(response.data.title);
           setBreadcrumb(response.data.breadcrumb);
@@ -47,7 +55,7 @@ export default function Page() {
       }
     }
     getCities();
-  }, []);
+  }, [accessToken]);
 
 
   const pageType= "Cities";

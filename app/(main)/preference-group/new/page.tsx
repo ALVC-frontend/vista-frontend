@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import { useAuth } from "components/useAuth";
 
 import { BreadCrumb, FormNav,  TextInput } from "@components/index";
 import React from "react";
@@ -41,13 +42,18 @@ const Questions = ({ questions, ...props }: Props & any): JSX.Element => {
 };
 
 export default function PreferenceGroupForm(): JSX.Element {
+  const { accessToken } = useAuth();
   const { push } = useRouter();
   const [title, setTitle] = useState<string>("");
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0);
   const [questions, setQuestions] = useState<Question[]>([]);
 
   const getQuestions = () => {
-    axios.get<Question[]>("https://vista-testing.herokuapp.com/api/admin/questions")
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    axios.get<Question[]>("https://vista-testing.herokuapp.com/api/admin/questions", { headers })
       .then((response) => {
         setQuestions(response.data);
       })
@@ -58,7 +64,7 @@ export default function PreferenceGroupForm(): JSX.Element {
 
   useEffect(() => {
     getQuestions();
-  }, []);
+  }, [accessToken]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
@@ -68,22 +74,28 @@ export default function PreferenceGroupForm(): JSX.Element {
     const questionId = parseInt(event.target.value);
     setSelectedQuestion(questionId);
   };
-  const createPreferenceGroup = async (event: { preventDefault: () => void; }) => {
+
+  const createPreferenceGroup = async (event: { preventDefault: () => void }): Promise<void> => {
     event.preventDefault();
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
     const data: FormData = {
       title: title,
       question_ids: [selectedQuestion],
     };
+
     axios
-      .post("https://vista-testing.herokuapp.com/api/admin/preference_groups", data)
+      .post("https://vista-testing.herokuapp.com/api/admin/preference_groups", data, { headers })
       .then((response) => {
-        // Redirect to preference group page regardless of response data
         push("/preference-group");
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
 
   return (
     <section className="w-full pl-6">

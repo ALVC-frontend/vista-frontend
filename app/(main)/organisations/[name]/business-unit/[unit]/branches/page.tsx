@@ -3,26 +3,33 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
+import { useAuth } from "components/useAuth";
 
 import { BreadCrumb, Button } from "@components/index";
 import { BreadLink } from "types/crumbs";
 import { convertFirstCapitals } from "@lib/helpers";
 import { useSearchParams } from 'next/navigation';
 export default function Page({ params }: any) {
+  const { accessToken } = useAuth();
   const searchParams = useSearchParams();
   const organisation_id = searchParams?.get('organisation_id');
   const [branches, setBranches] = useState([]);
-
   useEffect(() => {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
     axios
-      .get(`vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units/${params.unit}/branches`)
+      .get(`https://vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units/${params.unit}/branches`, { headers })
       .then(response => {
         setBranches(response.data);
+        console.log(response.data)
       })
       .catch(error => {
         console.error("Error fetching branches:", error);
       });
-  }, []);
+  }, [ accessToken ]);
+
 
   const links: BreadLink[] = [
     {

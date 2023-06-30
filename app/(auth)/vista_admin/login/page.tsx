@@ -15,14 +15,16 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://vista-testing.herokuapp.com/api/v1/auth/sign_in", {
-        email,
-        password,
-      });
-      localStorage.setItem("accessToken", res.data.accessToken);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.accessToken}`;
-      console.log(res.data);
-      console.log(res.data);
+      const res = await axios.post(
+        "http://localhost:4000/api/admin/staff/login",
+        {
+          email,
+          password,
+        }
+      );
+      const accessToken = res.data.token;
+      localStorage.setItem("accessToken", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       window.location.href = "/questions"; // Redirect the user to the home page
     } catch (error) {
       console.error(error);

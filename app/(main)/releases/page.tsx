@@ -11,6 +11,7 @@ import { releases } from "@lib/dummy";
 import axios from "axios";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface Release {
   id: number;
@@ -23,12 +24,22 @@ interface ReleaseResponse {
   paginate: Release[];
 }
 export default function Page() {
+  const { accessToken } = useAuth();
   const [releases, setReleases] = useState<Release[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     async function fetchReleases() {
       try {
-        const response = await  axios.get<ReleaseResponse>("https://vista-testing.herokuapp.com/api/admin/releases");
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get<ReleaseResponse>(
+          "https://vista-testing.herokuapp.com/api/admin/releases",
+          { headers }
+        );
+
         setReleases(response.data.paginate);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -39,10 +50,15 @@ export default function Page() {
     }
 
     fetchReleases();
-  }, []);
+  }, [accessToken]);
 
   const handleDelete = (id: number) => {
-    axios.delete(`/api/releases/${id}`)
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    axios
+      .delete(`/api/releases/${id}`, { headers })
       .then(() => {
         const updatedReleases = releases.filter((release) => release.id !== id);
         setReleases(updatedReleases);

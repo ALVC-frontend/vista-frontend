@@ -4,13 +4,15 @@ import { useState } from "react";
 import { BreadCrumb, FormNav, ImagePicker, TextInput } from "@components/index";
 import axios from "axios";
 import { editPartnerCategories } from "@lib/dummy";
+import { useAuth } from "components/useAuth";
+
 export default function Page() {
+  const { accessToken } = useAuth();
   const { push } = useRouter();
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
   const id = "replace-with-actual-category-id";
-
-  const handleSubmit = async (e:  React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("id", id);
@@ -18,13 +20,18 @@ export default function Page() {
     //formData.append("image", image);
 
     try {
-      const response = await axios.put(`https://vista-testing.herokuapp.com//api/partner-categories/${id}`, formData);
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.put(`https://vista-testing.herokuapp.com//api/partner-categories/${id}`, formData, { headers });
       console.log(response.data);
       push("/partner-categories");
     } catch (error) {
       console.error(error);
     }
   };
+
 
   return (
     <section className="w-full pl-6">

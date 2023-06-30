@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BreadCrumb, Button } from '@components/index';
 import { BreadLink } from 'types/crumbs';
 import { useSearchParams } from 'next/navigation';
+import { useAuth } from "components/useAuth";
 
 interface Unit {
   id: number;
@@ -16,7 +17,7 @@ interface Params {
   name: string;
 }
 export default function Page({ params }: any) {
-
+  const { accessToken } = useAuth();
   const searchParams = useSearchParams();
   const organisation_id = searchParams?.get('organisation_id');
   const [businessUnits, setBusinessUnits] = useState<Unit[]>([]);
@@ -40,8 +41,14 @@ export default function Page({ params }: any) {
   useEffect(() => {
     const fetchBusinessUnits = async () => {
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
         const response = await axios.get(
-          `https://vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units`
+          `https://vista-testing.herokuapp.com/api/admin/organisations/${organisation_id}/business_units`,
+          {
+            headers: headers,
+          }
         );
         setBusinessUnits(response.data);
         console.log(response.data);
@@ -52,7 +59,7 @@ export default function Page({ params }: any) {
     };
 
     fetchBusinessUnits();
-  }, []);
+  }, [accessToken]);
 
   return (
     <section className="w-full pl-1">

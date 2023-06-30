@@ -5,6 +5,8 @@ import Link from "next/link";
 import { BreadCrumb, Button } from "components/index";
 import axios from "axios";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
+
 
 interface Article {
   id: number;
@@ -14,7 +16,6 @@ interface Article {
   created_at: string;
   status: string;
   slug: string;
-  // add any other properties here as needed
 }
 
 interface ArticlesResponse {
@@ -33,24 +34,39 @@ interface ArticlesResponse {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  console.log(accessToken);
+  async function fetchArticles(accessToken: string) {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const response = await axios.get<ArticlesResponse>(
+        "https://vista-testing.herokuapp.com/api/admin/articles",
+        {
+          headers: headers,
+        }
+      );
+
+      setArticles(response.data.articles);
+      setIsLoading(false);
+      console.log("Response status:", response.status);
+      console.log(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  console.log(accessToken);
+
 
   useEffect(() => {
-    async function fetchArticles() {
-      try {
-        const response = await axios.get<ArticlesResponse>("https://vista-testing.herokuapp.com/api/admin/articles");
-        setArticles(response.data.articles);
-        setIsLoading(false);
-        console.log("Response status:", response.status);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+    if (accessToken) {
+      fetchArticles(accessToken);
     }
-
-    fetchArticles();
-  }, []);
+  }, [accessToken]);
 
   console.log("articles:", articles);
 

@@ -5,6 +5,7 @@ import { BreadCrumb, Button } from "@components/index";
 import axios from "axios";
 import React from "react";
 import  Loader  from "@components/Loader";
+import { useAuth } from "components/useAuth";
 
 interface PreferenceGroup {
   id: number;
@@ -15,13 +16,22 @@ interface partNerCategoryResponse {
   preference_groups: PreferenceGroup[];
 }
 export default function Page() {
+  const { accessToken } = useAuth();
   const [preferenceGroups, setPreferenceGroups] = useState<PreferenceGroup[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchPreferenceGroups() {
       try {
-        const response = await axios.get<partNerCategoryResponse>("https://vista-testing.herokuapp.com/api/admin/preference_groups");
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get<partNerCategoryResponse>(
+          "https://vista-testing.herokuapp.com/api/admin/preference_groups",
+          { headers }
+        );
+
         setPreferenceGroups(response.data.preference_groups);
         setIsLoading(false);
         console.log("Response status:", response.status);
@@ -32,7 +42,7 @@ export default function Page() {
     }
 
     fetchPreferenceGroups();
-  }, []);
+  }, [accessToken]);
 
   console.log("preferenceGroups:", preferenceGroups);
 

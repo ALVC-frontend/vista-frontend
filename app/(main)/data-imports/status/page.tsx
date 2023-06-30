@@ -1,103 +1,125 @@
 "use client";
-import axios from "axios";
+import axios from 'axios';
 import { BreadCrumb, Button } from "@components/index";
-import { statusDataImports } from "@lib/dummy";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import React from "react";
-import  Loader  from "@components/Loader";
+import { newDataImports } from "@lib/dummy";
+import React, { useState } from 'react';
+import { useAuth } from "components/useAuth";
 
-interface ImportData {
-  file: string;
-  status: string;
-  created: string;
-  finished: string;
+interface FormData {
+  file: null;
+  categories: number;
+  visibility_conditions: number;
+  questions: number;
+  locking_conditions: number;
+  [key: string]: any;
 }
 
 export default function Page() {
-  const [imports, setImports] = useState<ImportData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { accessToken } = useAuth();
+  const [formData, setFormData] = useState({
+    file: null,
+    categories: 0,
+    visibility_conditions: 0,
+    questions: 0,
+    locking_conditions: 0,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get<{paginate: { file: { url: string }; status: string; created_at: string; finished_at: string }[] }>("https://vista-testing.herokuapp.com/api/admin/data_imports");
+  const handleFileInputChange = (event: any) => {
+    const file = event.target.files[0];
+    setFormData((prevState) => ({ ...prevState, file }));
+  };
 
-      const importData = response.data.paginate.map((importItem) => {
-        return {
-          file: importItem.file.url,
-          status: importItem.status,
-          created: importItem.created_at,
-          finished: importItem.finished_at,
-        };
-      });
+  const handleCheckboxInputChange = (event: any) => {
+    const { name } = event.target;
+    setFormData((prevState) => ({ ...prevState, [name]: 1 }));
+  };
 
-      setImports(importData);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
 
-  const pageType= "Status";
+    const formDataToSend = new FormData();
 
-  if (isLoading) {
-    return <Loader variable={pageType} />
-  }
+    for (const key in formData) {
+      if (Object.prototype.hasOwnProperty.call(formData, key)) {
+        const value = formData[key as keyof typeof formData];
+        if (typeof value === 'number') {
+          formDataToSend.append(`data_import[${key}]`, value.toString());
+        } else if (value !== null) {
+          formDataToSend.append(`data_import[${key}]`, value);
+        }
+      }
+    }
+
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
+      };
+
+      const response = await axios.post(
+        'https://vista-testing.herokuapp.com/api/admin/data_imports',
+        formDataToSend,
+        { headers }
+      );
+
+      console.log(response.data);
+      window.location.href = "/imports/status";
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
-    <section className="w-full pl-1 pt-3">
-      {/* Header  */}
-      <BreadCrumb crumbs={statusDataImports} />
-      <header className="flex items-center justify-between px-10 my-4">
-        <div className="hidden md:block">
-          <h3 className="font-semibold">Data imports</h3>
-        </div>
-
-        <div className="">
-          <Link href="/data-imports/new">
-            <Button
-              text="Import data"
-              primary
-              extraStyles="font-thin text-sm px-4 py-3"
-            />
-          </Link>
-        </div>
+    <section className="pl-4">
+      <header>
+        <BreadCrumb crumbs={newDataImports} />
+        <h2 className="font-semibold">Import new data</h2>
       </header>
+      <main>
+        <form className="w-[95%] md:w-3/5" onSubmit={handleSubmit}>
+          <div className="">
+            <input
+              type="file"
+              className="file-input file-input-ghost bg-lightGray rounded-md"
+              name="file"
+              onChange={handleFileInputChange}
+            />
+          </div>
 
-      {/* Admins table  */}
+          <small className="opacity-[0.44]">Categories</small>
+          <div className="bg-lightGray p-4 rounded-md space-y-4">
+            <div className="flex items-center gap-x-3">
+              <input
+                type="checkbox"
+                name="visibility_conditions"
+                onChange={handleCheckboxInputChange}
+              />
+              <small>Visibility conditions</small>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <input
+                type="checkbox"
+                name="questions"
+                onChange={handleCheckboxInputChange}
+              />
+              <small>Questions</small>
+            </div>
+            <div className="flex items-center gap-x-3">
+              <input
+                type="checkbox"
+                name="locking_conditions"
+                onChange={handleCheckboxInputChange}
+              />
+              <small>Locking conditions</small>
+            </div>
+          </div>
 
-      <article className="w-full overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th className="bg-lightGray">File</th>
-              <th className="bg-lightGray">Status</th>
-              <th className="bg-lightGray">Created</th>
-              <th className="bg-lightGray">Finished</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {imports.map((importData) => (
-              <tr key={importData.file}>
-                <td>
-                  <p className="text-primary">{importData.file}</p>
-                </td>
-                <td>
-                  <p className="badge bg-background text-primary text-sm border-background p-4">
-                    {importData.status}
-                  </p>
-                </td>
-                <td>
-                  <small>{importData.created}</small>
-                </td>
-                <td>
-                  <small>{importData.finished}</small>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </article>
+          <div className="flex justify-end mt-8">
+            <Button text="Import" primary extraStyles="w-1/5" type="submit" />
+          </div>
+        </form>
+      </main>
     </section>
   );
 }

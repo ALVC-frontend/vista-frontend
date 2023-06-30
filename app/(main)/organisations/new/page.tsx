@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { BreadCrumb, FormNav } from "components";
 import { newOrganisation } from "@lib/dummy";
 import React from "react";
+import { useAuth } from "components/useAuth";
 
 interface FormData {
   name: string;
@@ -13,6 +14,7 @@ interface FormData {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const { push } = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -35,16 +37,22 @@ export default function Page() {
       }));
     }
   };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
 
       const response = await axios.post(
-        "https://vista-testing.herokuapp.com/api/admin/organisations",{
+        "https://vista-testing.herokuapp.com/api/admin/organisations",
+        {
           name: formData.name,
           about: formData.about,
-        });
+        },
+        { headers }
+      );
+
       console.log(response.data);
       // redirect to verify admin page
       push("/organisations");
@@ -52,6 +60,7 @@ export default function Page() {
       console.error(error);
     }
   };
+
 
   return (
     <section className="w-full pl-6">

@@ -9,8 +9,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dynamic from 'next/dynamic';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useAuth } from "components/useAuth";
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false
 });
@@ -60,6 +59,7 @@ interface ArticlesResponse {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const articleId = ids();
   console.log(articleId);
   const router = useRouter();
@@ -80,6 +80,9 @@ export default function Page() {
     async function fetchArticles() {
 
       try {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
         const response = await axios.get<ArticlesResponse>(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`);
         setArticles(response.data.articles);
         setIsLoading(false);
@@ -95,7 +98,7 @@ export default function Page() {
     }
 
     fetchArticles();
-  }, []);
+  }, [accessToken]);
   console.log("articles:", articles);
 
   const pageType= "Articles";
@@ -128,17 +131,23 @@ export default function Page() {
       }));
     }
   };
-
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`https://vista-testing.herokuapp.com/api/admin/articles/${articleId}`, {
-        title,
-        content,
+      const headers = {
+        Authorization: 'Bearer your_token',
+        'Content-Type': 'application/json',
+      };
+
+      const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
+        title: formData.title,
+        content: formData.content,
         categories: formData.categories,
         publish_at: publishDate.toISOString()
-      });
+      }, { headers });
+
       console.log(response.data);
+      // redirect to verify admin page
       router.push("/articles");
     } catch (error) {
       console.error(error);

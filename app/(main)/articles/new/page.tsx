@@ -68,12 +68,18 @@ export default function Page() {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
+      const headers = {
+        Authorization: 'Bearer your_token',
+        'Content-Type': 'application/json',
+      };
+
       const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/articles", {
         title: formData.title,
         content: formData.content,
-        categories: formData.categories, // assuming categories is an array
-        publish_at: publishDate.toISOString() // convert date to ISO string format
-      });
+        categories: formData.categories,
+        publish_at: publishDate.toISOString()
+      }, { headers });
+
       console.log(response.data);
       // redirect to verify admin page
       push("/articles");
@@ -81,6 +87,7 @@ export default function Page() {
       console.error(error);
     }
   };
+
   const ReactQuill = dynamic(() => import('react-quill'), {
     ssr: false
   });

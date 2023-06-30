@@ -6,36 +6,39 @@ import { BreadCrumb, Button, TextInput } from "components/index";
 import { newCategories } from "@lib/dummy";
 import Link from "next/link";
 import React from "react";
+import { useAuth } from "components/useAuth";
 
 export default function Page(): JSX.Element{
-  // Define state variables for each input field
+  const { accessToken } = useAuth();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [parent, setParent] = useState("");
   const [initial, setInitial] = useState(false);
   const [visibilityConditions, setVisibilityConditions] = useState("");
 
-  // Define an async function to handle form submission
   const handleSubmit = async (e?: FormEvent<HTMLFormElement>) => {
     if (e) {
       e.preventDefault();
     }
     try {
-      // Send a POST request to the server with the form data
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
       const response = await axios.post("https://vista-testing.herokuapp.com/api/admin/categories", {
         title,
         description,
         parent,
         initial,
         visibilityConditions,
-      });
+      }, { headers });
+
       console.log(response.data);
-      // Redirect to the categories page after successful creation
-      // You can use the router from Next.js or Link component to navigate to the categories page
     } catch (error) {
       console.log(error);
     }
   };
+
 
 
   return (

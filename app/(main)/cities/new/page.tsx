@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import { useAuth } from "components/useAuth";
 
 import {
   BadgeContainer,
@@ -14,6 +15,7 @@ import { newCityCrumbs } from "@lib/dummy";
 import React from "react";
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const router = useRouter();
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
@@ -22,19 +24,24 @@ export default function Page() {
     e.preventDefault();
 
     try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
       const response = await axios.post(
-        "https://vista-testing.herokuapp.comapi/admin/cities",
+        "https://vista-testing.herokuapp.com/api/admin/cities",
         {
           name,
           status,
           //photo,
-        }
+        },
+        { headers }
       );
+
       console.log(response.data);
-      router.push("/cities"); // navigate to cities page
+      router.push("/cities");
     } catch (error) {
       console.log(error);
-      window.alert("Error creating city"); // display error message
+      window.alert("Error creating city");
     }
   };
 

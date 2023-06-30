@@ -5,12 +5,14 @@ import { BreadCrumb, FormNav, TextInput } from "@components/index";
 import { newPartnerCategories } from "@lib/dummy";
 import React from "react";
 import axios from "axios";
+import { useAuth } from "components/useAuth";
 interface FormData {
   title: string;
   content: string;
   categories: string[];
 }
 export default function Page() {
+  const { accessToken } = useAuth();
   const { push } = useRouter();
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -38,20 +40,28 @@ export default function Page() {
   };
 
 ;
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post("ista-testing.herokuapp.com/api/admin/partner_categories", {
-        title: formData.title,
+const handleSubmit = async (event: { preventDefault: () => void }) => {
+  event.preventDefault();
+  try {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
 
-      });
-      console.log(response.data);
-      // redirect to verify admin page
-      push("/partner-categories");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const response = await axios.post(
+      "https://vista-testing.herokuapp.com/api/admin/partner_categories",
+      {
+        title: formData.title,
+      },
+      { headers }
+    );
+
+    console.log(response.data);
+    push("/partner-categories");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
     <section className="w-full pl-6">
       <header>

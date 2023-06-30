@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BreadCrumb, Button } from "@components/index";
 import { newDataImports } from "@lib/dummy";
 import React, { useState } from 'react';
+import { useAuth } from "components/useAuth";
 
 interface FormData {
   file: null;
@@ -14,6 +15,7 @@ interface FormData {
 }
 
 export default function Page() {
+  const { accessToken } = useAuth();
   const [formData, setFormData] = useState({
     file: null,
     categories: 0,
@@ -49,22 +51,24 @@ export default function Page() {
     }
 
     try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
+      };
+
       const response = await axios.post(
         'https://vista-testing.herokuapp.com/api/admin/data_imports',
         formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
+        { headers }
       );
 
       console.log(response.data);
-       window.location.href = "/imports/status";
+      window.location.href = "/imports/status";
     } catch (error) {
       console.error(error);
     }
   };
+
 
   return (
     <section className="pl-4">
