@@ -17,7 +17,6 @@ interface Category {
   ancestry: null | string;
   image: string;
   initial:boolean;
-  // Add other properties of the category here
 }
 
 interface ResponseData {
@@ -38,7 +37,7 @@ export default function Page() {
 
         const response = await axios.get<ResponseData>(
           "https://vista-testing.herokuapp.com/api/admin/categories",
-          { headers: headers } // Include the headers in the request
+          { headers: headers }
         );
 
         setCategories(response.data.categories);

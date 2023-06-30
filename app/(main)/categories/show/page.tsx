@@ -18,7 +18,6 @@ interface Category {
     ancestry: null | string;
     image: string;
     initial:boolean;
-    // Add other properties of the category here
   }
 
   interface ResponseData {

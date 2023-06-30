@@ -9,7 +9,6 @@ import { useAuth } from "components/useAuth";
 interface Organization {
   id: number;
   name: string;
-  // Add other properties of the organization here
 }
 
 export default function Page() {
